@@ -1,0 +1,14 @@
+resources: "resources.yaml"
+samples: "samples.tsv"
+unit: "units.tsv"
+
+modules:
+  parabricks: "main"
+  prealignment: "master"
+  qc: "master"
+
+default_container: ""
+
+reference:
+  fasta: ""
+  sites: ""
