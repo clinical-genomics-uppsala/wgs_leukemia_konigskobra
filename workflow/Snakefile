@@ -1,0 +1,54 @@
+__author__ = "Martin Rippin"
+__copyright__ = "Copyright 2021, Martin Rippin"
+__email__ = "martin.rippin@igp.uu.se"
+__license__ = "GPL-3"
+
+
+include: "rules/common.smk"
+
+
+rule all:
+    input:
+        unpack(compile_output_list),
+
+
+module prealignment:
+    snakefile: github("hydra-genetics/prealignment", path="workflow/Snakefile", tag=config["modules"]["prealignment"])
+    config: config
+
+use rule * from prealignment as prealignment_*
+
+module parabricks:
+    snakefile: github("hydra-genetics/parabricks", path="workflow/Snakefile", tag=config["modules"]["parabricks"])
+    config: config
+
+use rule * from parabricks as parabricks_*
+
+module qc:
+    snakefile: github("hydra-genetics/qc", path="workflow/Snakefile", tag=config["modules"]["qc"])
+    config: config
+
+use rule * from qc as qc_*
+    
+use rule mosdepth from qc as qc_mosdepth with:
+    input:
+        bam="parabricks/fq2bam/{sample}_{type}.bam",
+
+use rule samtools_stats from qc as qc_samtools_stats with:
+    input:
+        bam="parabricks/fq2bam/{sample}_{type}.bam",
+
+use rule picard_duplication_metrics from qc as qc_picard_duplication_metrics with:
+    input:
+        bam="parabricks/fq2bam/{sample}_{type}.bam",
+
+use rule picard_collect_wgs_metrics from qc as qc_picard_collect_wgs_metrics with:
+    input:
+        bam="parabricks/fq2bam/{sample}_{type}.bam",
+        ref=config["reference"]["fasta"],
+        interval=config["reference"]["wgs_intervals"],
+
+use rule picard_alignment_summary_metrics from qc as qc_picard_alignment_summary_metrics with:
+    input:
+        bam="parabricks/fq2bam/{sample}_{type}.bam",
+        ref=config["reference"]["fasta"],
