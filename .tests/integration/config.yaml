@@ -3,6 +3,7 @@ samples: "samples.tsv"
 units: "units.tsv"
 
 modules:
+  cnv_sv: "patch-cnvkit-call"
   parabricks: "develop"
   prealignment: "develop"
   qc: "develop"
@@ -13,6 +14,15 @@ reference:
   fasta: "reference/reference.fasta"
   sites: "reference/sites.vcf.gz"
   wgs_intervals: "reference/wgs.interval_list"
+
+trimmer_software: "fastp"
+
+cnvkit_call:
+  container: "docker://marrip/cnvkit:0.9.9"
+  extra: "-m wgs"
+
+config_manta_tn:
+  container: "docker://marrip/manta:v1.6.0"
 
 multiqc:
   container: "docker://marrip/multiqc:1.11"
@@ -39,7 +49,23 @@ multiqc:
     - "qc/picard_collect_wgs_metrics/{sample}_{type}.txt"
     - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
 
+manta_run_workflow_tn:
+  container: "docker://marrip/manta:v1.6.0"
+
+mosdepth:
+  container: "docker://marrip/mosdepth:0.3.2"
+
+picard_alignment_summary_metrics:
+  container: "docker://broadinstitute/gatk:4.2.0.0"
+
+picard_duplication_metrics:
+  container: "docker://broadinstitute/gatk:4.2.0.0"
+
+picard_collect_gc_bias_metrics:
+  container: "docker://broadinstitute/gatk:4.2.0.0"
+
 picard_collect_multiple_metrics:
+  container: "docker://broadinstitute/gatk:4.2.0.0"
   output_ext:
     - "alignment_summary_metrics"
     - "base_distribution_by_cycle_metrics"
@@ -50,3 +76,6 @@ picard_collect_multiple_metrics:
     - "quality_by_cycle.pdf"
     - "quality_distribution_metrics"
     - "quality_distribution.pdf"
+
+picard_collect_wgs_metrics:
+  container: "docker://broadinstitute/gatk:4.2.0.0"
