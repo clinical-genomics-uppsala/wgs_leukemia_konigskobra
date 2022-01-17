@@ -12,9 +12,33 @@ rule all:
         unpack(compile_output_list),
 
 
-module prealignment:
-    snakefile: github("hydra-genetics/prealignment", path="workflow/Snakefile", tag=config["modules"]["prealignment"])
-    config: config
+module cnv_sv:
+    snakefile:
+        github(
+            "hydra-genetics/cnv_sv",
+            path="workflow/Snakefile",
+            tag=config["modules"]["cnv_sv"],
+        )
+    config:
+        config
+
+
+use rule * from cnv_sv as cnv_sv_*
+
+
+use rule config_manta_tn from cnv_sv as cnv_sv_config_manta_tn with:
+    input:
+        bam_t="parabricks/fq2bam/{sample}_T.bam",
+        bam_n="parabricks/fq2bam/{sample}_N.bam",
+        ref=config["reference"]["fasta"],
+
+
+use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
+    input:
+        bam_t="parabricks/fq2bam/{sample}_T.bam",
+        bam_n="parabricks/fq2bam/{sample}_N.bam",
+        ref=config["reference"]["fasta"],
+        scrpt="cnv_sv/manta/{sample}/runWorkflow.py",
 
 use rule * from prealignment as prealignment_*
 
