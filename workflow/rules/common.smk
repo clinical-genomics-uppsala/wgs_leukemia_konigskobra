@@ -31,7 +31,11 @@ validate(samples, schema="../schemas/samples.schema.yaml")
 
 ### Read and validate units file
 
-units = pd.read_table(config["units"], dtype=str).set_index(["sample", "type", "run", "lane"], drop=False).sort_index()
+units = (
+    pd.read_table(config["units"], dtype=str)
+    .set_index(["sample", "type", "run", "lane"], drop=False)
+    .sort_index()
+)
 validate(units, schema="../schemas/units.schema.yaml")
 
 ### Set wildcard constraints
@@ -45,8 +49,12 @@ wildcard_constraints:
 def compile_output_list(wildcards):
     output_list = ["qc/multiqc/MultiQC.html"]
     output_list.append(
+        ["parabricks/mutectcaller/%s.vcf" % (sample) for sample in get_samples(samples)]
+    )
+    output_list.append(
         [
-        "parabricks/mutectcaller/%s.vcf" % (sample) for sample in get_samples(samples)
+            "cnv_sv/manta/%s/results/variants/somaticSV.vcf.gz" % (sample)
+            for sample in get_samples(samples)
         ]
     )
     return output_list
