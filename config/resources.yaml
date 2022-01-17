@@ -6,14 +6,6 @@ default_resources:
   threads: 0
   time: ""
 
-deepvariant:
-  gres: ""
-  mem_mb: 0
-  mem_per_cpu: 0
-  partition: ""
-  threads: 0
-  time: ""
-
 fq2bam:
   gres: ""
   mem_mb: 0
