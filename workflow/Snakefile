@@ -12,6 +12,36 @@ rule all:
         unpack(compile_output_list),
 
 
+module annotation:
+    snakefile:
+        github(
+            "hydra-genetics/annotation",
+            path="workflow/Snakefile",
+            tag=config["modules"]["annotation"],
+        )
+    config:
+        config
+
+
+use rule vep from annotation as annotation_vep with:
+    input:
+        vcf="parabricks/mutectcaller/{sample}.vcf.gz",
+        tabix="parabricks/mutectcaller/{sample}.vcf.gz.tbi",
+        cache=config["vep"]["vep_cache"],
+        fasta=config["reference"]["fasta"],
+    output:
+        vcf=temp("annotation/vep/{sample}.vcf"),
+    log:
+        "annotation/vep/{sample}.vcf.log",
+    benchmark:
+        repeat(
+            "annotation/vep/{sample}.vcf.benchmark.tsv",
+            config.get("vep", {}).get("benchmark_repeats", 1),
+        )
+    message:
+        "{rule}: Annotate {wildcards.sample}.vcf with VEP"
+
+
 module cnv_sv:
     snakefile:
         github(
@@ -26,11 +56,33 @@ module cnv_sv:
 use rule * from cnv_sv as cnv_sv_*
 
 
+use rule cnvkit_batch from cnv_sv as cnv_sv_cnvkit_batch with:
+    input:
+        bam="parabricks/fq2bam/{sample}_T.bam",
+        cnv_reference=config["cnvkit_batch"]["normal_reference"],
+
+
 use rule config_manta_tn from cnv_sv as cnv_sv_config_manta_tn with:
     input:
         bam_t="parabricks/fq2bam/{sample}_T.bam",
         bam_n="parabricks/fq2bam/{sample}_N.bam",
         ref=config["reference"]["fasta"],
+
+
+use rule germline_vcf from cnv_sv as cnv_sv_germline_vcf with:
+    input:
+        vcf="annotation/vep/{sample}.vcf",
+    output:
+        vcf=temp("cnv_sv/germline_vcf/{sample}_T.germline.vcf"),
+    log:
+        "cnv_sv/germline_vcf/{sample}_T.germline.vcf.log",
+    benchmark:
+        repeat(
+            "cnv_sv/germline_vcf/{sample}_T.germline.vcf.benchmark.tsv",
+            config.get("germline_vcf", {}).get("benchmark_repeats", 1),
+        )
+    message:
+        "{rule}: Create a germline only vcf cnv_sv/germline_vcf/{wildcards.sample}_T.germline.vcf"
 
 
 use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
@@ -119,3 +171,38 @@ use rule picard_collect_wgs_metrics from qc as qc_picard_collect_wgs_metrics wit
 use rule samtools_stats from qc as qc_samtools_stats with:
     input:
         bam="parabricks/fq2bam/{sample}_{type}.bam",
+
+
+module snv_indels:
+    snakefile:
+        github(
+            "hydra-genetics/snv_indels", path="workflow/Snakefile", tag=config["modules"]["snv_indels"]
+        )
+    config:
+        config
+
+
+use rule bgzip_vcf from snv_indels as snv_indels_bgzip_vcf with:
+    input:
+        "parabricks/mutectcaller/{sample}.vcf",
+    output:
+        temp("parabricks/mutectcaller/{sample}.vcf.gz"),
+    log:
+        "parabricks/mutectcaller/{sample}.vcf.gz.log"
+    benchmark:
+        repeat("parabricks/mutectcaller/{sample}.vcf.gz.benchmark.tsv", config.get("bgzip_vcf", {}).get("benchmark_repeats", 1))
+    message:
+        "{rule}: bgzip parabricks/mutectcaller/{wildcards.sample}.vcf"
+
+
+use rule tabix_vcf from snv_indels as snv_indels_tabix_vcf with:
+    input:
+        "parabricks/mutectcaller/{sample}.vcf.gz",
+    output:
+        temp("parabricks/mutectcaller/{sample}.vcf.gz.tbi"),
+    log:
+        "parabricks/mutectcaller/{sample}.vcf.gz.tbi.log"
+    benchmark:
+        repeat("parabricks/mutectcaller/{sample}.vcf.gz.tbi.benchmark.tsv", config.get("tabix_vcf", {}).get("benchmark_repeats", 1))
+    message:
+        "{rule}: tabix index for parabricks/mutectcaller/{wildcards.sample}.vcf.gz"

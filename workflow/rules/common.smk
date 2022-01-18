@@ -49,7 +49,7 @@ wildcard_constraints:
 def compile_output_list(wildcards):
     output_list = ["qc/multiqc/MultiQC.html"]
     output_list.append(
-        ["parabricks/mutectcaller/%s.vcf" % (sample) for sample in get_samples(samples)]
+        ["cnv_sv/cnvkit_vcf/%s_T.vcf" % (sample) for sample in get_samples(samples)]
     )
     output_list.append(
         [
