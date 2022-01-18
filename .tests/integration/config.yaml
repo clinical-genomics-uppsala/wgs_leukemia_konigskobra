@@ -3,26 +3,42 @@ samples: "samples.tsv"
 units: "units.tsv"
 
 modules:
+  annotation: "develop"
   cnv_sv: "develop"
   parabricks: "develop"
   prealignment: "develop"
   qc: "develop"
+  snv_indels: "develop"
 
 default_container: "docker://marrip/common:1.1.1"
 
 reference:
   fasta: "reference/reference.fasta"
+  fai: "reference/reference.fasta.fai"
   sites: "reference/sites.vcf.gz"
   wgs_intervals: "reference/wgs.interval_list"
 
 trimmer_software: "fastp"
 
-cnvkit_call:
+cnvkit_batch:
   container: "docker://marrip/cnvkit:0.9.9"
   method: "wgs"
+  normal_reference: "reference/cnvkit.cnn"
+
+cnvkit_call:
+  container: "docker://marrip/cnvkit:0.9.9"
+
+cnvkit_vcf:
+  container: "docker://python:3.9.9-slim-buster"
 
 config_manta_tn:
   container: "docker://marrip/manta:v1.6.0"
+
+fastp_pe:
+  container: "docker://hydragenetics/fastp:0.20.1"
+
+germline_vcf:
+  container: "docker://marrip/vep:104.3"
 
 multiqc:
   container: "docker://marrip/multiqc:1.11"
@@ -53,19 +69,21 @@ manta_run_workflow_tn:
   container: "docker://marrip/manta:v1.6.0"
 
 mosdepth:
-  container: "docker://marrip/mosdepth:0.3.2"
+  by: "500"
+  container: "docker://hydragenetics/mosdepth:0.3.2"
+  extra: "--fast-mode --no-per-base"
 
 picard_alignment_summary_metrics:
-  container: "docker://broadinstitute/gatk:4.2.0.0"
+  container: "docker://hydragenetics/picard:2.25.0"
 
 picard_duplication_metrics:
-  container: "docker://broadinstitute/gatk:4.2.0.0"
+  container: "docker://hydragenetics/picard:2.25.0"
 
 picard_collect_gc_bias_metrics:
-  container: "docker://broadinstitute/gatk:4.2.0.0"
+  container: "docker://hydragenetics/picard:2.25.0"
 
 picard_collect_multiple_metrics:
-  container: "docker://broadinstitute/gatk:4.2.0.0"
+  container: "docker://hydragenetics/picard:2.25.0"
   output_ext:
     - "alignment_summary_metrics"
     - "base_distribution_by_cycle_metrics"
@@ -78,4 +96,14 @@ picard_collect_multiple_metrics:
     - "quality_distribution.pdf"
 
 picard_collect_wgs_metrics:
-  container: "docker://broadinstitute/gatk:4.2.0.0"
+  container: "docker://hydragenetics/picard:2.25.0"
+
+samtools_stats:
+  container: "docker://hydragenetics/common:0.0.1"
+
+tabix:
+  container: "docker://hydragenetics/common:0.0.1"
+
+vep:
+  container: "docker://marrip/vep:104.3"
+  vep_cache: "reference/vep"
