@@ -1,0 +1,12 @@
+$schema: "http://json-schema.org/draft-04/schema#"
+description: sample list
+properties:
+  sample:
+    type: string
+    description: sample id
+  TC:
+    type: string
+    description: Tumor content
+required:
+  - sample
+  - TC

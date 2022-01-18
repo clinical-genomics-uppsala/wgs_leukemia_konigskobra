@@ -1,0 +1,23 @@
+default_resources:
+  gres: ""
+  mem_mb: 0
+  mem_per_cpu: 0
+  partition: ""
+  threads: 0
+  time: ""
+
+fq2bam:
+  gres: ""
+  mem_mb: 0
+  mem_per_cpu: 0
+  partition: ""
+  threads: 0
+  time: ""
+
+mutectcaller:
+  gres: ""
+  mem_mb: 0
+  mem_per_cpu: 0
+  partition: ""
+  threads: 0
+  time: ""
