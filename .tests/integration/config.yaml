@@ -3,7 +3,7 @@ samples: "samples.tsv"
 units: "units.tsv"
 
 modules:
-  cnv_sv: "patch-cnvkit-call"
+  cnv_sv: "develop"
   parabricks: "develop"
   prealignment: "develop"
   qc: "develop"
@@ -19,7 +19,7 @@ trimmer_software: "fastp"
 
 cnvkit_call:
   container: "docker://marrip/cnvkit:0.9.9"
-  extra: "-m wgs"
+  method: "wgs"
 
 config_manta_tn:
   container: "docker://marrip/manta:v1.6.0"

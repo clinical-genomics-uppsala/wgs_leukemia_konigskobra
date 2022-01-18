@@ -14,6 +14,9 @@ reference:
   sites: ""
   wgs_intervals: ""
 
+cnvkit_batch:
+  method: "wgs"
+
 multiqc:
   container: ""
   qc_files:
