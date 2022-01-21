@@ -131,9 +131,7 @@ use rule * from prealignment as prealignment_*
 
 module qc:
     snakefile:
-        github(
-            "hydra-genetics/qc", path="workflow/Snakefile", tag=config["modules"]["qc"]
-        )
+        github("hydra-genetics/qc", path="workflow/Snakefile", tag=config["modules"]["qc"])
     config:
         config
 
@@ -184,9 +182,7 @@ use rule samtools_stats from qc as qc_samtools_stats with:
 
 module snv_indels:
     snakefile:
-        github(
-            "hydra-genetics/snv_indels", path="workflow/Snakefile", tag=config["modules"]["snv_indels"]
-        )
+        github("hydra-genetics/snv_indels", path="workflow/Snakefile", tag=config["modules"]["snv_indels"])
     config:
         config
 
@@ -197,7 +193,7 @@ use rule bgzip_vcf from snv_indels as snv_indels_bgzip_vcf with:
     output:
         temp("parabricks/mutectcaller/{sample}.vcf.gz"),
     log:
-        "parabricks/mutectcaller/{sample}.vcf.gz.log"
+        "parabricks/mutectcaller/{sample}.vcf.gz.log",
     benchmark:
         repeat("parabricks/mutectcaller/{sample}.vcf.gz.benchmark.tsv", config.get("bgzip_vcf", {}).get("benchmark_repeats", 1))
     message:
@@ -210,8 +206,10 @@ use rule tabix_vcf from snv_indels as snv_indels_tabix_vcf with:
     output:
         temp("parabricks/mutectcaller/{sample}.vcf.gz.tbi"),
     log:
-        "parabricks/mutectcaller/{sample}.vcf.gz.tbi.log"
+        "parabricks/mutectcaller/{sample}.vcf.gz.tbi.log",
     benchmark:
-        repeat("parabricks/mutectcaller/{sample}.vcf.gz.tbi.benchmark.tsv", config.get("tabix_vcf", {}).get("benchmark_repeats", 1))
+        repeat(
+            "parabricks/mutectcaller/{sample}.vcf.gz.tbi.benchmark.tsv", config.get("tabix_vcf", {}).get("benchmark_repeats", 1)
+        )
     message:
         "{rule}: tabix index for parabricks/mutectcaller/{wildcards.sample}.vcf.gz"
