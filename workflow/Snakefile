@@ -59,13 +59,16 @@ use rule * from cnv_sv as cnv_sv_*
 use rule cnvkit_batch from cnv_sv as cnv_sv_cnvkit_batch with:
     input:
         bam="parabricks/fq2bam/{sample}_T.bam",
+        bai="parabricks/fq2bam/{sample}_T.bam.bai",
         cnv_reference=config["cnvkit_batch"]["normal_reference"],
 
 
 use rule config_manta_tn from cnv_sv as cnv_sv_config_manta_tn with:
     input:
         bam_t="parabricks/fq2bam/{sample}_T.bam",
+        bai_t="parabricks/fq2bam/{sample}_T.bam.bai",
         bam_n="parabricks/fq2bam/{sample}_N.bam",
+        bai_n="parabricks/fq2bam/{sample}_N.bam.bai",
         ref=config["reference"]["fasta"],
 
 
@@ -88,7 +91,9 @@ use rule germline_vcf from cnv_sv as cnv_sv_germline_vcf with:
 use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
     input:
         bam_t="parabricks/fq2bam/{sample}_T.bam",
+        bai_t="parabricks/fq2bam/{sample}_T.bam.bai",
         bam_n="parabricks/fq2bam/{sample}_N.bam",
+        bai_n="parabricks/fq2bam/{sample}_N.bam.bai",
         ref=config["reference"]["fasta"],
         scrpt="cnv_sv/manta/{sample}/runWorkflow.py",
 
@@ -136,34 +141,40 @@ use rule * from qc as qc_*
 use rule mosdepth from qc as qc_mosdepth with:
     input:
         bam="parabricks/fq2bam/{sample}_{type}.bam",
+        bai="parabricks/fq2bam/{sample}_{type}.bam.bai",
 
 
 use rule picard_alignment_summary_metrics from qc as qc_picard_alignment_summary_metrics with:
     input:
         bam="parabricks/fq2bam/{sample}_{type}.bam",
+        bai="parabricks/fq2bam/{sample}_{type}.bam.bai",
         ref=config["reference"]["fasta"],
 
 
 use rule picard_duplication_metrics from qc as qc_picard_duplication_metrics with:
     input:
         bam="parabricks/fq2bam/{sample}_{type}.bam",
+        bai="parabricks/fq2bam/{sample}_{type}.bam.bai",
 
 
 use rule picard_collect_gc_bias_metrics from qc as qc_picard_collect_gc_bias_metrics with:
     input:
         bam="parabricks/fq2bam/{sample}_{type}.bam",
+        bai="parabricks/fq2bam/{sample}_{type}.bam.bai",
         ref=config["reference"]["fasta"],
 
 
 use rule picard_collect_multiple_metrics from qc as qc_picard_collect_multiple_metrics with:
     input:
         bam="parabricks/fq2bam/{sample}_{type}.bam",
+        bai="parabricks/fq2bam/{sample}_{type}.bam.bai",
         ref=config["reference"]["fasta"],
 
 
 use rule picard_collect_wgs_metrics from qc as qc_picard_collect_wgs_metrics with:
     input:
         bam="parabricks/fq2bam/{sample}_{type}.bam",
+        bai="parabricks/fq2bam/{sample}_{type}.bam.bai",
         ref=config["reference"]["fasta"],
         interval=config["reference"]["wgs_intervals"],
 
@@ -171,6 +182,7 @@ use rule picard_collect_wgs_metrics from qc as qc_picard_collect_wgs_metrics wit
 use rule samtools_stats from qc as qc_samtools_stats with:
     input:
         bam="parabricks/fq2bam/{sample}_{type}.bam",
+        bai="parabricks/fq2bam/{sample}_{type}.bam.bai",
 
 
 module snv_indels:
