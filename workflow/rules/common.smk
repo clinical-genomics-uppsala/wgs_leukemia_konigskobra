@@ -53,7 +53,7 @@ def compile_output_list(wildcards):
     )
     output_list.append(
         [
-            "cnv_sv/manta/%s/results/variants/somaticSV.ssa.vcf.gz" % (sample)
+            "cnv_sv/manta/%s/results/variants/somaticSV.vcf.gz" % (sample)
             for sample in get_samples(samples)
         ]
     )
