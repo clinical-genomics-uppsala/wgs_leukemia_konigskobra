@@ -6,9 +6,9 @@ default_resources:
   time: "1:00:00"
 
 fq2bam:
-  gres: "gpu:1"
+  gres: "--gres=gpu:1"
   partition: "GPU"
 
 mutectcaller:
-  gres: "gpu:1"
+  gres: "--gres=gpu:1"
   partition: "GPU"
