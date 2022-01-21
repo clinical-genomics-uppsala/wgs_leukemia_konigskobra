@@ -45,5 +45,5 @@ wildcard_constraints:
 def compile_output_list(wildcards):
     output_list = ["qc/multiqc/MultiQC.html"]
     output_list.append(["cnv_sv/cnvkit_vcf/%s_T.vcf" % (sample) for sample in get_samples(samples)])
-    output_list.append(["cnv_sv/manta/%s/results/variants/somaticSV.vcf.gz" % (sample) for sample in get_samples(samples)])
+    output_list.append(["cnv_sv/manta/%s/results/variants/somaticSV.ssa.vcf.gz" % (sample) for sample in get_samples(samples)])
     return output_list

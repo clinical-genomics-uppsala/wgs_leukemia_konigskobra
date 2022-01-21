@@ -23,6 +23,9 @@ module annotation:
         config
 
 
+use rule * from annotation as annotation_*
+
+
 use rule vep from annotation as annotation_vep with:
     input:
         vcf="parabricks/mutectcaller/{sample}.vcf.gz",
