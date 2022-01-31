@@ -5,7 +5,7 @@ units: "units.tsv"
 modules:
   annotation: "develop"
   cnv_sv: "develop"
-  parabricks: "fix-gres"
+  parabricks: "develop"
   prealignment: "develop"
   qc: "develop"
   snv_indels: "develop"
