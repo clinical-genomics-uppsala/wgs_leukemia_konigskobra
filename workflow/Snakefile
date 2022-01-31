@@ -79,7 +79,7 @@ use rule germline_vcf from cnv_sv as cnv_sv_germline_vcf with:
     input:
         vcf="annotation/vep/{sample}.vcf",
     output:
-        vcf=temp("cnv_sv/germline_vcf/{sample}_T.germline.vcf"),
+        vcf="cnv_sv/germline_vcf/{sample}_T.germline.vcf",
     log:
         "cnv_sv/germline_vcf/{sample}_T.germline.vcf.log",
     benchmark:
