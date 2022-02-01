@@ -3,7 +3,7 @@ samples: "samples.tsv"
 units: "units.tsv"
 
 modules:
-  annotation: "fix-ssa-output"
+  annotation: "develop"
   cnv_sv: "develop"
   parabricks: "develop"
   prealignment: "develop"
