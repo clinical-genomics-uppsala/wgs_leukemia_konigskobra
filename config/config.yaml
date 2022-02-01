@@ -39,6 +39,7 @@ fastp_pe:
 
 germline_vcf:
   container: "docker://marrip/vep:104.3"
+  filter: '--filter "DP > 20" --filter "MAX_AF >= 0.001"'
 
 multiqc:
   container: "docker://marrip/multiqc:1.11"
