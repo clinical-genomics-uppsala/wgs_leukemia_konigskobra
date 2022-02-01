@@ -3,12 +3,12 @@ samples: "samples.tsv"
 units: "units.tsv"
 
 modules:
-  annotation: "develop"
+  annotation: "fix-ssa-output"
   cnv_sv: "develop"
-  parabricks: "fix-gres"
+  parabricks: "develop"
   prealignment: "develop"
   qc: "develop"
-  snv_indels: "develop"
+  misc: "develop"
 
 default_container: "docker://hydragenetics/common:0.0.1"
 
@@ -39,6 +39,7 @@ fastp_pe:
 
 germline_vcf:
   container: "docker://marrip/vep:104.3"
+  filter: '--filter "DP > 20" --filter "MAX_AF >= 0.001"'
 
 multiqc:
   container: "docker://marrip/multiqc:1.11"
@@ -65,6 +66,11 @@ multiqc:
     - "qc/picard_collect_wgs_metrics/{sample}_{type}.txt"
     - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
 
+manta:
+  bed_files:
+    all: "reference/all.bed"
+    aml: "reference/aml.bed"
+
 manta_run_workflow_tn:
   container: "docker://marrip/manta:v1.6.0"
 
@@ -72,6 +78,11 @@ mosdepth:
   by: "500"
   container: "docker://hydragenetics/mosdepth:0.3.2"
   extra: "--fast-mode --no-per-base"
+
+mutectcaller:
+  bed_files:
+    all: "reference/all.bed"
+    aml: "reference/aml.bed"
 
 picard_alignment_summary_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
