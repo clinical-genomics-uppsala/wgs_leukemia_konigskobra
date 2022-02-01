@@ -5,7 +5,6 @@ __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
-#include: "rules/gunzip.smk"
 
 
 rule all:
@@ -210,9 +209,5 @@ use rule * from misc as misc_*
 
 
 ruleorder: parabricks_fq2bam > misc_samtools_index
-
-
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
-
-
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_bgzip
