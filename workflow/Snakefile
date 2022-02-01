@@ -5,6 +5,7 @@ __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
+#include: "rules/gunzip.smk"
 
 
 rule all:
@@ -33,16 +34,34 @@ use rule vep from annotation as annotation_vep with:
         cache=config["vep"]["vep_cache"],
         fasta=config["reference"]["fasta"],
     output:
-        vcf=temp("annotation/vep/{sample}.vcf"),
+        vcf="parabricks/mutectcaller/{sample}.vep.vcf",
     log:
-        "annotation/vep/{sample}.vcf.log",
+        "parabricks/mutectcaller/{sample}.vep.vcf.log",
     benchmark:
         repeat(
-            "annotation/vep/{sample}.vcf.benchmark.tsv",
+            "parabricks/mutectcaller/{sample}.vep.vcf.benchmark.tsv",
             config.get("vep", {}).get("benchmark_repeats", 1),
         )
     message:
-        "{rule}: Annotate {wildcards.sample}.vcf with VEP"
+        "{rule}: Annotate {wildcards.sample}.vcf"
+
+
+use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation with:
+    input:
+        vcf="cnv_sv/manta/{sample}/results/variants/somaticSV.snpeff.vcf.gz",
+        panel=config["simple_sv_annotation"]["panel"],
+        fusion_pairs=config["simple_sv_annotation"]["fusion_pairs"],
+    output:
+        vcf="cnv_sv/manta/{sample}.ssa.vcf",
+    log:
+        "cnv_sv/manta/{sample}.ssa.vcf.log",
+    benchmark:
+        repeat(
+            "cnv_sv/manta/{sample}.ssa.vcf.benchmark.tsv",
+            config.get("snpeff", {}).get("benchmark_repeats", 1),
+        )
+    message:
+        "{rule}: Annotate cnv_sv/manta/{wildcards.sample}.snpeff.vcf.gz"
 
 
 module cnv_sv:
@@ -77,9 +96,9 @@ use rule config_manta_tn from cnv_sv as cnv_sv_config_manta_tn with:
 
 use rule germline_vcf from cnv_sv as cnv_sv_germline_vcf with:
     input:
-        vcf="annotation/vep/{sample}.vcf",
+        vcf="parabricks/mutectcaller/{sample}.vep.vcf",
     output:
-        vcf=temp("cnv_sv/germline_vcf/{sample}_T.germline.vcf"),
+        vcf="cnv_sv/germline_vcf/{sample}_T.germline.vcf",
     log:
         "cnv_sv/germline_vcf/{sample}_T.germline.vcf.log",
     benchmark:
@@ -180,36 +199,20 @@ use rule samtools_stats from qc as qc_samtools_stats with:
         bam="parabricks/fq2bam/{sample}_{type}.bam",
 
 
-module snv_indels:
+module misc:
     snakefile:
-        github("hydra-genetics/snv_indels", path="workflow/Snakefile", tag=config["modules"]["snv_indels"])
+        github("hydra-genetics/misc", path="workflow/Snakefile", tag=config["modules"]["misc"])
     config:
         config
 
 
-use rule bgzip_vcf from snv_indels as snv_indels_bgzip_vcf with:
-    input:
-        "parabricks/mutectcaller/{sample}.vcf",
-    output:
-        temp("parabricks/mutectcaller/{sample}.vcf.gz"),
-    log:
-        "parabricks/mutectcaller/{sample}.vcf.gz.log",
-    benchmark:
-        repeat("parabricks/mutectcaller/{sample}.vcf.gz.benchmark.tsv", config.get("bgzip_vcf", {}).get("benchmark_repeats", 1))
-    message:
-        "{rule}: bgzip parabricks/mutectcaller/{wildcards.sample}.vcf"
+use rule * from misc as misc_*
 
 
-use rule tabix_vcf from snv_indels as snv_indels_tabix_vcf with:
-    input:
-        "parabricks/mutectcaller/{sample}.vcf.gz",
-    output:
-        temp("parabricks/mutectcaller/{sample}.vcf.gz.tbi"),
-    log:
-        "parabricks/mutectcaller/{sample}.vcf.gz.tbi.log",
-    benchmark:
-        repeat(
-            "parabricks/mutectcaller/{sample}.vcf.gz.tbi.benchmark.tsv", config.get("tabix_vcf", {}).get("benchmark_repeats", 1)
-        )
-    message:
-        "{rule}: tabix index for parabricks/mutectcaller/{wildcards.sample}.vcf.gz"
+ruleorder: parabricks_fq2bam > misc_samtools_index
+
+
+ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
+
+
+ruleorder: cnv_sv_manta_run_workflow_tn > misc_bgzip
