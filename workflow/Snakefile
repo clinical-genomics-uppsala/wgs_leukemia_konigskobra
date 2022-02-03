@@ -171,6 +171,12 @@ use rule mosdepth from qc as qc_mosdepth with:
         bai="parabricks/fq2bam/{sample}_{type}.bam.bai",
 
 
+use rule multiqc from qc as qc_multiqc with:
+    output:
+        html="qc/multiqc/MultiQC.html",
+        directory=directory("qc/multiqc/MultiQC_data"),
+
+
 use rule picard_alignment_summary_metrics from qc as qc_picard_alignment_summary_metrics with:
     input:
         bam="parabricks/fq2bam/{sample}_{type}.bam",
