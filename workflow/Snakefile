@@ -222,7 +222,7 @@ use rule bedtools_intersect from misc as misc_bedtools_intersect with:
 
 
 use rule imagemagick from misc as misc_imagemagick with:
-     output:
+    output:
         png="{file}.png",
 
 
