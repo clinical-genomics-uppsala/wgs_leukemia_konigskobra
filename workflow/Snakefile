@@ -84,6 +84,11 @@ use rule cnvkit_batch from cnv_sv as cnv_sv_cnvkit_batch with:
         cnv_reference=config["cnvkit_batch"]["normal_reference"],
 
 
+use rule cnvkit_vcf from cnv_sv as cnv_sv_cnvkit_vcf with:
+    output:
+        vcf="cnv_sv/cnvkit_vcf/{sample}_{type}.vcf",
+
+
 use rule config_manta_tn from cnv_sv as cnv_sv_config_manta_tn with:
     input:
         bam_t="parabricks/fq2bam/{sample}_T.bam",
@@ -117,6 +122,9 @@ use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
         bai_n="parabricks/fq2bam/{sample}_N.bam.bai",
         ref=config["reference"]["fasta"],
         scrpt="cnv_sv/manta/{sample}/runWorkflow.py",
+    output:
+        som_sv_vcf="cnv_sv/manta/{sample}/results/variants/somaticSV.vcf.gz",
+        som_sv_tbi="cnv_sv/manta/{sample}/results/variants/somaticSV.vcf.gz.tbi",
 
 
 module parabricks:
@@ -206,6 +214,16 @@ module misc:
 
 
 use rule * from misc as misc_*
+
+
+use rule bedtools_intersect from misc as misc_bedtools_intersect with:
+    output:
+        vcf="{module}/{caller}/{file}.{bed}.vcf",
+
+
+use rule imagemagick from misc as misc_imagemagick with:
+     output:
+        png="{file}.png",
 
 
 ruleorder: parabricks_fq2bam > misc_samtools_index
