@@ -5,7 +5,7 @@ units: "units.tsv"
 modules:
   annotation: "develop"
   cnv_sv: "develop"
-  parabricks: "develop"
+  parabricks: "fix-rg"
   prealignment: "develop"
   qc: "develop"
   misc: "develop"
@@ -15,10 +15,11 @@ default_container: "docker://hydragenetics/common:0.0.1"
 reference:
   fasta: "reference/reference.fasta"
   fai: "reference/reference.fasta.fai"
+  genome_dir: "reference/"
   sites: "reference/sites.vcf.gz"
   wgs_intervals: "reference/wgs.interval_list"
 
-trimmer_software: "fastp"
+trimmer_software: "fastp_pe"
 
 cnvkit_batch:
   container: "docker://marrip/cnvkit:0.9.9"
@@ -27,6 +28,10 @@ cnvkit_batch:
 
 cnvkit_call:
   container: "docker://marrip/cnvkit:0.9.9"
+
+cnvkit_scatter:
+  container: "docker://marrip/cnvkit:0.9.9"
+  extra: "-c {locus} --y-min -10 --y-max 10"
 
 cnvkit_vcf:
   container: "docker://python:3.9.9-slim-buster"
@@ -49,8 +54,8 @@ multiqc:
     - "qc/mosdepth/{sample}_{type}.mosdepth.summary.txt"
     - "qc/mosdepth/{sample}_{type}.regions.bed.gz"
     - "qc/mosdepth/{sample}_{type}.regions.bed.gz.csi"
-    - "qc/picard_alignment_summary_metrics/{sample}_{type}.alignment_summary_metrics.txt"
-    - "qc/picard_duplication_metrics/{sample}_{type}.duplication_metrics.txt"
+    - "qc/picard_collect_alignment_summary_metrics/{sample}_{type}.alignment_summary_metrics.txt"
+    - "qc/picard_collect_duplication_metrics/{sample}_{type}.duplication_metrics.txt"
     - "qc/picard_collect_gc_bias_metrics/{sample}_{type}.gc_bias.pdf"
     - "qc/picard_collect_gc_bias_metrics/{sample}_{type}.gc_bias.detail_metrics"
     - "qc/picard_collect_gc_bias_metrics/{sample}_{type}.gc_bias.summary_metrics"
@@ -84,10 +89,10 @@ mutectcaller:
     all: "reference/all.bed"
     aml: "reference/aml.bed"
 
-picard_alignment_summary_metrics:
+picard_collect_alignment_summary_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
 
-picard_duplication_metrics:
+picard_collect_duplication_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
 
 picard_collect_gc_bias_metrics:
