@@ -189,13 +189,13 @@ use rule multiqc from qc as qc_multiqc with:
         directory=directory("qc/multiqc/MultiQC_data"),
 
 
-use rule picard_alignment_summary_metrics from qc as qc_picard_alignment_summary_metrics with:
+use rule picard_collect_alignment_summary_metrics from qc as qc_picard_alignment_summary_metrics with:
     input:
         bam="parabricks/fq2bam/{sample}_{type}.bam",
         ref=config["reference"]["fasta"],
 
 
-use rule picard_duplication_metrics from qc as qc_picard_duplication_metrics with:
+use rule picard_collect_duplication_metrics from qc as qc_picard_duplication_metrics with:
     input:
         bam="parabricks/fq2bam/{sample}_{type}.bam",
 
