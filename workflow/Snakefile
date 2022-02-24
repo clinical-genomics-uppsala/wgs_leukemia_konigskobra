@@ -84,6 +84,18 @@ use rule cnvkit_batch from cnv_sv as cnv_sv_cnvkit_batch with:
         cnv_reference=config["cnvkit_batch"]["normal_reference"],
 
 
+use rule cnvkit_scatter from cnv_sv as cnv_sv_cnvkit_scatter with:
+    output:
+        plot="cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.png"
+    log:
+        "cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.log",
+    benchmark:
+        repeat(
+            "cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.benchmark.tsv",
+            config.get("cnvkit_scatter", {}).get("benchmark_repeats", 1),
+        )
+
+
 use rule cnvkit_vcf from cnv_sv as cnv_sv_cnvkit_vcf with:
     output:
         vcf="cnv_sv/cnvkit_vcf/{sample}_{type}.vcf",
