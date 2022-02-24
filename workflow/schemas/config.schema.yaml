@@ -40,15 +40,6 @@ properties:
       extra:
         type: string
         description: parameters that should be forwarded to fastp
-  merged:
-    type: object
-    properties:
-      benchmark_repeats:
-        type: string
-        description: set number of times benchmark should be repeated for merged
-      container:
-        type: string
-        description: name or path to docker/singularity container
   required:
     - samples
     - units

@@ -68,25 +68,6 @@ properties:
         type: string
         description: max execution time for 'fq2bam' rule
 
-  merged:
-    type: object
-    properties:
-      mem_mb:
-        type: integer
-        description: default memory used for 'merged' rule
-      mem_per_cpu:
-        type: integer
-        description: default memory used per cpu for 'merged' rule
-      partition:
-        type: string
-        description: default partition to use on the cluster for 'merged' rule
-      threads:
-        type: integer
-        description: default number of threads that will be used by 'merged' rule
-      time:
-        type: string
-        description: default max execution time for 'merged' rule
-
   mutectcaller:
     type: object
     properties:
