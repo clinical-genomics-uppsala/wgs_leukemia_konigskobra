@@ -153,6 +153,14 @@ module parabricks:
 use rule * from parabricks as parabricks_*
 
 
+use rule fq2bam from parabricks as parabricks_fq2bam with:
+    output:
+        bam="parabricks/fq2bam/{sample}_{type}.bam",
+        bai="parabricks/fq2bam/{sample}_{type}.bam.bai",
+        metrics="parabricks/fq2bam/{sample}_{type}.metrics",
+        recal="parabricks/fq2bam/{sample}_{type}.txt",
+
+
 module prealignment:
     snakefile:
         github(
