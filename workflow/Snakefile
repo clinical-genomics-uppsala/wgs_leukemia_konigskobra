@@ -8,248 +8,248 @@ include: "rules/common.smk"
 
 
 rule all:
-  input:
-      unpack(compile_output_list),
+    input:
+        unpack(compile_output_list),
 
 
 module annotation:
-  snakefile:
-      github(
-          "hydra-genetics/annotation",
-          path="workflow/Snakefile",
-          tag=config["modules"]["annotation"],
-      )
-  config:
-      config
+    snakefile:
+        github(
+            "hydra-genetics/annotation",
+            path="workflow/Snakefile",
+            tag=config["modules"]["annotation"],
+        )
+    config:
+        config
 
 
 use rule * from annotation as annotation_*
 
 
 use rule vep from annotation as annotation_vep with:
-  input:
-      vcf="parabricks/mutectcaller/{sample}.vcf.gz",
-      tabix="parabricks/mutectcaller/{sample}.vcf.gz.tbi",
-      cache=config["vep"]["vep_cache"],
-      fasta=config["reference"]["fasta"],
-  output:
-      vcf="parabricks/mutectcaller/{sample}.vep.vcf",
-  log:
-      "parabricks/mutectcaller/{sample}.vep.vcf.log",
-  benchmark:
-      repeat(
-          "parabricks/mutectcaller/{sample}.vep.vcf.benchmark.tsv",
-          config.get("vep", {}).get("benchmark_repeats", 1),
-      )
-  message:
-      "{rule}: Annotate {wildcards.sample}.vcf"
+    input:
+        vcf="parabricks/mutectcaller/{sample}.vcf.gz",
+        tabix="parabricks/mutectcaller/{sample}.vcf.gz.tbi",
+        cache=config["vep"]["vep_cache"],
+        fasta=config["reference"]["fasta"],
+    output:
+        vcf="parabricks/mutectcaller/{sample}.vep.vcf",
+    log:
+        "parabricks/mutectcaller/{sample}.vep.vcf.log",
+    benchmark:
+        repeat(
+            "parabricks/mutectcaller/{sample}.vep.vcf.benchmark.tsv",
+            config.get("vep", {}).get("benchmark_repeats", 1),
+        )
+    message:
+        "{rule}: Annotate {wildcards.sample}.vcf"
 
 
 use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation with:
-  input:
-      vcf="cnv_sv/manta/{sample}/results/variants/somaticSV.snpeff.vcf.gz",
-      panel=config["simple_sv_annotation"]["panel"],
-      fusion_pairs=config["simple_sv_annotation"]["fusion_pairs"],
-  output:
-      vcf="cnv_sv/manta/{sample}.ssa.vcf",
-  log:
-      "cnv_sv/manta/{sample}.ssa.vcf.log",
-  benchmark:
-      repeat(
-          "cnv_sv/manta/{sample}.ssa.vcf.benchmark.tsv",
-          config.get("snpeff", {}).get("benchmark_repeats", 1),
-      )
-  message:
-      "{rule}: Annotate cnv_sv/manta/{wildcards.sample}.snpeff.vcf.gz"
+    input:
+        vcf="cnv_sv/manta/{sample}/results/variants/somaticSV.snpeff.vcf.gz",
+        panel=config["simple_sv_annotation"]["panel"],
+        fusion_pairs=config["simple_sv_annotation"]["fusion_pairs"],
+    output:
+        vcf="cnv_sv/manta/{sample}.ssa.vcf",
+    log:
+        "cnv_sv/manta/{sample}.ssa.vcf.log",
+    benchmark:
+        repeat(
+            "cnv_sv/manta/{sample}.ssa.vcf.benchmark.tsv",
+            config.get("snpeff", {}).get("benchmark_repeats", 1),
+        )
+    message:
+        "{rule}: Annotate cnv_sv/manta/{wildcards.sample}.snpeff.vcf.gz"
 
 
 module cnv_sv:
-  snakefile:
-      github(
-          "hydra-genetics/cnv_sv",
-          path="workflow/Snakefile",
-          tag=config["modules"]["cnv_sv"],
-      )
-  config:
-      config
+    snakefile:
+        github(
+            "hydra-genetics/cnv_sv",
+            path="workflow/Snakefile",
+            tag=config["modules"]["cnv_sv"],
+        )
+    config:
+        config
 
 
 use rule * from cnv_sv as cnv_sv_*
 
 
 use rule cnvkit_batch from cnv_sv as cnv_sv_cnvkit_batch with:
-  input:
-      bam="parabricks/fq2bam/{sample}_T.bam",
-      bai="parabricks/fq2bam/{sample}_T.bam.bai",
-      cnv_reference=config["cnvkit_batch"]["normal_reference"],
+    input:
+        bam="parabricks/fq2bam/{sample}_T.bam",
+        bai="parabricks/fq2bam/{sample}_T.bam.bai",
+        cnv_reference=config["cnvkit_batch"]["normal_reference"],
 
 
 use rule cnvkit_scatter from cnv_sv as cnv_sv_cnvkit_scatter with:
-  output:
-      plot="cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.png",
-  log:
-      "cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.log",
-  benchmark:
-      repeat(
-          "cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.benchmark.tsv",
-          config.get("cnvkit_scatter", {}).get("benchmark_repeats", 1),
-      )
+    output:
+        plot="cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.png",
+    log:
+        "cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.log",
+    benchmark:
+        repeat(
+            "cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.benchmark.tsv",
+            config.get("cnvkit_scatter", {}).get("benchmark_repeats", 1),
+        )
 
 
 use rule cnvkit_vcf from cnv_sv as cnv_sv_cnvkit_vcf with:
-  output:
-      vcf="cnv_sv/cnvkit_vcf/{sample}_{type}.vcf",
+    output:
+        vcf="cnv_sv/cnvkit_vcf/{sample}_{type}.vcf",
 
 
 use rule config_manta_tn from cnv_sv as cnv_sv_config_manta_tn with:
-  input:
-      bam_t="parabricks/fq2bam/{sample}_T.bam",
-      bai_t="parabricks/fq2bam/{sample}_T.bam.bai",
-      bam_n="parabricks/fq2bam/{sample}_N.bam",
-      bai_n="parabricks/fq2bam/{sample}_N.bam.bai",
-      ref=config["reference"]["fasta"],
+    input:
+        bam_t="parabricks/fq2bam/{sample}_T.bam",
+        bai_t="parabricks/fq2bam/{sample}_T.bam.bai",
+        bam_n="parabricks/fq2bam/{sample}_N.bam",
+        bai_n="parabricks/fq2bam/{sample}_N.bam.bai",
+        ref=config["reference"]["fasta"],
 
 
 use rule germline_vcf from cnv_sv as cnv_sv_germline_vcf with:
-  input:
-      vcf="parabricks/mutectcaller/{sample}.vep.vcf",
-  output:
-      vcf="cnv_sv/germline_vcf/{sample}_T.germline.vcf",
-  log:
-      "cnv_sv/germline_vcf/{sample}_T.germline.vcf.log",
-  benchmark:
-      repeat(
-          "cnv_sv/germline_vcf/{sample}_T.germline.vcf.benchmark.tsv",
-          config.get("germline_vcf", {}).get("benchmark_repeats", 1),
-      )
-  message:
-      "{rule}: Create a germline only vcf cnv_sv/germline_vcf/{wildcards.sample}_T.germline.vcf"
+    input:
+        vcf="parabricks/mutectcaller/{sample}.vep.vcf",
+    output:
+        vcf="cnv_sv/germline_vcf/{sample}_T.germline.vcf",
+    log:
+        "cnv_sv/germline_vcf/{sample}_T.germline.vcf.log",
+    benchmark:
+        repeat(
+            "cnv_sv/germline_vcf/{sample}_T.germline.vcf.benchmark.tsv",
+            config.get("germline_vcf", {}).get("benchmark_repeats", 1),
+        )
+    message:
+        "{rule}: Create a germline only vcf cnv_sv/germline_vcf/{wildcards.sample}_T.germline.vcf"
 
 
 use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
-  input:
-      bam_t="parabricks/fq2bam/{sample}_T.bam",
-      bai_t="parabricks/fq2bam/{sample}_T.bam.bai",
-      bam_n="parabricks/fq2bam/{sample}_N.bam",
-      bai_n="parabricks/fq2bam/{sample}_N.bam.bai",
-      ref=config["reference"]["fasta"],
-      scrpt="cnv_sv/manta/{sample}/runWorkflow.py",
-  output:
-      som_sv_vcf="cnv_sv/manta/{sample}/results/variants/somaticSV.vcf.gz",
-      som_sv_tbi="cnv_sv/manta/{sample}/results/variants/somaticSV.vcf.gz.tbi",
+    input:
+        bam_t="parabricks/fq2bam/{sample}_T.bam",
+        bai_t="parabricks/fq2bam/{sample}_T.bam.bai",
+        bam_n="parabricks/fq2bam/{sample}_N.bam",
+        bai_n="parabricks/fq2bam/{sample}_N.bam.bai",
+        ref=config["reference"]["fasta"],
+        scrpt="cnv_sv/manta/{sample}/runWorkflow.py",
+    output:
+        som_sv_vcf="cnv_sv/manta/{sample}/results/variants/somaticSV.vcf.gz",
+        som_sv_tbi="cnv_sv/manta/{sample}/results/variants/somaticSV.vcf.gz.tbi",
 
 
 module parabricks:
-  snakefile:
-      github(
-          "hydra-genetics/parabricks",
-          path="workflow/Snakefile",
-          tag=config["modules"]["parabricks"],
-      )
-  config:
-      config
+    snakefile:
+        github(
+            "hydra-genetics/parabricks",
+            path="workflow/Snakefile",
+            tag=config["modules"]["parabricks"],
+        )
+    config:
+        config
 
 
 use rule * from parabricks as parabricks_*
 
 
 use rule fq2bam from parabricks as parabricks_fq2bam with:
-  output:
-      bam="parabricks/fq2bam/{sample}_{type}.bam",
-      bai="parabricks/fq2bam/{sample}_{type}.bam.bai",
-      metrics="parabricks/fq2bam/{sample}_{type}.metrics",
-      recal="parabricks/fq2bam/{sample}_{type}.txt",
+    output:
+        bam="parabricks/fq2bam/{sample}_{type}.bam",
+        bai="parabricks/fq2bam/{sample}_{type}.bam.bai",
+        metrics="parabricks/fq2bam/{sample}_{type}.metrics",
+        recal="parabricks/fq2bam/{sample}_{type}.txt",
 
 
 module prealignment:
-  snakefile:
-      github(
-          "hydra-genetics/prealignment",
-          path="workflow/Snakefile",
-          tag=config["modules"]["prealignment"],
-      )
-  config:
-      config
+    snakefile:
+        github(
+            "hydra-genetics/prealignment",
+            path="workflow/Snakefile",
+            tag=config["modules"]["prealignment"],
+        )
+    config:
+        config
 
 
 use rule * from prealignment as prealignment_*
 
 
 module qc:
-  snakefile:
-      github("hydra-genetics/qc", path="workflow/Snakefile", tag=config["modules"]["qc"])
-  config:
-      config
+    snakefile:
+        github("hydra-genetics/qc", path="workflow/Snakefile", tag=config["modules"]["qc"])
+    config:
+        config
 
 
 use rule * from qc as qc_*
 
 
 use rule mosdepth from qc as qc_mosdepth with:
-  input:
-      bam="parabricks/fq2bam/{sample}_{type}.bam",
-      bai="parabricks/fq2bam/{sample}_{type}.bam.bai",
+    input:
+        bam="parabricks/fq2bam/{sample}_{type}.bam",
+        bai="parabricks/fq2bam/{sample}_{type}.bam.bai",
 
 
 use rule multiqc from qc as qc_multiqc with:
-  output:
-      html="qc/multiqc/MultiQC.html",
-      directory=directory("qc/multiqc/MultiQC_data"),
+    output:
+        html="qc/multiqc/MultiQC.html",
+        directory=directory("qc/multiqc/MultiQC_data"),
 
 
 use rule picard_collect_alignment_summary_metrics from qc as qc_picard_alignment_summary_metrics with:
-  input:
-      bam="parabricks/fq2bam/{sample}_{type}.bam",
-      ref=config["reference"]["fasta"],
+    input:
+        bam="parabricks/fq2bam/{sample}_{type}.bam",
+        ref=config["reference"]["fasta"],
 
 
 use rule picard_collect_duplication_metrics from qc as qc_picard_duplication_metrics with:
-  input:
-      bam="parabricks/fq2bam/{sample}_{type}.bam",
+    input:
+        bam="parabricks/fq2bam/{sample}_{type}.bam",
 
 
 use rule picard_collect_gc_bias_metrics from qc as qc_picard_collect_gc_bias_metrics with:
-  input:
-      bam="parabricks/fq2bam/{sample}_{type}.bam",
-      ref=config["reference"]["fasta"],
+    input:
+        bam="parabricks/fq2bam/{sample}_{type}.bam",
+        ref=config["reference"]["fasta"],
 
 
 use rule picard_collect_multiple_metrics from qc as qc_picard_collect_multiple_metrics with:
-  input:
-      bam="parabricks/fq2bam/{sample}_{type}.bam",
-      ref=config["reference"]["fasta"],
+    input:
+        bam="parabricks/fq2bam/{sample}_{type}.bam",
+        ref=config["reference"]["fasta"],
 
 
 use rule picard_collect_wgs_metrics from qc as qc_picard_collect_wgs_metrics with:
-  input:
-      bam="parabricks/fq2bam/{sample}_{type}.bam",
-      ref=config["reference"]["fasta"],
-      interval=config["reference"]["wgs_intervals"],
+    input:
+        bam="parabricks/fq2bam/{sample}_{type}.bam",
+        ref=config["reference"]["fasta"],
+        interval=config["reference"]["wgs_intervals"],
 
 
 use rule samtools_stats from qc as qc_samtools_stats with:
-  input:
-      bam="parabricks/fq2bam/{sample}_{type}.bam",
+    input:
+        bam="parabricks/fq2bam/{sample}_{type}.bam",
 
 
 module misc:
-  snakefile:
-      github("hydra-genetics/misc", path="workflow/Snakefile", tag=config["modules"]["misc"])
-  config:
-      config
+    snakefile:
+        github("hydra-genetics/misc", path="workflow/Snakefile", tag=config["modules"]["misc"])
+    config:
+        config
 
 
 use rule * from misc as misc_*
 
 
 use rule bedtools_intersect from misc as misc_bedtools_intersect with:
-  output:
-      vcf="{module}/{caller}/{file}.{bed}.vcf",
+    output:
+        vcf="{module}/{caller}/{file}.{bed}.vcf",
 
 
 use rule imagemagick from misc as misc_imagemagick with:
-  output:
-      png="{file}.png",
+    output:
+        png="{file}.png",
 
 
 ruleorder: parabricks_fq2bam > misc_samtools_index
