@@ -84,6 +84,11 @@ use rule cnvkit_batch from cnv_sv as cnv_sv_cnvkit_batch with:
         cnv_reference=config["cnvkit_batch"]["normal_reference"],
 
 
+use rule cnvkit_call from cnv_sv as cnv_sv_cnvkit_call with:
+    output:
+        segment="cnv_sv/cnvkit_call/{sample}_{type}.loh.cns",
+
+
 use rule cnvkit_scatter from cnv_sv as cnv_sv_cnvkit_scatter with:
     output:
         plot="cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.png",
@@ -247,7 +252,7 @@ use rule bedtools_intersect from misc as misc_bedtools_intersect with:
         vcf="{module}/{caller}/{file}.{bed}.vcf",
 
 
-use rule imagemagick from misc as misc_imagemagick with:
+use rule imagemagick_convert from misc as misc_imagemagick_convert with:
     output:
         png="{file}.png",
 
