@@ -56,7 +56,7 @@ def compile_output_list(wildcards):
         ]
     )
     output_list.append(
-        ["cnv_sv/manta/%s.ssa.%s.vcf" % (sample, diagnosis) for sample in get_samples(samples) for diagnosis in ["aml", "all"]]
+        ["cnv_sv/manta_run_workflow_tn/%s.ssa.%s.vcf" % (sample, diagnosis) for sample in get_samples(samples) for diagnosis in ["aml", "all"]]
     )
     output_list.append(
         [

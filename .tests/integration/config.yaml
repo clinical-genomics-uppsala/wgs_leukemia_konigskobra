@@ -71,12 +71,10 @@ multiqc:
     - "qc/picard_collect_wgs_metrics/{sample}_{type}.txt"
     - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
 
-manta:
+manta_run_workflow_tn:
   bed_files:
     all: "reference/all.bed"
     aml: "reference/aml.bed"
-
-manta_run_workflow_tn:
   container: "docker://marrip/manta:v1.6.0"
 
 mosdepth:

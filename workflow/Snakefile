@@ -45,22 +45,41 @@ use rule vep from annotation as annotation_vep with:
         "{rule}: Annotate {wildcards.sample}.vcf"
 
 
+use rule vep from annotation as annotation_vep_t with:
+    input:
+        vcf="parabricks/mutectcaller/{sample}_T.vcf.gz",
+        tabix="parabricks/mutectcaller/{sample}_T.vcf.gz.tbi",
+        cache=config["vep"]["vep_cache"],
+        fasta=config["reference"]["fasta"],
+    output:
+        vcf="parabricks/mutectcaller/{sample}_T.vep.vcf",
+    log:
+        "parabricks/mutectcaller/{sample}_T.vep.vcf.log",
+    benchmark:
+        repeat(
+            "parabricks/mutectcaller/{sample}_T.vep.vcf.benchmark.tsv",
+            config.get("vep", {}).get("benchmark_repeats", 1),
+        )
+    message:
+        "{rule}: Annotate {wildcards.sample}_T.vcf"
+
+
 use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation with:
     input:
-        vcf="cnv_sv/manta/{sample}/results/variants/somaticSV.snpeff.vcf.gz",
+        vcf="cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.snpeff.vcf.gz",
         panel=config["simple_sv_annotation"]["panel"],
         fusion_pairs=config["simple_sv_annotation"]["fusion_pairs"],
     output:
-        vcf="cnv_sv/manta/{sample}.ssa.vcf",
+        vcf="cnv_sv/manta_run_workflow_tn/{sample}.ssa.vcf",
     log:
-        "cnv_sv/manta/{sample}.ssa.vcf.log",
+        "cnv_sv/manta_run_workflow_tn/{sample}.ssa.vcf.log",
     benchmark:
         repeat(
-            "cnv_sv/manta/{sample}.ssa.vcf.benchmark.tsv",
+            "cnv_sv/manta_run_workflow_tn/{sample}.ssa.vcf.benchmark.tsv",
             config.get("snpeff", {}).get("benchmark_repeats", 1),
         )
     message:
-        "{rule}: Annotate cnv_sv/manta/{wildcards.sample}.snpeff.vcf.gz"
+        "{rule}: Annotate cnv_sv/manta_run_workflow_tn/{wildcards.sample}/results/variants/somaticSV.snpeff.vcf.gz"
 
 
 module cnv_sv:
@@ -117,7 +136,7 @@ use rule config_manta_tn from cnv_sv as cnv_sv_config_manta_tn with:
 
 use rule germline_vcf from cnv_sv as cnv_sv_germline_vcf with:
     input:
-        vcf="parabricks/mutectcaller/{sample}.vep.vcf",
+        vcf="parabricks/mutectcaller/{sample}_T.vep.vcf",
     output:
         vcf="cnv_sv/germline_vcf/{sample}_T.germline.vcf",
     log:
@@ -138,10 +157,10 @@ use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
         bam_n="parabricks/fq2bam/{sample}_N.bam",
         bai_n="parabricks/fq2bam/{sample}_N.bam.bai",
         ref=config["reference"]["fasta"],
-        scrpt="cnv_sv/manta/{sample}/runWorkflow.py",
+        scrpt="cnv_sv/manta_run_workflow_tn/{sample}/runWorkflow.py",
     output:
-        som_sv_vcf="cnv_sv/manta/{sample}/results/variants/somaticSV.vcf.gz",
-        som_sv_tbi="cnv_sv/manta/{sample}/results/variants/somaticSV.vcf.gz.tbi",
+        som_sv_vcf="cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.vcf.gz",
+        som_sv_tbi="cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.vcf.gz.tbi",
 
 
 module parabricks:
