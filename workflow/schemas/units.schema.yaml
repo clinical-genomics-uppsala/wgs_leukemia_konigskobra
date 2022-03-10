@@ -10,7 +10,7 @@ properties:
   platform:
     type: string
     description: sequence platform that have been used to generate data, ex NextSeq
-  run:
+  flowcell:
     type: string
     description: sequencing run id
   lane:
@@ -29,7 +29,7 @@ required:
   - sample
   - type
   - platform
-  - run
+  - flowcell
   - lane
   - fastq1
   - fastq2

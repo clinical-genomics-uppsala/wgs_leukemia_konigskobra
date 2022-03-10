@@ -7,11 +7,11 @@ modules:
   cnv_sv: "master"
   compression: "v0.1.0"
   parabricks: "main"
-  prealignment: "master"
+  prealignment: "v0.1.0"
   qc: "master"
   misc: "master"
 
-default_container: "docker://marrip/common:1.1.1"
+default_container: "docker://hydragenetics/common:0.1.0"
 
 reference:
   fasta: ""
@@ -29,6 +29,13 @@ cnvkit_batch:
 cnvkit_call:
   container: "docker://marrip/cnvkit:0.9.9"
 
+cnvkit_diagram:
+  container: "docker://marrip/cnvkit:0.9.9"
+
+cnvkit_scatter:
+  container: "docker://marrip/cnvkit:0.9.9"
+  extra: "-c {locus} --y-min -10 --y-max 10"
+
 cnvkit_vcf:
   container: "docker://python:3.9.9-slim-buster"
 
@@ -41,6 +48,14 @@ fastp_pe:
 germline_vcf:
   container: "docker://marrip/vep:104.3"
   filter: '--filter "DP > 20" --filter "MAX_AF >= 0.001"'
+
+manta_run_workflow_tn:
+  container: "docker://marrip/manta:v1.6.0"
+
+mosdepth:
+  by: "500"
+  container: "docker://hydragenetics/mosdepth:0.3.2"
+  extra: "--fast-mode --no-per-base"
 
 multiqc:
   container: "docker://marrip/multiqc:1.11"
@@ -66,19 +81,6 @@ multiqc:
     - "qc/picard_collect_multiple_metrics/{sample}_{type}.quality_distribution.pdf"
     - "qc/picard_collect_wgs_metrics/{sample}_{type}.txt"
     - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
-
-manta:
-  bed_files:
-    all: ""
-    aml: ""
-
-manta_run_workflow_tn:
-  container: "docker://marrip/manta:v1.6.0"
-
-mosdepth:
-  by: "500"
-  container: "docker://hydragenetics/mosdepth:0.3.2"
-  extra: "--fast-mode --no-per-base"
 
 mutectcaller:
   bed_files:
@@ -110,8 +112,14 @@ picard_collect_multiple_metrics:
 picard_collect_wgs_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
 
-samtools_stats:
-  container: "docker://hydragenetics/common:0.0.1"
+simple_sv_annotation:
+  container: "docker://hydragenetics/simple_sv_annotation:2019.02.18"
+  panel: ""
+  fusion_pairs: ""
+
+snpeff:
+  container: "docker://hydragenetics/snpeff:5.0"
+  db: ""
 
 spring:
   container: "docker://hydragenetics/spring:1.0.1"
