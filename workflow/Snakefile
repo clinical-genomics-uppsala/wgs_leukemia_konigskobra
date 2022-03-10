@@ -163,6 +163,20 @@ use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
         som_sv_tbi="cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.vcf.gz.tbi",
 
 
+module compression:
+    snakefile:
+        github(
+            "hydra-genetics/compression",
+            path="workflow/Snakefile",
+            tag=config["modules"]["compression"],
+        )
+    config:
+        config
+
+
+use rule * from compression as compression_*
+
+
 module parabricks:
     snakefile:
         github(

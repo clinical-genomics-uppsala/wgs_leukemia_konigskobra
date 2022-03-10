@@ -5,6 +5,7 @@ units: "units.tsv"
 modules:
   annotation: "master"
   cnv_sv: "master"
+  compression: "v0.1.0"
   parabricks: "main"
   prealignment: "master"
   qc: "master"
@@ -112,8 +113,8 @@ picard_collect_wgs_metrics:
 samtools_stats:
   container: "docker://hydragenetics/common:0.0.1"
 
-tabix:
-  container: "docker://hydragenetics/common:0.0.1"
+spring:
+  container: "docker://hydragenetics/spring:1.0.1"
 
 vep:
   container: "docker://marrip/vep:104.3"

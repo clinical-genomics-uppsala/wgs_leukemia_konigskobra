@@ -69,4 +69,13 @@ def compile_output_list(wildcards):
             for diagnosis in ["aml", "all"]
         ]
     )
+    output_list.append(
+        [
+            "compression/spring/%s_%s_%s_%s.spring" % (sample, flowcell, lane, t)
+            for sample in set(units["sample"])
+            for flowcell in set(units["flowcell"])
+            for lane in set(units["lane"])
+            for t in set(units["type"])
+        ]
+    )
     return output_list
