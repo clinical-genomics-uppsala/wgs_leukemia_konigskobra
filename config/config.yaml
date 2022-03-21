@@ -6,7 +6,7 @@ modules:
   annotation: "master"
   cnv_sv: "master"
   compression: "v0.1.0"
-  parabricks: "main"
+  parabricks: "v0.1.0"
   prealignment: "v0.1.0"
   qc: "master"
   misc: "master"

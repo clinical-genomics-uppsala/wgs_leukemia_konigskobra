@@ -64,7 +64,7 @@ def compile_output_list(wildcards):
     )
     output_list.append(
         [
-            "parabricks/mutectcaller/%s.vep.%s.vcf" % (sample, diagnosis)
+            "parabricks/pbrun_mutectcaller_tn/%s.vep.%s.vcf" % (sample, diagnosis)
             for sample in get_samples(samples)
             for diagnosis in ["aml", "all"]
         ]

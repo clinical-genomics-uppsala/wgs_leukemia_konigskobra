@@ -28,17 +28,17 @@ use rule * from annotation as annotation_*
 
 use rule vep from annotation as annotation_vep with:
     input:
-        vcf="parabricks/mutectcaller/{sample}.vcf.gz",
-        tabix="parabricks/mutectcaller/{sample}.vcf.gz.tbi",
+        vcf="parabricks/pbrun_mutectcaller_tn/{sample}.vcf.gz",
+        tabix="parabricks/pbrun_mutectcaller_tn/{sample}.vcf.gz.tbi",
         cache=config["vep"]["vep_cache"],
         fasta=config["reference"]["fasta"],
     output:
-        vcf="parabricks/mutectcaller/{sample}.vep.vcf",
+        vcf="parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf",
     log:
-        "parabricks/mutectcaller/{sample}.vep.vcf.log",
+        "parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.log",
     benchmark:
         repeat(
-            "parabricks/mutectcaller/{sample}.vep.vcf.benchmark.tsv",
+            "parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.benchmark.tsv",
             config.get("vep", {}).get("benchmark_repeats", 1),
         )
     message:
@@ -47,17 +47,17 @@ use rule vep from annotation as annotation_vep with:
 
 use rule vep from annotation as annotation_vep_t with:
     input:
-        vcf="parabricks/mutectcaller/{sample}_T.vcf.gz",
-        tabix="parabricks/mutectcaller/{sample}_T.vcf.gz.tbi",
+        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.vcf.gz",
+        tabix="parabricks/pbrun_mutectcaller_t/{sample}_T.vcf.gz.tbi",
         cache=config["vep"]["vep_cache"],
         fasta=config["reference"]["fasta"],
     output:
-        vcf="parabricks/mutectcaller/{sample}_T.vep.vcf",
+        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf",
     log:
-        "parabricks/mutectcaller/{sample}_T.vep.vcf.log",
+        "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf.log",
     benchmark:
         repeat(
-            "parabricks/mutectcaller/{sample}_T.vep.vcf.benchmark.tsv",
+            "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf.benchmark.tsv",
             config.get("vep", {}).get("benchmark_repeats", 1),
         )
     message:
@@ -98,8 +98,8 @@ use rule * from cnv_sv as cnv_sv_*
 
 use rule cnvkit_batch from cnv_sv as cnv_sv_cnvkit_batch with:
     input:
-        bam="parabricks/fq2bam/{sample}_T.bam",
-        bai="parabricks/fq2bam/{sample}_T.bam.bai",
+        bam="parabricks/pbrun_fq2bam/{sample}_T.bam",
+        bai="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
         cnv_reference=config["cnvkit_batch"]["normal_reference"],
 
 
@@ -127,16 +127,16 @@ use rule cnvkit_vcf from cnv_sv as cnv_sv_cnvkit_vcf with:
 
 use rule config_manta_tn from cnv_sv as cnv_sv_config_manta_tn with:
     input:
-        bam_t="parabricks/fq2bam/{sample}_T.bam",
-        bai_t="parabricks/fq2bam/{sample}_T.bam.bai",
-        bam_n="parabricks/fq2bam/{sample}_N.bam",
-        bai_n="parabricks/fq2bam/{sample}_N.bam.bai",
+        bam_t="parabricks/pbrun_fq2bam/{sample}_T.bam",
+        bai_t="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
+        bam_n="parabricks/pbrun_fq2bam/{sample}_N.bam",
+        bai_n="parabricks/pbrun_fq2bam/{sample}_N.bam.bai",
         ref=config["reference"]["fasta"],
 
 
 use rule germline_vcf from cnv_sv as cnv_sv_germline_vcf with:
     input:
-        vcf="parabricks/mutectcaller/{sample}_T.vep.vcf",
+        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf",
     output:
         vcf="cnv_sv/germline_vcf/{sample}_T.germline.vcf",
     log:
@@ -152,10 +152,10 @@ use rule germline_vcf from cnv_sv as cnv_sv_germline_vcf with:
 
 use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
     input:
-        bam_t="parabricks/fq2bam/{sample}_T.bam",
-        bai_t="parabricks/fq2bam/{sample}_T.bam.bai",
-        bam_n="parabricks/fq2bam/{sample}_N.bam",
-        bai_n="parabricks/fq2bam/{sample}_N.bam.bai",
+        bam_t="parabricks/pbrun_fq2bam/{sample}_T.bam",
+        bai_t="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
+        bam_n="parabricks/pbrun_fq2bam/{sample}_N.bam",
+        bai_n="parabricks/pbrun_fq2bam/{sample}_N.bam.bai",
         ref=config["reference"]["fasta"],
         scrpt="cnv_sv/manta_run_workflow_tn/{sample}/runWorkflow.py",
     output:
@@ -191,12 +191,12 @@ module parabricks:
 use rule * from parabricks as parabricks_*
 
 
-use rule fq2bam from parabricks as parabricks_fq2bam with:
+use rule pbrun_fq2bam from parabricks as parabricks_pbrun_fq2bam with:
     output:
-        bam="parabricks/fq2bam/{sample}_{type}.bam",
-        bai="parabricks/fq2bam/{sample}_{type}.bam.bai",
-        metrics="parabricks/fq2bam/{sample}_{type}.metrics",
-        recal="parabricks/fq2bam/{sample}_{type}.txt",
+        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bai="parabricks/pbrun_fq2bam/{sample}_{type}.bam.bai",
+        metrics="parabricks/pbrun_fq2bam/{sample}_{type}.metrics",
+        recal="parabricks/pbrun_fq2bam/{sample}_{type}.txt",
 
 
 module prealignment:
@@ -225,8 +225,8 @@ use rule * from qc as qc_*
 
 use rule mosdepth from qc as qc_mosdepth with:
     input:
-        bam="parabricks/fq2bam/{sample}_{type}.bam",
-        bai="parabricks/fq2bam/{sample}_{type}.bam.bai",
+        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bai="parabricks/pbrun_fq2bam/{sample}_{type}.bam.bai",
 
 
 use rule multiqc from qc as qc_multiqc with:
@@ -237,37 +237,37 @@ use rule multiqc from qc as qc_multiqc with:
 
 use rule picard_collect_alignment_summary_metrics from qc as qc_picard_alignment_summary_metrics with:
     input:
-        bam="parabricks/fq2bam/{sample}_{type}.bam",
+        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
         ref=config["reference"]["fasta"],
 
 
 use rule picard_collect_duplication_metrics from qc as qc_picard_duplication_metrics with:
     input:
-        bam="parabricks/fq2bam/{sample}_{type}.bam",
+        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
 
 
 use rule picard_collect_gc_bias_metrics from qc as qc_picard_collect_gc_bias_metrics with:
     input:
-        bam="parabricks/fq2bam/{sample}_{type}.bam",
+        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
         ref=config["reference"]["fasta"],
 
 
 use rule picard_collect_multiple_metrics from qc as qc_picard_collect_multiple_metrics with:
     input:
-        bam="parabricks/fq2bam/{sample}_{type}.bam",
+        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
         ref=config["reference"]["fasta"],
 
 
 use rule picard_collect_wgs_metrics from qc as qc_picard_collect_wgs_metrics with:
     input:
-        bam="parabricks/fq2bam/{sample}_{type}.bam",
+        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
         ref=config["reference"]["fasta"],
         interval=config["reference"]["wgs_intervals"],
 
 
 use rule samtools_stats from qc as qc_samtools_stats with:
     input:
-        bam="parabricks/fq2bam/{sample}_{type}.bam",
+        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
 
 
 module misc:
@@ -290,6 +290,6 @@ use rule imagemagick_convert from misc as misc_imagemagick_convert with:
         png="{file}.png",
 
 
-ruleorder: parabricks_fq2bam > misc_samtools_index
+ruleorder: parabricks_pbrun_fq2bam > misc_samtools_index
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_bgzip
