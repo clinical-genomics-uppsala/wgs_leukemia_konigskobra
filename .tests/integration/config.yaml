@@ -6,7 +6,7 @@ modules:
   annotation: "develop"
   cnv_sv: "develop"
   compression: "v0.1.0"
-  parabricks: "develop"
+  parabricks: "v0.1.0"
   prealignment: "v0.1.0"
   qc: "develop"
   misc: "develop"
@@ -86,7 +86,7 @@ multiqc:
     - "qc/picard_collect_wgs_metrics/{sample}_{type}.txt"
     - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
 
-mutectcaller:
+pbrun_mutectcaller_tn:
   bed_files:
     all: "reference/all.bed"
     aml: "reference/aml.bed"
