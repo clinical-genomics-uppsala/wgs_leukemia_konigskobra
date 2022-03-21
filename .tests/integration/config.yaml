@@ -116,6 +116,13 @@ picard_collect_multiple_metrics:
 picard_collect_wgs_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
 
+pindel_call:
+  bedfile: "reference/pindel.bed"
+  container: "docker://hydragenetics/pindel:0.2.5b9"
+
+pindel2vcf:
+  container: "docker://hydragenetics/pindel:0.2.5b9"
+
 simple_sv_annotation:
   container: "docker://hydragenetics/simple_sv_annotation:2019.02.18"
   panel: "reference/panel.txt"
