@@ -134,6 +134,12 @@ use rule config_manta_tn from cnv_sv as cnv_sv_config_manta_tn with:
         ref=config["reference"]["fasta"],
 
 
+use rule generate_pindel_config from cnv_sv as cnv_sv_generate_pindel_config with:
+    input:
+        bam="parabricks/pbrun_fq2bam/{sample}_T.bam",
+        metrics="qc/picard_collect_multiple_metrics/{sample}_T.insert_size_metrics",
+
+
 use rule germline_vcf from cnv_sv as cnv_sv_germline_vcf with:
     input:
         vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf",
@@ -161,6 +167,14 @@ use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
     output:
         som_sv_vcf="cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.vcf.gz",
         som_sv_tbi="cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.vcf.gz.tbi",
+
+
+use rule pindel_call from cnv_sv as cnv_sv_pindel_call with:
+    input:
+        bam="parabricks/pbrun_fq2bam/{sample}_T.bam",
+        bai="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
+        config="cnv_sv/pindel/{sample}.cfg",
+        ref=config["reference"]["fasta"],
 
 
 module compression:

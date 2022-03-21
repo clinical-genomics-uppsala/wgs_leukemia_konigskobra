@@ -47,6 +47,7 @@ def compile_output_list(wildcards):
     chromosomes.extend(range(1, 23))
     output_list = ["qc/multiqc/MultiQC.html"]
     output_list.append(["cnv_sv/cnvkit_vcf/%s_T.vcf" % (sample) for sample in get_samples(samples)])
+    output_list.append(["cnv_sv/pindel/%s.vcf" % (sample) for sample in get_samples(samples)])
     output_list.append(["cnv_sv/cnvkit_diagram/%s_T.png" % (sample) for sample in get_samples(samples)])
     output_list.append(
         [
