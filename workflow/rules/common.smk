@@ -79,4 +79,12 @@ def compile_output_list(wildcards):
             for t in set(units["type"])
         ]
     )
+    output_list.append(
+        [
+            "compression/crumble/%s_%s.crumble.cram%s" % (sample, t, ext)
+            for sample in get_samples(samples)
+            for t in get_unit_types(units, sample)
+            for ext in ["", ".crai"]
+        ]
+    )
     return output_list
