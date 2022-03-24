@@ -5,11 +5,11 @@ units: "units.tsv"
 modules:
   annotation: "develop"
   cnv_sv: "develop"
-  compression: "v0.1.0"
+  compression: "v1.0.0"
   parabricks: "v0.1.0"
   prealignment: "v0.1.0"
   qc: "develop"
-  misc: "develop"
+  misc: "v0.1.0"
 
 default_container: "docker://hydragenetics/common:0.1.0"
 
@@ -64,6 +64,7 @@ mosdepth:
 multiqc:
   container: "docker://marrip/multiqc:1.11"
   qc_files:
+    - "qc/fastqc/{sample}_{type}_{flowcell}_{lane}_{read}.zip"
     - "qc/mosdepth/{sample}_{type}.mosdepth.global.dist.txt"
     - "qc/mosdepth/{sample}_{type}.mosdepth.region.dist.txt"
     - "qc/mosdepth/{sample}_{type}.mosdepth.summary.txt"
