@@ -73,10 +73,10 @@ def compile_output_list(wildcards):
     output_list.append(
         [
             "compression/spring/%s_%s_%s_%s.spring" % (sample, flowcell, lane, t)
-            for sample in set(units["sample"])
-            for flowcell in set(units["flowcell"])
-            for lane in set(units["lane"])
-            for t in set(units["type"])
+            for sample in get_samples(samples)
+            for flowcell in set([u.flowcell for u in units.loc[(sample,)].dropna().itertuples()])
+            for lane in set([u.lane for u in units.loc[(sample,)].dropna().itertuples()])
+            for t in get_unit_types(units, sample)
         ]
     )
     output_list.append(
