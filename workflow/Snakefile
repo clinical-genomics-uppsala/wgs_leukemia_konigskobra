@@ -254,8 +254,8 @@ use rule mosdepth from qc as qc_mosdepth with:
 
 use rule multiqc from qc as qc_multiqc with:
     output:
-        html="qc/multiqc/MultiQC.html",
-        directory=directory("qc/multiqc/MultiQC_data"),
+        html="qc/multiqc/multiqc.html",
+        directory=directory("qc/multiqc/multiqc_data"),
 
 
 use rule picard_collect_alignment_summary_metrics from qc as qc_picard_alignment_summary_metrics with:
