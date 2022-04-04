@@ -177,6 +177,11 @@ use rule pindel_call from cnv_sv as cnv_sv_pindel_call with:
         ref=config["reference"]["fasta"],
 
 
+use rule pindel2vcf from cnv_sv as cnv_sv_pindel2vcf with:
+    output:
+        vcf="cnv_sv/pindel/{sample}.vcf",
+
+
 module compression:
     snakefile:
         github(
