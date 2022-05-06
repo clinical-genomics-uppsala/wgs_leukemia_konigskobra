@@ -210,7 +210,7 @@ use rule samtools_view from compression as compression_samtools_view with:
 
 use rule spring from compression as compression_spring with:
     output:
-        spring="compression/spring/{sample}_{flowcell}_{lane}_{type}.spring",
+        spring="compression/spring/{sample}_{flowcell}_{lane}_{barcode}_{type}.spring",
 
 
 module parabricks:
