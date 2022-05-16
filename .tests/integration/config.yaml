@@ -3,12 +3,12 @@ samples: "samples.tsv"
 units: "units.tsv"
 
 modules:
-  annotation: "develop"
+  annotation: "e58432c3467db31621ab51a16034a026cf2a2c84"
   cnv_sv: "develop"
-  compression: "v1.0.0"
-  parabricks: "v0.1.0"
-  prealignment: "v0.1.0"
-  qc: "develop"
+  compression: "v1.1.0"
+  parabricks: "v0.2.0"
+  prealignment: "v0.2.0"
+  qc: "v0.1.0"
   misc: "v0.1.0"
 
 default_container: "docker://hydragenetics/common:0.1.0"
