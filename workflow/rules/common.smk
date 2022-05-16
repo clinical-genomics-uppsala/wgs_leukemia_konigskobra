@@ -79,9 +79,45 @@ def compile_output_list(wildcards):
             "compression/spring/%s_%s_%s_%s_%s.spring" % (sample, flowcell, lane, barcode, t)
             for sample in get_samples(samples)
             for t in get_unit_types(units, sample)
-            for flowcell in set([u.flowcell for u in units.loc[(sample,t,)].dropna().itertuples()])
-            for barcode in set([u.barcode for u in units.loc[(sample,t,)].dropna().itertuples()])
-            for lane in set([u.lane for u in units.loc[(sample,t,)].dropna().itertuples()])
+            for flowcell in set(
+                [
+                    u.flowcell
+                    for u in units.loc[
+                        (
+                            sample,
+                            t,
+                        )
+                    ]
+                    .dropna()
+                    .itertuples()
+                ]
+            )
+            for barcode in set(
+                [
+                    u.barcode
+                    for u in units.loc[
+                        (
+                            sample,
+                            t,
+                        )
+                    ]
+                    .dropna()
+                    .itertuples()
+                ]
+            )
+            for lane in set(
+                [
+                    u.lane
+                    for u in units.loc[
+                        (
+                            sample,
+                            t,
+                        )
+                    ]
+                    .dropna()
+                    .itertuples()
+                ]
+            )
         ]
     )
     output_list.append(
