@@ -64,7 +64,7 @@ mosdepth:
 multiqc:
   container: "docker://marrip/multiqc:1.11"
   qc_files:
-    - "qc/fastqc/{sample}_{type}_{flowcell}_{lane}_{read}.zip"
+    - "qc/fastqc/{sample}_{type}_{flowcell}_{lane}_{barcode}_{read}.zip"
     - "qc/mosdepth/{sample}_{type}.mosdepth.global.dist.txt"
     - "qc/mosdepth/{sample}_{type}.mosdepth.region.dist.txt"
     - "qc/mosdepth/{sample}_{type}.mosdepth.summary.txt"
