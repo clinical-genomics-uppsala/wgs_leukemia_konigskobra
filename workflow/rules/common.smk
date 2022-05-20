@@ -62,15 +62,9 @@ def compile_output_list(wildcards):
     )
     output_list.append(
         [
-            "cnv_sv/manta_run_workflow_tn/%s.ssa.%s.vcf" % (sample, diagnosis)
+            "tsv_files/%s_%s_tn.%s.tsv" % (sample, tool, diagnosis)
             for sample in get_samples(samples)
-            for diagnosis in ["aml", "all"]
-        ]
-    )
-    output_list.append(
-        [
-            "parabricks/pbrun_mutectcaller_tn/%s.vep.%s.vcf" % (sample, diagnosis)
-            for sample in get_samples(samples)
+            for tool in ["manta", "mutectcaller"]
             for diagnosis in ["aml", "all"]
         ]
     )
