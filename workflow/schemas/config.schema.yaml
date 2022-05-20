@@ -4,45 +4,452 @@ type: object
 properties:
   resources:
     type: string
-    description: Path to resources.yaml file
+    description: path to resources.yaml file
+
   samples:
     type: string
-    description: Path to samples.tsv file
+    description: path to samples.tsv file
+
   units:
     type: string
-    description: Path to units.tsv file
-  trimmer_software:
-    type: string
+    description: path to units.tsv file
+
+  modules:
+    type: object
+    description: map module to version/branch/tag
+    properties:
+      annotation:
+        type: string
+        description: version/branch/tag
+      cnv_sv:
+        type: string
+        description: version/branch/tag
+      compression:
+        type: string
+        description: version/branch/tag
+      parabricks:
+        type: string
+        description: version/branch/tag
+      prealignment:
+        type: string
+        description: version/branch/tag
+      qc:
+        type: string
+        description: version/branch/tag
+      misc:
+        type: string
+        description: version/branch/tag
+    required:
+      - annotation
+      - cnv_sv
+      - compression
+      - parabricks
+      - prealignment
+      - qc
+      - misc
+
   default_container:
     type: string
     description: name or path to a default docker/singularity container
+
   reference:
     type: object
     properties:
+      fai:
+        type: string
+        description: path to reference fasta index file
       fasta:
         type: string
         description: path to reference fasta file
       sites:
         type: string
         description: path to known sites list file
+      wgs_intervals:
+        type: string
+        description: path to wgs interval file
     required:
+      - fai
       - fasta
       - sites
-  fastp_pe:
+      - wgs_intervals
+
+  trimmer_software:
+    type: string
+    description: name of rule to be used for trimming
+
+  bedtools_intersect:
     type: object
+    description: parameters for bedtools_intersect
     properties:
-      benchmark_repeats:
-        type: number
-        description: set number of times benchmark should be repeated for fastp_pe
+      extra:
+        type: string
+        description: extra parameters to be forwarded
+
+  cnvkit_batch:
+    type: object
+    description: parameters for cnvkit_batch
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      method:
+        type: string
+        description: cnvkit method to be used, should be wgs
+      normal_reference:
+        type: string
+        description: path to panel of normals file
+    required:
+      - container
+
+  cnvkit_call:
+    type: object
+    description: parameters for cnvkit_call
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  cnvkit_diagram:
+    type: object
+    description: parameters for cnvkit_diagram
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  cnvkit_scatter:
+    type: object
+    description: parameters for cnvkit_scatter
+    properties:
       container:
         type: string
         description: name or path to docker/singularity container
       extra:
         type: string
-        description: parameters that should be forwarded to fastp
-  required:
-    - samples
-    - units
-    - resources
-    - default_container
-    - reference
+        description: extra parameters to be forwarded
+    required:
+      - container
+
+  cnvkit_vcf:
+    type: object
+    description: parameters for cnvkit_vcf
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  crumble:
+    type: object
+    description: parameters for crumble
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      extra:
+        type: string
+        description: extra parameters to be forwarded
+    required:
+      - container
+
+  config_manta_tn:
+    type: object
+    description: parameters for config_manta_tn
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  fastp_pe:
+    type: object
+    description: parameters for fastp_pe
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  fastqc:
+    type: object
+    description: parameters for fastqc
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  germline_vcf:
+    type: object
+    description: parameters for germline_vcf
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      filter:
+        type: string
+        description: which filter options to apply
+    required:
+      - container
+      - filter
+
+  imagemagick_convert:
+    type: object
+    description: parameters for imagemagick_convert
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  manta_run_workflow_tn:
+    type: object
+    description: parameters for manta_run_workflow_tn
+    properties:
+      bed_files:
+        type: object
+        description: map of bed files
+        properties:
+          all:
+            type: string
+            description: path to bed file containing relevant genes for ALL
+          aml:
+            type: string
+            description: path to bed file containing relevant genes for AML
+        required:
+          - all
+          - aml
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - bed_files
+      - container
+
+  mosdepth:
+    type: object
+    description: parameters for mosdepth
+    properties:
+      by:
+        type: string
+        description: window size
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      extra:
+        type: string
+        description: extra parameters to be forwarded
+    required:
+      - by
+      - container
+
+  multiqc:
+    type: object
+    description: parameters for mosdepth
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      qc_files:
+        type: array
+        description: list of input files containing appropriate variables
+    required:
+      - container
+      - qc_files
+
+  pbrun_mutectcaller_tn:
+    type: object
+    description: parameters for pbrun_mutectcaller_tn
+    properties:
+      bed_files:
+        type: object
+        description: map of bedfiles
+        properties:
+          all:
+            type: string
+            description: path to bed file containing relevant genes for ALL
+          aml:
+            type: string
+            description: path to bed file containing relevant genes for AML
+        required:
+          - all
+          - aml
+    required:
+      - bed_files
+
+  picard_collect_alignment_summary_metrics:
+    type: object
+    description: parameters for picard_collect_alignment_summary_metrics
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  picard_collect_duplication_metrics:
+    type: object
+    description: parameters for picard_collect_duplication_metrics
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  picard_collect_gc_bias_metrics:
+    type: object
+    description: parameters for picard_collect_gc_bias_metrics
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  picard_collect_multiple_metrics:
+    type: object
+    description: parameters for picard_collect_multiple_metrics
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      output_ext:
+        type: array
+        description: list of metric file suffixes that should be produced
+    required:
+      - container
+
+  picard_collect_wgs_metrics:
+    type: object
+    description: parameters for picard_collect_wgs_metrics
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  pindel_call:
+    type: object
+    description: parameters for pindel_call
+    properties:
+      bedfile:
+        type: string
+        description: path to bed file containing region of interest
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - bedfile
+      - container
+
+  pindel2vcf:
+    type: object
+    description: parameters for pindel2vcf
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  simple_sv_annotation:
+    type: object
+    description: parameters for simple_sv_annotation
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      fusion_pairs:
+        type: string
+        description: path to list of fusion pairs
+      panel:
+        type: string
+        description: path to list of genes
+    required:
+      - container
+      - fusion_pairs
+      - panel
+
+  snpeff:
+    type: object
+    description: parameters for snpeff
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      db:
+        type: string
+        description: path to snpeff db
+    required:
+      - container
+      - db
+
+  spring:
+    type: object
+    description: parameters for spring
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  vep:
+    type: object
+    description: parameters for vep
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      vep_cache:
+        type: string
+        description: path to vep cache
+    required:
+      - container
+      - vep_cache
+
+required:
+  - resources
+  - samples
+  - units
+  - modules
+  - default_container
+  - reference
+  - trimmer_software
+  - cnvkit_batch
+  - cnvkit_call
+  - cnvkit_diagram
+  - cnvkit_scatter
+  - cnvkit_vcf
+  - config_manta_tn
+  - crumble
+  - fastp_pe
+  - fastqc
+  - germline_vcf
+  - imagemagick_convert
+  - manta_run_workflow_tn
+  - mosdepth
+  - multiqc
+  - pbrun_mutectcaller_tn
+  - picard_collect_alignment_summary_metrics
+  - picard_collect_duplication_metrics
+  - picard_collect_gc_bias_metrics
+  - picard_collect_multiple_metrics
+  - picard_collect_wgs_metrics
+  - pindel_call
+  - pindel2vcf
+  - simple_sv_annotation
+  - snpeff
+  - spring
+  - vep

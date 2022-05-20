@@ -6,7 +6,7 @@ default_resources:
   threads: 0
   time: ""
 
-fq2bam:
+pbrun_fq2bam:
   gres: ""
   mem_mb: 0
   mem_per_cpu: 0
@@ -14,7 +14,15 @@ fq2bam:
   threads: 0
   time: ""
 
-mutectcaller:
+pbrun_mutectcaller_t:
+  gres: ""
+  mem_mb: 0
+  mem_per_cpu: 0
+  partition: ""
+  threads: 0
+  time: ""
+
+pbrun_mutectcaller_tn:
   gres: ""
   mem_mb: 0
   mem_per_cpu: 0
