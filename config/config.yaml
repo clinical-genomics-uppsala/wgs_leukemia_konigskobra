@@ -37,7 +37,7 @@ cnvkit_diagram:
 
 cnvkit_scatter:
   container: "docker://marrip/cnvkit:0.9.9"
-  extra: "-c {locus} --y-min -10 --y-max 10"
+  extra: "-c {locus} --y-min -5 --y-max 5"
 
 cnvkit_vcf:
   container: "docker://python:3.9.9-slim-buster"
@@ -150,4 +150,5 @@ spring:
 
 vep:
   container: "docker://marrip/vep:104.3"
+  extra: "--max_af --protein --hgvs --canonical --pick"
   vep_cache: ""
