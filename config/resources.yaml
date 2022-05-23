@@ -7,7 +7,7 @@ default_resources:
   time: ""
 
 pbrun_fq2bam:
-  gres: ""
+  gres: "--gres=gpu:"
   mem_mb: 0
   mem_per_cpu: 0
   partition: ""
@@ -15,7 +15,7 @@ pbrun_fq2bam:
   time: ""
 
 pbrun_mutectcaller_t:
-  gres: ""
+  gres: "--gres=gpu:"
   mem_mb: 0
   mem_per_cpu: 0
   partition: ""
@@ -23,7 +23,7 @@ pbrun_mutectcaller_t:
   time: ""
 
 pbrun_mutectcaller_tn:
-  gres: ""
+  gres: "--gres=gpu:"
   mem_mb: 0
   mem_per_cpu: 0
   partition: ""
