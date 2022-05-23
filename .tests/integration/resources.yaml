@@ -5,10 +5,14 @@ default_resources:
   threads: 1
   time: "1:00:00"
 
-fq2bam:
+pbrun_fq2bam:
   gres: "--gres=gpu:1"
   partition: "GPU"
 
-mutectcaller:
+pbrun_mutectcaller_t:
+  gres: "--gres=gpu:1"
+  partition: "GPU"
+
+pbrun_mutectcaller_tn:
   gres: "--gres=gpu:1"
   partition: "GPU"
