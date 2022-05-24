@@ -6,16 +6,24 @@ default_resources:
   threads: 0
   time: ""
 
-fq2bam:
-  gres: ""
+pbrun_fq2bam:
+  gres: "--gres=gpu:"
   mem_mb: 0
   mem_per_cpu: 0
   partition: ""
   threads: 0
   time: ""
 
-mutectcaller:
-  gres: ""
+pbrun_mutectcaller_t:
+  gres: "--gres=gpu:"
+  mem_mb: 0
+  mem_per_cpu: 0
+  partition: ""
+  threads: 0
+  time: ""
+
+pbrun_mutectcaller_tn:
+  gres: "--gres=gpu:"
   mem_mb: 0
   mem_per_cpu: 0
   partition: ""
