@@ -109,7 +109,7 @@ snakemake --profile my-profile
 | `tsv_files/{sample}_mutectcaller_tn.all.tsv` | `.tsv` file for excel containing SNVs from mutect2 for ALL |
 | `tsv_files/{sample}_manta_tn.aml.tsv` | `.tsv` file for excel containing SVs from manta for AML |
 | `tsv_files/{sample}_manta_tn.all.tsv` | `.tsv` file for excel containing SVs from manta for ALL |
-| `qc/multiqc/multiqc.html` | `.html` report from MultiQC |
+| `qc/multiqc/multiqc_DNA.html` | `.html` report from MultiQC |
 
 ## :judge: Rule Graph
 
