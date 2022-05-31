@@ -254,17 +254,36 @@ properties:
 
   multiqc:
     type: object
-    description: parameters for mosdepth
+    description: parameters for multiqc
     properties:
       container:
         type: string
         description: name or path to docker/singularity container
+      reports:
+        type: object
+        description: report names
+        properties:
+          DNA:
+            type: object
+            description: information to compile report correctly
+            properties:
+              included_unit_types:
+                type: array
+                description: unit types to be part of this report
+              qc_files:
+                type: array
+                description: file names which should be included in report
+            required:
+              - included_unit_types
+              - qc_files
+        required:
+          - DNA
       qc_files:
         type: array
         description: list of input files containing appropriate variables
     required:
       - container
-      - qc_files
+      - reports
 
   pbrun_mutectcaller_tn:
     type: object
