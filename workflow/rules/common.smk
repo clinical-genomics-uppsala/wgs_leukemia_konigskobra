@@ -49,7 +49,7 @@ wildcard_constraints:
 def compile_output_list(wildcards):
     chromosomes = ["X", "Y"]
     chromosomes.extend(range(1, 23))
-    output_list = ["qc/multiqc/multiqc.html"]
+    output_list = ["qc/multiqc/multiqc_%s.html" % (report) for report in config["multiqc"]["reports"]]
     output_list.append(["cnv_sv/cnvkit_vcf/%s_T.vcf" % (sample) for sample in get_samples(samples)])
     output_list.append(["cnv_sv/pindel/%s.vcf" % (sample) for sample in get_samples(samples)])
     output_list.append(["cnv_sv/cnvkit_diagram/%s_T.png" % (sample) for sample in get_samples(samples)])
