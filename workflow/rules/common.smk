@@ -49,7 +49,7 @@ wildcard_constraints:
 def compile_output_list(wildcards):
     chromosomes = ["X", "Y"]
     chromosomes.extend(range(1, 23))
-    output_list = ["qc/multiqc/multiqc_%s.html" % (report) for report in config["multiqc"]["reports"]]
+    output_list = ["qc/multiqc/multiqc_DNA.html"]
     output_list.append(["cnv_sv/cnvkit_vcf/%s_T.vcf" % (sample) for sample in get_samples(samples)])
     output_list.append(["cnv_sv/pindel/%s.vcf" % (sample) for sample in get_samples(samples)])
     output_list.append(["cnv_sv/cnvkit_diagram/%s_T.png" % (sample) for sample in get_samples(samples)])
@@ -62,15 +62,9 @@ def compile_output_list(wildcards):
     )
     output_list.append(
         [
-            "cnv_sv/manta_run_workflow_tn/%s.ssa.%s.vcf" % (sample, diagnosis)
+            "tsv_files/%s_%s_tn.%s.tsv" % (sample, tool, diagnosis)
             for sample in get_samples(samples)
-            for diagnosis in ["aml", "all"]
-        ]
-    )
-    output_list.append(
-        [
-            "parabricks/pbrun_mutectcaller_tn/%s.vep.%s.vcf" % (sample, diagnosis)
-            for sample in get_samples(samples)
+            for tool in ["manta", "mutectcaller"]
             for diagnosis in ["aml", "all"]
         ]
     )

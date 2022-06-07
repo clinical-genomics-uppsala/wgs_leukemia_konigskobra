@@ -5,6 +5,8 @@ __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
+include: "rules/manta_to_tsv.smk"
+include: "rules/mutectcaller_to_tsv.smk"
 
 
 rule all:

@@ -4,22 +4,23 @@ type: object
 properties:
   default_resources:
     type: object
+    description: default resource definitions
     properties:
       mem_mb:
         type: integer
-        description: default memory used for a rule
+        description: max memory in MB to be available by default
       mem_per_cpu:
         type: integer
-        description: default memory used per cpu for a rule
+        description: memory in MB used per cpu by default
       partition:
         type: string
-        description: default partition to use on the cluster for a rule
+        description: partition to use on cluster by default
       threads:
         type: integer
-        description: default number of threads that will be used by a rule
+        description: number of threads to be available by default
       time:
         type: string
-        description: default max execution time for a rule
+        description: max execution time by default
     required:
       - mem_mb
       - mem_per_cpu
@@ -27,68 +28,594 @@ properties:
       - threads
       - time
 
+  bedtools_intersect:
+    type: object
+    description: resource definitions for bedtools_intersect
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+
+  cnvkit_batch:
+    type: object
+    description: resource definitions for cnvkit_batch
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  cnvkit_call:
+    type: object
+    description: resource definitions for cnvkit_call
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  cnvkit_diagram:
+    type: object
+    description: resource definitions for cnvkit_diagram
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  cnvkit_scatter:
+    type: object
+    description: resource definitions for cnvkit_scatter
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  cnvkit_vcf:
+    type: object
+    description: resource definitions for cnvkit_vcf
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  config_manta_tn:
+    type: object
+    description: resource definitions for config_manta_tn
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  crumble:
+    type: object
+    description: resource definitions for crumble
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
   fastp_pe:
     type: object
+    description: resource definitions for fastp_pe
     properties:
       mem_mb:
         type: integer
-        description: default memory used for 'fastp_pe' rule
+        description: max memory in MB to be available
       mem_per_cpu:
         type: integer
-        description: default memory used per cpu for 'fastp_pe' rule
+        description: memory in MB used per cpu
       partition:
         type: string
-        description: default partition to use on the cluster for 'fastp_pe' rule
+        description: partition to use on cluster
       threads:
         type: integer
-        description: default number of threads that will be used by 'fastp_pe' rule
+        description: number of threads to be available
       time:
         type: string
-        description: default max execution time for 'fastp_pe' rule
-
-  fq2bam:
+        description: max execution time
+ 
+  fastqc:
     type: object
+    description: resource definitions for fastqc
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  germline_vcf:
+    type: object
+    description: resource definitions for germline_vcf
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  imagemagick_convert:
+    type: object
+    description: resource definitions for imagemagick_convert
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  manta_run_workflow_tn:
+    type: object
+    description: resource definitions for manta_run_workflow_tn
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  mosdepth:
+    type: object
+    description: resource definitions for mosdepth
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  multiqc:
+    type: object
+    description: resource definitions for multiqc
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  pbrun_fq2bam:
+    type: object
+    description: resource definitions for pbrun_fq2bam
     properties:
       gres:
         type: string
-        description: generic resource scheduling for 'fq2bam' rule
+        description: general resource definition for gpus
       mem_mb:
         type: integer
-        description: memory used for 'fq2bam' rule
+        description: max memory in MB to be available
       mem_per_cpu:
         type: integer
-        description: memory used per cpu for 'fq2bam' rule
+        description: memory in MB used per cpu
       partition:
         type: string
-        description: partition to use on the cluster for 'fq2bam' rule
+        description: partition to use on cluster
       threads:
         type: integer
-        description: number of threads that will be used by 'fq2bam' rule
+        description: number of threads to be available
       time:
         type: string
-        description: max execution time for 'fq2bam' rule
+        description: max execution time
 
-  mutectcaller:
+  pbrun_mutectcaller_t:
     type: object
+    description: resource definitions for pbrun_mutectcaller_t
     properties:
       gres:
         type: string
-        description: generic resource scheduling for 'mutectcaller' rule
+        description: general resource definition for gpus
       mem_mb:
         type: integer
-        description: memory used for 'mutectcaller' rule
+        description: max memory in MB to be available
       mem_per_cpu:
         type: integer
-        description: memory used per cpu for 'mutectcaller' rule
+        description: memory in MB used per cpu
       partition:
         type: string
-        description: partition to use on the cluster for 'mutectcaller' rule
+        description: partition to use on cluster
       threads:
         type: integer
-        description: number of threads that will be used by 'mutectcaller' rule
+        description: number of threads to be available
       time:
         type: string
-        description: max execution time for 'mutectcaller' rule
+        description: max execution time
+ 
+  pbrun_mutectcaller_tn:
+    type: object
+    description: resource definitions for pbrun_mutectcaller_tn
+    properties:
+      gres:
+        type: string
+        description: general resource definition for gpus
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  picard_collect_alignment_summary_metrics:
+    type: object
+    description: resource definitions for picard_collect_alignment_summary_metrics
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  picard_collect_duplication_metrics:
+    type: object
+    description: resource definitions for picard_collect_duplication_metrics
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  picard_collect_gc_bias_metrics:
+    type: object
+    description: resource definitions for picard_collect_gc_bias_metrics
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  picard_collect_multiple_metrics:
+    type: object
+    description: resource definitions for picard_collect_multiple_metrics
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  picard_collect_wgs_metrics:
+    type: object
+    description: resource definitions for picard_collect_wgs_metrics
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  pindel_call:
+    type: object
+    description: resource definitions for pindel_call
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  pindel2vcf:
+    type: object
+    description: resource definitions for pindel2vcf
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  simple_sv_annotation:
+    type: object
+    description: resource definitions for simple_sv_annotation
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  snpeff:
+    type: object
+    description: resource definitions for snpeff
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  spring:
+    type: object
+    description: resource definitions for spring
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+ 
+  vep:
+    type: object
+    description: resource definitions for vep
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
 
 required:
   - default_resources
