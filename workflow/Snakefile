@@ -5,6 +5,7 @@ __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
+include: "rules/cp_results.smk"
 include: "rules/manta_to_tsv.smk"
 include: "rules/mutectcaller_to_tsv.smk"
 
@@ -341,3 +342,14 @@ use rule samtools_index from misc as misc_samtools_index with:
 ruleorder: parabricks_pbrun_fq2bam > misc_samtools_index
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_bgzip
+ruleorder: misc_tabix > cp_pindel_tbi
+ruleorder: misc_tabix > cp_manta_tbi
+ruleorder: misc_tabix > cp_manta_all_tbi
+ruleorder: misc_tabix > cp_manta_aml_tbi
+ruleorder: misc_tabix > cp_tbi_tn
+ruleorder: misc_tabix > cp_tbi_all
+ruleorder: misc_tabix > cp_tbi_aml
+ruleorder: misc_tabix > cp_tbi_t
+ruleorder: misc_tabix > cp_cnvkit_tbi
+ruleorder: misc_samtools_index > cp_crai
+ruleorder: misc_imagemagick_convert > cp_cnvkit_diagram
