@@ -8,7 +8,7 @@ rule cp_vcf_all:
     input:
         "parabricks/pbrun_mutectcaller_tn/{sample}.vep.all.vcf.gz",
     output:
-        "Results/{project}/{sample}/vcfs/{sample}.vep.all.vcf.gz",
+        "Results/{project}/{sample}/vcfs/{sample}_TN.vep.all.vcf.gz",
     threads: config.get("cp_vcf_all", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_vcf_all", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -26,7 +26,7 @@ rule cp_tbi_all:
     input:
         "parabricks/pbrun_mutectcaller_tn/{sample}.vep.all.vcf.gz.tbi",
     output:
-        "Results/{project}/{sample}/vcfs/{sample}.vep.all.vcf.gz.tbi",
+        "Results/{project}/{sample}/vcfs/{sample}_TN.vep.all.vcf.gz.tbi",
     threads: config.get("cp_tbi_all", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_tbi_all", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -44,7 +44,7 @@ rule cp_vcf_aml:
     input:
         "parabricks/pbrun_mutectcaller_tn/{sample}.vep.aml.vcf.gz",
     output:
-        "Results/{project}/{sample}/vcfs/{sample}.vep.aml.vcf.gz",
+        "Results/{project}/{sample}/vcfs/{sample}_TN.vep.aml.vcf.gz",
     threads: config.get("cp_vcf_aml", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_vcf_aml", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -62,7 +62,7 @@ rule cp_tbi_aml:
     input:
         "parabricks/pbrun_mutectcaller_tn/{sample}.vep.aml.vcf.gz.tbi",
     output:
-        "Results/{project}/{sample}/vcfs/{sample}.vep.aml.vcf.gz.tbi",
+        "Results/{project}/{sample}/vcfs/{sample}_TN.vep.aml.vcf.gz.tbi",
     threads: config.get("cp_tbi_aml", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_tbi_aml", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -80,7 +80,7 @@ rule cp_vcf_tn:
     input:
         "parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.gz",
     output:
-        "Results/{project}/{sample}/vcfs/{sample}.vep.vcf.gz",
+        "Results/{project}/{sample}/vcfs/{sample}_TN.vep.vcf.gz",
     threads: config.get("cp_vcf_tn", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_vcf_tn", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -98,7 +98,7 @@ rule cp_tbi_tn:
     input:
         "parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.gz.tbi",
     output:
-        "Results/{project}/{sample}/vcfs/{sample}.vep.vcf.gz.tbi",
+        "Results/{project}/{sample}/vcfs/{sample}_TN.vep.vcf.gz.tbi",
     threads: config.get("cp_tbi_tn", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_tbi_tn", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -188,7 +188,7 @@ rule cp_tsv_mutectcaller_all:
     input:
         "tsv_files/{sample}_mutectcaller_tn.all.tsv",
     output:
-        "Results/{project}/{sample}/{sample}_mutectcaller_tn.all.tsv",
+        "Results/{project}/{sample}/{sample}_mutectcaller_TN.all.tsv",
     threads: config.get("cp_tsv_mutectcaller_all", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_tsv_mutectcaller_all", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -206,7 +206,7 @@ rule cp_tsv_manta_all:
     input:
         "tsv_files/{sample}_manta_tn.all.tsv",
     output:
-        "Results/{project}/{sample}/{sample}_manta_tn.all.tsv",
+        "Results/{project}/{sample}/{sample}_manta_TN.all.tsv",
     threads: config.get("cp_tsv_manta_all", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_tsv_manta_all", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -224,7 +224,7 @@ rule cp_tsv_mutectcaller_aml:
     input:
         "tsv_files/{sample}_mutectcaller_tn.aml.tsv",
     output:
-        "Results/{project}/{sample}/{sample}_mutectcaller_tn.aml.tsv",
+        "Results/{project}/{sample}/{sample}_mutectcaller_TN.aml.tsv",
     threads: config.get("cp_tsv_muntectcaller_aml", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_tsv_muntectcaller_aml", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -242,7 +242,7 @@ rule cp_tsv_manta_aml:
     input:
         "tsv_files/{sample}_manta_tn.aml.tsv",
     output:
-        "Results/{project}/{sample}/{sample}_manta_tn.aml.tsv",
+        "Results/{project}/{sample}/{sample}_manta_TN.aml.tsv",
     threads: config.get("cp_tsv_manta_aml", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_tsv_manta_aml", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -260,7 +260,7 @@ rule cp_manta_vcf:
     input:
         "cnv_sv/manta_run_workflow_tn/{sample}.ssa.vcf.gz",
     output:
-        "Results/{project}/{sample}/manta/{sample}.ssa.vcf.gz",
+        "Results/{project}/{sample}/manta/{sample}_TN.ssa.vcf.gz",
     threads: config.get("cp_manta_vcf", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_manta_vcf", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -278,7 +278,7 @@ rule cp_manta_tbi:
     input:
         "cnv_sv/manta_run_workflow_tn/{sample}.ssa.vcf.gz.tbi",
     output:
-        "Results/{project}/{sample}/manta/{sample}.ssa.vcf.gz.tbi",
+        "Results/{project}/{sample}/manta/{sample}_TN.ssa.vcf.gz.tbi",
     threads: config.get("cp_manta_tbi", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_manta_tbi", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -296,7 +296,7 @@ rule cp_manta_all_vcf:
     input:
         "cnv_sv/manta_run_workflow_tn/{sample}.ssa.all.vcf.gz",
     output:
-        "Results/{project}/{sample}/manta/{sample}.ssa.all.vcf.gz",
+        "Results/{project}/{sample}/manta/{sample}_TN.ssa.all.vcf.gz",
     threads: config.get("cp_manta_all_vcf", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_manta_all_vcf", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -314,7 +314,7 @@ rule cp_manta_all_tbi:
     input:
         "cnv_sv/manta_run_workflow_tn/{sample}.ssa.all.vcf.gz.tbi",
     output:
-        "Results/{project}/{sample}/manta/{sample}.ssa.all.vcf.gz.tbi",
+        "Results/{project}/{sample}/manta/{sample}_TN.ssa.all.vcf.gz.tbi",
     threads: config.get("cp_manta_all_tbi", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_manta_all_tbi", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -332,7 +332,7 @@ rule cp_manta_aml_vcf:
     input:
         "cnv_sv/manta_run_workflow_tn/{sample}.ssa.aml.vcf.gz",
     output:
-        "Results/{project}/{sample}/manta/{sample}.ssa.aml.vcf.gz",
+        "Results/{project}/{sample}/manta/{sample}_TN.ssa.aml.vcf.gz",
     threads: config.get("cp_manta_aml_vcf", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_manta_aml_vcf", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -350,7 +350,7 @@ rule cp_manta_aml_tbi:
     input:
         "cnv_sv/manta_run_workflow_tn/{sample}.ssa.aml.vcf.gz.tbi",
     output:
-        "Results/{project}/{sample}/manta/{sample}.ssa.aml.vcf.gz.tbi",
+        "Results/{project}/{sample}/manta/{sample}_TN.ssa.aml.vcf.gz.tbi",
     threads: config.get("cp_manta_aml_tbi", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_manta_aml_tbi", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -476,7 +476,7 @@ rule cp_multiqc:
     input:
         "qc/multiqc/multiqc_DNA.html",
     output:
-        "Results/MultiQC_DNA.html",
+        "Results/MultiQC_TN.html",
     threads: config.get("cp_multiqc", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_multiqc", {}).get("mem_mb", config["default_resources"]["mem_mb"]),

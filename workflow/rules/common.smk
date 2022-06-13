@@ -49,7 +49,7 @@ wildcard_constraints:
 def compile_output_list(wildcards):
     chromosomes = ["X", "Y"]
     chromosomes.extend(range(1, 23))
-    output_list = ["Results/MultiQC_DNA.html"]
+    output_list = ["Results/MultiQC_TN.html"]
     output_list.append(
         [
             "Results/%s/%s/%s.pindel.vcf.gz%s" % (samples.loc[(sample)]["project"], sample, sample, ext)
@@ -60,13 +60,6 @@ def compile_output_list(wildcards):
     output_list.append(
         [
             "Results/%s/%s/cnvkit/%s_T.vcf.gz%s" % (samples.loc[(sample)]["project"], sample, sample, ext)
-            for sample in get_samples(samples)
-            for ext in ["", ".tbi"]
-        ]
-    )
-    output_list.append(
-        [
-            "Results/%s/%s/%s.pindel.vcf.gz%s" % (samples.loc[(sample)]["project"], sample, sample, ext)
             for sample in get_samples(samples)
             for ext in ["", ".tbi"]
         ]
@@ -83,15 +76,15 @@ def compile_output_list(wildcards):
     )
     output_list.append(
         [
-            "Results/%s/%s/manta/%s.ssa%s.vcf.gz%s" % (samples.loc[(sample)]["project"], sample, sample, diagnons, ext)
+            "Results/%s/%s/manta/%s_TN.ssa%s.vcf.gz%s" % (samples.loc[(sample)]["project"], sample, sample, diagnosis, ext)
             for sample in get_samples(samples)
-            for diagnons in ["", ".all", ".aml"]
+            for diagnosis in ["", ".all", ".aml"]
             for ext in ["", ".tbi"]
         ]
     )
     output_list.append(
         [
-            "Results/%s/%s/%s_%s_tn.%s.tsv" % (samples.loc[(sample)]["project"], sample, sample, tool, diagnosis)
+            "Results/%s/%s/%s_%s_TN.%s.tsv" % (samples.loc[(sample)]["project"], sample, sample, tool, diagnosis)
             for sample in get_samples(samples)
             for tool in ["manta", "mutectcaller"]
             for diagnosis in ["aml", "all"]
@@ -153,7 +146,7 @@ def compile_output_list(wildcards):
     )
     output_list.append(
         [
-            "Results/%s/%s/vcfs/%s.vep%s.vcf.gz%s" % (samples.loc[(sample)]["project"], sample, sample, diagnosis, ext)
+            "Results/%s/%s/vcfs/%s_TN.vep%s.vcf.gz%s" % (samples.loc[(sample)]["project"], sample, sample, diagnosis, ext)
             for sample in get_samples(samples)
             for diagnosis in ["", ".all", ".aml"]
             for ext in ["", ".tbi"]
