@@ -52,31 +52,31 @@ def compile_output_list(wildcards):
     output_list = ["Results/MultiQC_TN.html"]
     output_list.append(
         [
-            "Results/%s/%s/%s.pindel.vcf.gz%s" % (samples.loc[(sample)]["project"], sample, sample, ext)
+            "Results/%s/%s/SNV_indels/%s.pindel.vcf.gz%s" % (samples.loc[(sample)]["project"], sample, sample, ext)
             for sample in get_samples(samples)
             for ext in ["", ".tbi"]
         ]
     )
     output_list.append(
         [
-            "Results/%s/%s/cnvkit/%s_T.vcf.gz%s" % (samples.loc[(sample)]["project"], sample, sample, ext)
+            "Results/%s/%s/CNV/%s_T.vcf.gz%s" % (samples.loc[(sample)]["project"], sample, sample, ext)
             for sample in get_samples(samples)
             for ext in ["", ".tbi"]
         ]
     )
     output_list.append(
-        ["Results/%s/%s/cnvkit/%s_T.png" % (samples.loc[(sample)]["project"], sample, sample) for sample in get_samples(samples)]
+        ["Results/%s/%s/CNV/%s_T.png" % (samples.loc[(sample)]["project"], sample, sample) for sample in get_samples(samples)]
     )
     output_list.append(
         [
-            "Results/%s/%s/cnvkit/%s_T_chr%s.png" % (samples.loc[(sample)]["project"], sample, sample, chromosome)
+            "Results/%s/%s/CNV/%s_T_chr%s.png" % (samples.loc[(sample)]["project"], sample, sample, chromosome)
             for sample in get_samples(samples)
             for chromosome in chromosomes
         ]
     )
     output_list.append(
         [
-            "Results/%s/%s/manta/%s_TN.ssa%s.vcf.gz%s" % (samples.loc[(sample)]["project"], sample, sample, diagnosis, ext)
+            "Results/%s/%s/SV/%s_TN.ssa%s.vcf.gz%s" % (samples.loc[(sample)]["project"], sample, sample, diagnosis, ext)
             for sample in get_samples(samples)
             for diagnosis in ["", ".all", ".aml"]
             for ext in ["", ".tbi"]
@@ -84,9 +84,15 @@ def compile_output_list(wildcards):
     )
     output_list.append(
         [
-            "Results/%s/%s/%s_%s_TN.%s.tsv" % (samples.loc[(sample)]["project"], sample, sample, tool, diagnosis)
+            "Results/%s/%s/SNV_indels/%s_mutectcaller_TN.%s.tsv" % (samples.loc[(sample)]["project"], sample, sample, diagnosis)
             for sample in get_samples(samples)
-            for tool in ["manta", "mutectcaller"]
+            for diagnosis in ["aml", "all"]
+        ]
+    )
+    output_list.append(
+        [
+            "Results/%s/%s/SV/%s_manta_TN.%s.tsv" % (samples.loc[(sample)]["project"], sample, sample, diagnosis)
+            for sample in get_samples(samples)
             for diagnosis in ["aml", "all"]
         ]
     )
@@ -138,7 +144,7 @@ def compile_output_list(wildcards):
     )
     output_list.append(
         [
-            "Results/%s/%s/%s_%s.crumble.cram%s" % (samples.loc[(sample)]["project"], sample, sample, type, ext)
+            "Results/%s/%s/Cram/%s_%s.crumble.cram%s" % (samples.loc[(sample)]["project"], sample, sample, type, ext)
             for sample in get_samples(samples)
             for type in get_unit_types(units, sample)
             for ext in ["", ".crai"]
@@ -146,7 +152,7 @@ def compile_output_list(wildcards):
     )
     output_list.append(
         [
-            "Results/%s/%s/vcfs/%s_TN.vep%s.vcf.gz%s" % (samples.loc[(sample)]["project"], sample, sample, diagnosis, ext)
+            "Results/%s/%s/SNV_indels/%s_TN.vep%s.vcf.gz%s" % (samples.loc[(sample)]["project"], sample, sample, diagnosis, ext)
             for sample in get_samples(samples)
             for diagnosis in ["", ".all", ".aml"]
             for ext in ["", ".tbi"]
@@ -154,7 +160,7 @@ def compile_output_list(wildcards):
     )
     output_list.append(
         [
-            "Results/%s/%s/vcfs/%s_T.vep.vcf.gz%s" % (samples.loc[(sample)]["project"], sample, sample, ext)
+            "Results/%s/%s/SNV_indels/%s_T.vep.vcf.gz%s" % (samples.loc[(sample)]["project"], sample, sample, ext)
             for sample in get_samples(samples)
             for ext in ["", ".tbi"]
         ]
