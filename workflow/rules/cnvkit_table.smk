@@ -4,6 +4,7 @@ __email__ = "arielle.munters@scilifelab.uu.se"
 __license__ = "GPL-3"
 
 
+# localrules: cnvkit_table
 rule cnvkit_table:
     input:
         cns="cnv_sv/cnvkit_call/{sample}_{type}.loh.cns",
@@ -31,6 +32,6 @@ rule cnvkit_table:
     conda:
         "../envs/cnvkit_table.yaml"
     message:
-        "{rule}: Create output table from "
+        "{rule}: Create output table from {input.cns} and {input.gene_interest}"
     script:
         "../scripts/cnvkit_to_table.py"
