@@ -1,10 +1,11 @@
-__author__ = "Martin Rippin"
-__copyright__ = "Copyright 2021, Martin Rippin"
-__email__ = "martin.rippin@igp.uu.se"
+__author__ = "Martin Rippin, Arielle R Munters"
+__copyright__ = "Copyright 2022, Martin Rippin, Arielle R Munters"
+__email__ = "martin.rippin@igp.uu.se, arielle.munters@scilifelab.uu.se"
 __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
+include: "rules/cnvkit_table.smk"
 include: "rules/cp_results.smk"
 include: "rules/manta_to_tsv.smk"
 include: "rules/mutectcaller_to_tsv.smk"

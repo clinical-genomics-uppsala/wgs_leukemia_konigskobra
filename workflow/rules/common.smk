@@ -76,6 +76,12 @@ def compile_output_list(wildcards):
     )
     output_list.append(
         [
+            "Results/%s/%s/CNV/%s_T.CNV.xlsx" % (samples.loc[(sample)]["project"], sample, sample)
+            for sample in get_samples(samples)
+        ]
+    )
+    output_list.append(
+        [
             "Results/%s/%s/SV/%s_TN.ssa%s.vcf.gz%s" % (samples.loc[(sample)]["project"], sample, sample, diagnosis, ext)
             for sample in get_samples(samples)
             for diagnosis in ["", ".all", ".aml"]
