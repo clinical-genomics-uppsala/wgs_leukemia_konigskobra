@@ -15,7 +15,8 @@ with open(snakemake.input.gene_interest) as bedfile:
     for line in bedfile:
         bedtable.append(line.strip().split('\t'))
 
-relevant_cnvs = []
+chromosomes = ['chr'+str(i) for i in range(1,23)]+['chrX','chrY']
+relevant_cnvs = { i : [] for i in chromosomes }
 relevant_cnvs_header = ['Chromosome', 'Start', 'End', 'Log2', 'BAF', 'CopyNumber1', 'CopyNumber2','Depth', 'Probes', 'Weight']
 with open(snakemake.input.cns, 'r+') as cnsfile:
     cns_header = next(cnsfile).rstrip().split("\t")
@@ -31,7 +32,7 @@ with open(snakemake.input.cns, 'r+') as cnsfile:
                 outline = [cnv_chr, cnv_start, cnv_end, float(cnv[cns_header.index('log2')]), cnv_baf,
                            cnv[cns_header.index('cn1')], cnv[cns_header.index('cn2')], cnv[cns_header.index('depth')],
                            cnv[cns_header.index('probes')], cnv[cns_header.index('weight')]]
-                relevant_cnvs.append(outline)
+                relevant_cnvs[cnv_chr].append(outline)
                 continue
             else:
                 for bedline in bedtable:
@@ -46,31 +47,33 @@ with open(snakemake.input.cns, 'r+') as cnsfile:
                                           cnv[cns_header.index('cn1')], cnv[cns_header.index('cn2')],
                                           cnv[cns_header.index('depth')], cnv[cns_header.index('probes')],
                                           cnv[cns_header.index('weight')]]
-                                relevant_cnvs.append(outline)
+                                relevant_cnvs[cnv_chr].append(outline)
                                 break
 
 ''' Creating xlsx file '''
 sample = str(snakemake.input.cns).split("/")[-1].split("_")[0]
 workbook = xlsxwriter.Workbook(snakemake.output[0])
-worksheet_calls = workbook.add_worksheet('Calls')
 heading_format = workbook.add_format({'bold': True, 'font_size': 18})
 tablehead_format = workbook.add_format({'bold': True, 'text_wrap': True})
 red_format = workbook.add_format({'font_color': 'red'})
+# create sheets for each chromosome
+for chromosome in chromosomes:
+    worksheet = workbook.add_worksheet(chromosome)
+    worksheet.set_column('B:E', 10)
+    worksheet.write('A1', 'CNVkit calls for '+chromosome, heading_format)
+    worksheet.write('A3', 'Sample: '+str(sample))
+    worksheet.write('A5', 'Calls larger then 100kb or in CNA bedfile included')
 
-
-worksheet_calls.set_column('B:E', 10)
-worksheet_calls.write('A1', 'CNVkit calls', heading_format)
-worksheet_calls.write('A3', 'Sample: '+str(sample))
-worksheet_calls.write('A5', 'Calls larger than 100 kb or in CNA bedfile included')
-# Add link to bedfile
-worksheet_calls.write_row('A7', relevant_cnvs_header, tablehead_format)
-row = 7
-col = 0
-for line in relevant_cnvs:
-    if (-0.25 < line[3] < 0.2):
-        worksheet_calls.write_row(row, col, line, red_format)
-    else:
-        worksheet_calls.write_row(row, col, line)
-    row += 1
+    image_path = snakemake.params.cnvkit_scattter_folder + '/' + sample + '_T_'+chromosome+'.png'
+    worksheet.insert_image('A7', image_path)
+    worksheet.write_row('A29', relevant_cnvs_header, tablehead_format)
+    row = 29
+    col = 0
+    for line in relevant_cnvs[chromosome]:
+        if (-0.25 < line[3] < 0.2):
+            worksheet.write_row(row, col, line, red_format)
+        else:
+            worksheet.write_row(row, col, line)
+        row += 1
 
 workbook.close()

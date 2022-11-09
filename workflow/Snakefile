@@ -113,6 +113,10 @@ use rule cnvkit_call from cnv_sv as cnv_sv_cnvkit_call with:
 
 
 use rule cnvkit_scatter from cnv_sv as cnv_sv_cnvkit_scatter with:
+    input:
+        segments="cnv_sv/cnvkit_call/{sample}_{type}.loh.cns",
+        segment_regions="cnv_sv/cnvkit_batch/{sample}/{sample}_{type}.cnr",
+        vcf="cnv_sv/germline_vcf/{sample}_{type}.germline.vcf",
     output:
         plot="cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.png",
     log:
@@ -354,3 +358,4 @@ ruleorder: cp_tbi_t > misc_tabix
 ruleorder: cp_cnvkit_tbi > misc_tabix
 ruleorder: cp_crai > misc_samtools_index
 ruleorder: cp_cnvkit_diagram > misc_imagemagick_convert
+ruleorder: cnv_sv_cnvkit_scatter > misc_imagemagick_convert

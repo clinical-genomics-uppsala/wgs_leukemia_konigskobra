@@ -4,20 +4,21 @@ __email__ = "arielle.munters@scilifelab.uu.se"
 __license__ = "GPL-3"
 
 
-# localrules: cnvkit_table
 rule cnvkit_table:
     input:
         cns="cnv_sv/cnvkit_call/{sample}_{type}.loh.cns",
         gene_interest=config["cnvkit_table"]["bedfile"],
+        cnv_scatter=expand("cnv_sv/cnvkit_scatter/{{sample}}_{{type}}_{locus}.png", locus=['chr'+str(i) for i in range(1,23)]+['chrX','chrY']),
     output:
         temp("cnv_sv/cnvkit_table/{sample}_{type}.CNV.xlsx"),
     params:
+        cnvkit_scattter_folder="cnv_sv/cnvkit_scatter/",
         extra=config.get("cnvkit_table", {}).get("extra", ""),
     log:
-        "cnv_sv/cnvkit_table/{sample}_{type}.output.log",
+        "cnv_sv/cnvkit_table/{sample}_{type}.CNV.xlsx.log",
     benchmark:
         repeat(
-            "cnv_sv/cnvkit_table/{sample}_{type}.output.benchmark.tsv",
+            "cnv_sv/cnvkit_table/{sample}_{type}.CNV.xlsx.benchmark.tsv",
             config.get("cnvkit_table", {}).get("benchmark_repeats", 1)
         )
     threads: config.get("cnvkit_table", {}).get("threads", config["default_resources"]["threads"])
