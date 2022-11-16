@@ -1,10 +1,11 @@
-__author__ = "Martin Rippin"
-__copyright__ = "Copyright 2021, Martin Rippin"
-__email__ = "martin.rippin@igp.uu.se"
+__author__ = "Martin Rippin, Arielle R Munters"
+__copyright__ = "Copyright 2022, Martin Rippin, Arielle R Munters"
+__email__ = "martin.rippin@igp.uu.se, arielle.munters@scilifelab.uu.se"
 __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
+include: "rules/cnvkit_table.smk"
 include: "rules/cp_results.smk"
 include: "rules/manta_to_tsv.smk"
 include: "rules/mutectcaller_to_tsv.smk"
@@ -112,6 +113,10 @@ use rule cnvkit_call from cnv_sv as cnv_sv_cnvkit_call with:
 
 
 use rule cnvkit_scatter from cnv_sv as cnv_sv_cnvkit_scatter with:
+    input:
+        segments="cnv_sv/cnvkit_call/{sample}_{type}.loh.cns",
+        segment_regions="cnv_sv/cnvkit_batch/{sample}/{sample}_{type}.cnr",
+        vcf="cnv_sv/germline_vcf/{sample}_{type}.germline.vcf",
     output:
         plot="cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.png",
     log:
@@ -353,3 +358,4 @@ ruleorder: cp_tbi_t > misc_tabix
 ruleorder: cp_cnvkit_tbi > misc_tabix
 ruleorder: cp_crai > misc_samtools_index
 ruleorder: cp_cnvkit_diagram > misc_imagemagick_convert
+ruleorder: cnv_sv_cnvkit_scatter > misc_imagemagick_convert

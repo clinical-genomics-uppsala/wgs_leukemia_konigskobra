@@ -14,7 +14,8 @@ vcf = vcf.Reader(open(input_file, "r"))
 
 with open(output_file, "wt") as tsv:
     tsv_writer = csv.writer(tsv, delimiter='\t')
-    tsv_writer.writerow(["#SAMPLE", "CHROMOSOME", "POSITION", "REFERENCE", "ALTERNATIVE", "ALLELEFREQUENCY", "DEPTH", "GENE", "TRANSCRIPT", "NUCLEOTIDESEQ", "PROTEIN", "PROTEINSEQ", "CONSEQUENCE"])
+    tsv_writer.writerow(["#SAMPLE", "CHROMOSOME", "POSITION", "REFERENCE", "ALTERNATIVE", "ALLELEFREQUENCY", "DEPTH", "GENE",
+                         "TRANSCRIPT", "NUCLEOTIDESEQ", "PROTEIN", "PROTEINSEQ", "CONSEQUENCE"])
     for row in vcf:
         genes = row.INFO["CSQ"][0].split("|")
         transcript_field = genes[10].split(":")
@@ -27,4 +28,5 @@ with open(output_file, "wt") as tsv:
         if analysis == "tn":
             i = 1
         af = row.samples[i]["AF"]
-        tsv_writer.writerow([sample, row.CHROM, row.POS, row.REF, row.ALT, af, row.INFO["DP"], genes[3], transcript_field[0], transcript_field[1], protein_field[0], protein_field[1], genes[1]])
+        tsv_writer.writerow([sample, row.CHROM, row.POS, row.REF, row.ALT, af, row.INFO["DP"], genes[3], transcript_field[0],
+                             transcript_field[1], protein_field[0], protein_field[1], genes[1]])

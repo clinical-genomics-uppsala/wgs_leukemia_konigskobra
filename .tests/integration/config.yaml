@@ -40,6 +40,9 @@ cnvkit_scatter:
   container: "docker://marrip/cnvkit:0.9.9"
   extra: "-c {locus} --y-min -10 --y-max 10"
 
+cnvkit_table:
+  bedfile: "reference/cna_genes.bed"
+
 cnvkit_vcf:
   container: "docker://python:3.9.9-slim-buster"
 

@@ -11,7 +11,7 @@ from hydra_genetics.utils.resources import load_resources
 from hydra_genetics.utils.samples import *
 from hydra_genetics.utils.units import *
 
-min_version("6.10.0")
+min_version("7.8.0")
 
 ### Set and validate config file
 
@@ -72,6 +72,12 @@ def compile_output_list(wildcards):
             "Results/%s/%s/CNV/%s_T_chr%s.png" % (samples.loc[(sample)]["project"], sample, sample, chromosome)
             for sample in get_samples(samples)
             for chromosome in chromosomes
+        ]
+    )
+    output_list.append(
+        [
+            "Results/%s/%s/CNV/%s_T.CNV.xlsx" % (samples.loc[(sample)]["project"], sample, sample)
+            for sample in get_samples(samples)
         ]
     )
     output_list.append(
