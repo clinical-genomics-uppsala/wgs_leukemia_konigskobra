@@ -8,7 +8,10 @@ rule cnvkit_table:
     input:
         cns="cnv_sv/cnvkit_call/{sample}_{type}.loh.cns",
         gene_interest=config["cnvkit_table"]["bedfile"],
-        cnv_scatter=expand("cnv_sv/cnvkit_scatter/{{sample}}_{{type}}_{locus}.png", locus=['chr'+str(i) for i in range(1,23)]+['chrX','chrY']),
+        cnv_scatter=expand(
+            "cnv_sv/cnvkit_scatter/{{sample}}_{{type}}_{locus}.png",
+            locus=["chr" + str(i) for i in range(1, 23)] + ["chrX", "chrY"],
+        ),
     output:
         temp("cnv_sv/cnvkit_table/{sample}_{type}.CNV.xlsx"),
     params:
@@ -19,7 +22,7 @@ rule cnvkit_table:
     benchmark:
         repeat(
             "cnv_sv/cnvkit_table/{sample}_{type}.CNV.xlsx.benchmark.tsv",
-            config.get("cnvkit_table", {}).get("benchmark_repeats", 1)
+            config.get("cnvkit_table", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("cnvkit_table", {}).get("threads", config["default_resources"]["threads"])
     resources:

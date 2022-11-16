@@ -399,6 +399,7 @@ rule cp_pindel_tbi:
     shell:
         "cp {input} {output}"
 
+
 rule cp_cnvkit_table:
     input:
         "cnv_sv/cnvkit_table/{sample}_T.CNV.xlsx",
@@ -415,6 +416,7 @@ rule cp_cnvkit_table:
         config.get("cp_cnvkit_table", {}).get("container", config["default_container"])
     shell:
         "cp {input} {output}"
+
 
 rule cp_cnvkit_vcf:
     input:
