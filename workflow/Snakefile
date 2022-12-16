@@ -9,6 +9,24 @@ include: "rules/cnvkit_table.smk"
 include: "rules/cp_results.smk"
 include: "rules/manta_to_tsv.smk"
 include: "rules/mutectcaller_to_tsv.smk"
+include: "rules/sample_order_multiqc.smk"
+
+
+ruleorder: parabricks_pbrun_fq2bam > misc_samtools_index
+ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
+ruleorder: cnv_sv_manta_run_workflow_tn > misc_bgzip
+ruleorder: cp_pindel_tbi > misc_tabix
+ruleorder: cp_manta_tbi > misc_tabix
+ruleorder: cp_manta_all_tbi > misc_tabix
+ruleorder: cp_manta_aml_tbi > misc_tabix
+ruleorder: cp_tbi_tn > misc_tabix
+ruleorder: cp_tbi_all > misc_tabix
+ruleorder: cp_tbi_aml > misc_tabix
+ruleorder: cp_tbi_t > misc_tabix
+ruleorder: cp_cnvkit_tbi > misc_tabix
+ruleorder: cp_crai > misc_samtools_index
+ruleorder: cp_cnvkit_diagram > misc_imagemagick_convert
+ruleorder: cnv_sv_cnvkit_scatter > misc_imagemagick_convert
 
 
 rule all:
@@ -266,9 +284,28 @@ use rule mosdepth from qc as qc_mosdepth with:
 
 
 use rule multiqc from qc as qc_multiqc with:
-    output:
-        html="qc/multiqc/multiqc_{report}.html",
-        directory=directory("qc/multiqc/multiqc_{report}_data"),
+    input:
+        files=lambda wildcards: set(
+            [
+                file.format(sample=sample, type=u.type, lane=u.lane, flowcell=u.flowcell, barcode=u.barcode, read=read, ext=ext)
+                for file in config["multiqc"]["reports"][wildcards.report]["qc_files"]
+                for sample in get_samples(samples)
+                for u in units.loc[sample].dropna().itertuples()
+                if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
+                for read in ["fastq1", "fastq2"]
+                for ext in config.get("picard_collect_multiple_metrics", {}).get("output_ext", [""])
+            ]
+        ),
+        config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
+        sample_replacement="qc/multiqc/sample_replacement.tsv",
+        sample_order="qc/multiqc/sample_order.tsv",
+    params:
+        extra=lambda wildcards, input: "--sample-replacement "
+        + input.sample_replacement
+        + " --sample-names "
+        + input.sample_order
+        + " -c "
+        + input.config,
 
 
 use rule picard_collect_alignment_summary_metrics from qc as qc_picard_alignment_summary_metrics with:
@@ -342,20 +379,3 @@ use rule samtools_index from misc as misc_samtools_index with:
         )
     message:
         "{rule}: Index {wildcards.file}.crumble.cram file"
-
-
-ruleorder: parabricks_pbrun_fq2bam > misc_samtools_index
-ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
-ruleorder: cnv_sv_manta_run_workflow_tn > misc_bgzip
-ruleorder: cp_pindel_tbi > misc_tabix
-ruleorder: cp_manta_tbi > misc_tabix
-ruleorder: cp_manta_all_tbi > misc_tabix
-ruleorder: cp_manta_aml_tbi > misc_tabix
-ruleorder: cp_tbi_tn > misc_tabix
-ruleorder: cp_tbi_all > misc_tabix
-ruleorder: cp_tbi_aml > misc_tabix
-ruleorder: cp_tbi_t > misc_tabix
-ruleorder: cp_cnvkit_tbi > misc_tabix
-ruleorder: cp_crai > misc_samtools_index
-ruleorder: cp_cnvkit_diagram > misc_imagemagick_convert
-ruleorder: cnv_sv_cnvkit_scatter > misc_imagemagick_convert
