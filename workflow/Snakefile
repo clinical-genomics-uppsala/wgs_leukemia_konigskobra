@@ -326,6 +326,14 @@ use rule picard_collect_gc_bias_metrics from qc as qc_picard_collect_gc_bias_met
         ref=config["reference"]["fasta"],
 
 
+use rule picard_collect_hs_metrics from qc as qc_picard_collect_hs_metrics with:
+    input:
+        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bait_intervals=config["reference"]["design_intervals"],
+        reference=config["reference"]["fasta"],
+        target_intervals=config["reference"]["design_intervals"],
+
+
 use rule picard_collect_multiple_metrics from qc as qc_picard_collect_multiple_metrics with:
     input:
         bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
