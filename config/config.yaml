@@ -58,9 +58,12 @@ fastp_pe:
 fastqc:
   container: "docker://hydragenetics/fastqc:0.11.9"
 
-germline_vcf:
-  container: "docker://marrip/vep:104.3"
-  filter: '--filter "DP > 20" --filter "MAX_AF >= 0.001"'
+filter_vcf:
+  germline: "config/config_germline_filter.yaml"
+
+# germline_vcf:
+#   container: "docker://marrip/vep:104.3"
+#   filter: '--filter "DP > 20" --filter "MAX_AF >= 0.001"'
 
 imagemagick_convert:
   container: "docker://hydragenetics/imagemagick:7.1.0_20"
