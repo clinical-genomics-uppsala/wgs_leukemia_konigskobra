@@ -4,7 +4,7 @@ units: "units.tsv"
 
 modules:
   annotation: "e58432c3467db31621ab51a16034a026cf2a2c84"
-  cnv_sv: "4b3f69ef0f0781b7943ca27ca16b940470c27118"
+  cnv_sv: "c81d30d"
   compression: "v1.1.0"
   filtering: "b7f4dc3"
   parabricks: "v0.2.0"
@@ -15,17 +15,15 @@ modules:
 default_container: "docker://hydragenetics/common:0.1.9"
 
 reference:
-  fai: ""
+  design_bed: ""
   fasta: ""
+  fai: ""
+  genome_dir: "" # req by parabricks module not used
   sites: ""
   wgs_intervals: ""
-  design_intervals: "" #HSMetrics
-  genome_dir: "reference" # required for parabricks
+  design_intervals: "" #hsmetrics
 
 trimmer_software: "fastp_pe"
-
-bedtools_intersect:
-  extra: "-header"
 
 cnvkit_batch:
   container: "docker://hydragenetics/cnvkit:0.9.9"
@@ -42,11 +40,15 @@ cnvkit_scatter:
   container: "docker://hydragenetics/cnvkit:0.9.9"
   extra: "-c {locus} --y-min -5 --y-max 5"
 
+cnvkit_table:
+  bedfile: ""
+  container: ""
+
 cnvkit_vcf:
   container: "docker://python:3.9.9-slim-buster"
 
 config_manta_tn:
-  container: "docker://hydragenetics/manta:v1.6.0"
+  container: "docker://hydragenetics/manta:1.6.0"
 
 crumble:
   container: "docker://hydragenetics/crumble:0.8.3"
@@ -68,7 +70,10 @@ manta_run_workflow_tn:
   bed_files:
     all: ""
     aml: ""
-  container: "docker://hydragenetics/manta:v1.6.0"
+  container: "docker://hydragenetics/manta:1.6.0"
+
+bedtools_intersect:
+  extra: "-header"
 
 mosdepth:
   by: "500"
@@ -82,7 +87,6 @@ multiqc:
       config: "config/multiqc_dna_config.yaml"
       included_unit_types: ['T', 'N']
       qc_files:
-        - "prealignment/fastp_pe/{sample}_{flowcell}_{lane}_{barcode}_{type}.json"
         - "qc/fastqc/{sample}_{type}_{flowcell}_{lane}_{barcode}_{read}_fastqc.zip"
         - "qc/mosdepth/{sample}_{type}.mosdepth.global.dist.txt"
         - "qc/mosdepth/{sample}_{type}.mosdepth.region.dist.txt"
@@ -94,7 +98,7 @@ multiqc:
         - "qc/picard_collect_gc_bias_metrics/{sample}_{type}.gc_bias.pdf"
         - "qc/picard_collect_gc_bias_metrics/{sample}_{type}.gc_bias.detail_metrics"
         - "qc/picard_collect_gc_bias_metrics/{sample}_{type}.gc_bias.summary_metrics"
-        - "qc/picard_collect_hs_metrics/{sample}_{type}.HsMetrics.txt" #behover bed
+        - "qc/picard_collect_hs_metrics/{sample}_{type}.HsMetrics.txt"
         - "qc/picard_collect_multiple_metrics/{sample}_{type}.alignment_summary_metrics"
         - "qc/picard_collect_multiple_metrics/{sample}_{type}.base_distribution_by_cycle_metrics"
         - "qc/picard_collect_multiple_metrics/{sample}_{type}.base_distribution_by_cycle.pdf"
@@ -119,6 +123,9 @@ picard_collect_duplication_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
 
 picard_collect_gc_bias_metrics:
+  container: "docker://hydragenetics/picard:2.25.0"
+
+picard_collect_hs_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
 
 picard_collect_multiple_metrics:
@@ -149,8 +156,8 @@ sample_order_multiqc:
 
 simple_sv_annotation:
   container: "docker://hydragenetics/simple_sv_annotation:2019.02.18"
-  fusion_pairs: ""
   panel: ""
+  fusion_pairs: ""
 
 snpeff:
   container: "docker://hydragenetics/snpeff:5.0"
