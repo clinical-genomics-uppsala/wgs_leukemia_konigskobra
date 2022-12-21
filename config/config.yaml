@@ -61,10 +61,6 @@ fastqc:
 filter_vcf:
   germline: "config/config_germline_filter.yaml"
 
-# germline_vcf:
-#   container: "docker://marrip/vep:104.3"
-#   filter: '--filter "DP > 20" --filter "MAX_AF >= 0.001"'
-
 imagemagick_convert:
   container: "docker://hydragenetics/imagemagick:7.1.0_20"
 
@@ -150,7 +146,7 @@ pindel2vcf:
 
 sample_order_multiqc:
   sample_sheet: "SampleSheet.csv"
-  
+
 simple_sv_annotation:
   container: "docker://hydragenetics/simple_sv_annotation:2019.02.18"
   fusion_pairs: ""
@@ -164,6 +160,6 @@ spring:
   container: "docker://hydragenetics/spring:1.0.1"
 
 vep:
-  container: "docker://marrip/vep:104.3"
-  extra: "--max_af --protein --hgvs --canonical --pick"
+  container: "docker://hydragenetics/vep:105"
   vep_cache: ""
+  extra: "--assembly GRCh38 --check_existing --pick --sift b --polyphen b --ccds --uniprot --hgvs --symbol --numbers --domains --regulatory --canonical --protein --biotype --uniprot --tsl --appris --gene_phenotype --af --af_1kg --af_gnomad --max_af --pubmed --variant_class"
