@@ -14,6 +14,6 @@ with open(output_file, "wt") as tsv:
     tsv_writer = csv.writer(tsv, delimiter='\t')
     tsv_writer.writerow(["#POSITION1", "POSITION2", "GENES", "DEPTH"])
     for row in vcf:
-        if "MantaBND" in row.ID:
+        if "MantaBND" in row.ID and not bool(row.FILTER):
             genes = row.INFO["ANN"][0].split("|")
             tsv_writer.writerow([row.CHROM + ":" + str(row.POS), row.ALT, genes[3] + "(" + genes[4] + ")", row.INFO["BND_DEPTH"]])
