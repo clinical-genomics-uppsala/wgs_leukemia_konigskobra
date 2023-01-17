@@ -27,6 +27,9 @@ properties:
       compression:
         type: string
         description: version/branch/tag
+      filtering:
+        type: string
+        description: version/branch/tag
       parabricks:
         type: string
         description: version/branch/tag
@@ -45,6 +48,7 @@ properties:
       - compression
       - parabricks
       - prealignment
+      - filtering
       - qc
       - misc
 
@@ -187,19 +191,18 @@ properties:
     required:
       - container
 
-  germline_vcf:
+  filter_vcf:
     type: object
-    description: parameters for germline_vcf
+    description: parapmeter for filtering vcfs
     properties:
       container:
         type: string
-        description: name or path to docker/singularity container
-      filter:
+        description: name or path of container
+      germline:
         type: string
-        description: which filter options to apply
-    required:
-      - container
-      - filter
+        description: path to config file for filtering out germline snvs for baf plots
+      required:
+        - germline
 
   imagemagick_convert:
     type: object
@@ -455,7 +458,7 @@ required:
   - crumble
   - fastp_pe
   - fastqc
-  - germline_vcf
+  - filter_vcf
   - imagemagick_convert
   - manta_run_workflow_tn
   - mosdepth

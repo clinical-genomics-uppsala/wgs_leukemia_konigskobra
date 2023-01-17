@@ -6,12 +6,13 @@ modules:
   annotation: "e58432c3467db31621ab51a16034a026cf2a2c84"
   cnv_sv: "4b3f69ef0f0781b7943ca27ca16b940470c27118"
   compression: "v1.1.0"
+  filtering: "b7f4dc3"
   parabricks: "v0.2.0"
   prealignment: "v0.2.0"
-  qc: "ca81558181c16766674ddc9179e27928e87cc32b"
+  qc: "178be68"
   misc: "v0.1.0"
 
-default_container: "docker://hydragenetics/common:0.1.3"
+default_container: "docker://hydragenetics/common:0.1.9"
 
 reference:
   fai: "reference/reference.fasta.fai"
@@ -19,6 +20,7 @@ reference:
   genome_dir: "reference"
   sites: "reference/sites.vcf.gz"
   wgs_intervals: "reference/wgs.interval_list"
+  design_intervals: "reference/wgs.interval_list" #HSMetrics
 
 trimmer_software: "fastp_pe"
 
@@ -26,19 +28,19 @@ bedtools_intersect:
   extra: "-header"
 
 cnvkit_batch:
-  container: "docker://marrip/cnvkit:0.9.9"
+  container: "docker://hydragenetics/cnvkit:0.9.9"
   method: "wgs"
   normal_reference: "reference/cnvkit.cnn"
 
 cnvkit_diagram:
-  container: "docker://marrip/cnvkit:0.9.9"
+  container: "docker://hydragenetics/cnvkit:0.9.9"
 
 cnvkit_call:
-  container: "docker://marrip/cnvkit:0.9.9"
+  container: "docker://hydragenetics/cnvkit:0.9.9"
 
 cnvkit_scatter:
-  container: "docker://marrip/cnvkit:0.9.9"
-  extra: "-c {locus} --y-min -10 --y-max 10"
+  container: "docker://hydragenetics/cnvkit:0.9.9"
+  extra: "-c {locus} --y-min -5 --y-max 5"
 
 cnvkit_table:
   bedfile: "reference/cna_genes.bed"
@@ -47,7 +49,7 @@ cnvkit_vcf:
   container: "docker://python:3.9.9-slim-buster"
 
 config_manta_tn:
-  container: "docker://marrip/manta:v1.6.0"
+  container: "docker://hydragenetics/manta:v1.6.0"
 
 crumble:
   container: "docker://hydragenetics/crumble:0.8.3"
@@ -59,9 +61,8 @@ fastp_pe:
 fastqc:
   container: "docker://hydragenetics/fastqc:0.11.9"
 
-germline_vcf:
-  container: "docker://marrip/vep:104.3"
-  filter: '--filter "DP > 20" --filter "MAX_AF >= 0.001"'
+filter_vcf:
+  germline: "../../config/config_germline_filter.yaml"
 
 imagemagick_convert:
   container: "docker://hydragenetics/imagemagick:7.1.0_20"
@@ -70,7 +71,7 @@ manta_run_workflow_tn:
   bed_files:
     all: "reference/all.bed"
     aml: "reference/aml.bed"
-  container: "docker://marrip/manta:v1.6.0"
+  container: "docker://hydragenetics/manta:v1.6.0"
 
 mosdepth:
   by: "500"
@@ -78,11 +79,13 @@ mosdepth:
   extra: "--fast-mode --no-per-base"
 
 multiqc:
-  container: "docker://marrip/multiqc:1.11"
+  container: "docker://hydragenetics/multiqc:1.11"
   reports:
     DNA:
+      config: "../../config/multiqc_dna_config.yaml"
       included_unit_types: ['T', 'N']
       qc_files:
+        - "prealignment/fastp_pe/{sample}_{flowcell}_{lane}_{barcode}_{type}.json"
         - "qc/fastqc/{sample}_{type}_{flowcell}_{lane}_{barcode}_{read}_fastqc.zip"
         - "qc/mosdepth/{sample}_{type}.mosdepth.global.dist.txt"
         - "qc/mosdepth/{sample}_{type}.mosdepth.region.dist.txt"
@@ -94,6 +97,7 @@ multiqc:
         - "qc/picard_collect_gc_bias_metrics/{sample}_{type}.gc_bias.pdf"
         - "qc/picard_collect_gc_bias_metrics/{sample}_{type}.gc_bias.detail_metrics"
         - "qc/picard_collect_gc_bias_metrics/{sample}_{type}.gc_bias.summary_metrics"
+        - "qc/picard_collect_hs_metrics/{sample}_{type}.HsMetrics.txt" #behover bed
         - "qc/picard_collect_multiple_metrics/{sample}_{type}.alignment_summary_metrics"
         - "qc/picard_collect_multiple_metrics/{sample}_{type}.base_distribution_by_cycle_metrics"
         - "qc/picard_collect_multiple_metrics/{sample}_{type}.base_distribution_by_cycle.pdf"
@@ -143,6 +147,9 @@ pindel_call:
 pindel2vcf:
   container: "docker://hydragenetics/pindel:0.2.5b9"
 
+sample_order_multiqc:
+  sample_sheet: "SampleSheet.csv"
+
 simple_sv_annotation:
   container: "docker://hydragenetics/simple_sv_annotation:2019.02.18"
   panel: "reference/panel.txt"
@@ -156,5 +163,6 @@ spring:
   container: "docker://hydragenetics/spring:1.0.1"
 
 vep:
-  container: "docker://marrip/vep:104.3"
+  container: "docker://hydragenetics/vep:105"
   vep_cache: "reference/vep"
+  extra: "--assembly GRCh38 --check_existing --pick --sift b --polyphen b --ccds --uniprot --hgvs --symbol --numbers --domains --regulatory --canonical --protein --biotype --uniprot --tsl --appris --gene_phenotype --af --af_1kg --af_gnomad --max_af --pubmed --variant_class"
