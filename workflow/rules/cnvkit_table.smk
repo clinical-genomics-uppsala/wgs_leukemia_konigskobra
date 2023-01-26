@@ -12,12 +12,14 @@ rule cnvkit_table:
             "cnv_sv/cnvkit_scatter/{{sample}}_{{type}}_{locus}.png",
             locus=["chr" + str(i) for i in range(1, 23)] + ["chrX", "chrY"],
         ),
+        cnvkit_scatter_whole="cnv_sv/cnvkit_scatter/{sample}_{type}.png",
     output:
         temp("cnv_sv/cnvkit_table/{sample}_{type}.CNV.xlsx"),
     params:
         cnvkit_scattter_folder="cnv_sv/cnvkit_scatter/",
         log=config.get("cnvkit_table", {}).get("log_thresholds", "-0.25,0.2"),
         ploidy=config.get("cnvkit_table", {}).get("ploidy", "2"),
+        tc=lambda wildcards: get_sample(samples, wildcards)["tumor_content"],
         extra=config.get("cnvkit_table", {}).get("extra", ""),
     log:
         "cnv_sv/cnvkit_table/{sample}_{type}.CNV.xlsx.log",
