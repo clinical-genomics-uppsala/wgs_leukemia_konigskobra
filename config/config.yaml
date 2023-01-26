@@ -43,6 +43,8 @@ cnvkit_scatter:
 cnvkit_table:
   bedfile: ""
   container: ""
+  log_thresholds: ""
+  ploidy: ""
 
 cnvkit_vcf:
   container: "docker://python:3.9.9-slim-buster"

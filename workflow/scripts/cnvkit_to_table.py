@@ -30,17 +30,17 @@ relevant_cnvs_header = [
     'Probes',
     'Weight'
 ]
+# import pdb; pdb.set_trace()
 with open(snakemake.input.cns, 'r+') as cnsfile:
     cns_header = next(cnsfile).rstrip().split("\t")
     for cnv_line in cnsfile:
         cnv = cnv_line.strip().split("\t")
-        if not (cnv[cns_header.index('cn')] == '2' and
-                cnv[cns_header.index('cn1')] == '1' and
-                cnv[cns_header.index('cn2')] == '1'):
+        if not (((int(snakemake.params.ploidy) % 2) == 0 and cnv[cns_header.index('cn1')] == cnv[cns_header.index('cn2')]) or
+                ((int(snakemake.params.ploidy) % 2) != 0 and
+                int(cnv[cns_header.index('cn2')])+1 == int(cnv[cns_header.index('cn1')]))):
             cnv_chr = cnv[cns_header.index('chromosome')]
             cnv_start = int(cnv[cns_header.index('start')])
             cnv_end = int(cnv[cns_header.index('end')])
-    #        import pdb; pdb.set_trace()
             cnv_baf = float_or_na(cnv[cns_header.index('baf')])
             if (cnv_end - cnv_start) >= 100000:
                 outline = [cnv_chr, cnv_start, cnv_end, float(cnv[cns_header.index('log2')]), cnv_baf,
@@ -65,6 +65,8 @@ with open(snakemake.input.cns, 'r+') as cnsfile:
                             break
 
 ''' Creating xlsx file '''
+low_log = float(snakemake.params.log.split(',')[0])
+high_log = float(snakemake.params.log.split(',')[1])
 sample = str(snakemake.input.cns).split("/")[-1].split("_")[0]
 workbook = xlsxwriter.Workbook(snakemake.output[0])
 heading_format = workbook.add_format({'bold': True, 'font_size': 18})
@@ -77,14 +79,15 @@ for chromosome in chromosomes:
     worksheet.write('A1', 'CNVkit calls for '+chromosome, heading_format)
     worksheet.write('A3', 'Sample: '+str(sample))
     worksheet.write('A5', 'Calls larger then 100kb or in CNA bedfile included')
+    worksheet.write('A6', 'Calls with log2 values inbeteen '+str(low_log)+' and '+str(high_log), red_format)
 
     image_path = snakemake.params.cnvkit_scattter_folder + '/' + sample + '_T_'+chromosome+'.png'
-    worksheet.insert_image('A7', image_path)
-    worksheet.write_row('A29', relevant_cnvs_header, tablehead_format)
-    row = 29
+    worksheet.insert_image('A8', image_path)
+    worksheet.write_row('A30', relevant_cnvs_header, tablehead_format)
+    row = 30
     col = 0
     for line in relevant_cnvs[chromosome]:
-        if (-0.25 < line[3] < 0.2):
+        if (low_log < line[3] < high_log):
             worksheet.write_row(row, col, line, red_format)
         else:
             worksheet.write_row(row, col, line)

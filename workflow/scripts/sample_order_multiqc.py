@@ -11,7 +11,8 @@ with open(snakemake.input.sample_sheet, 'r') as samplesheet:
         line = lline.strip()
         if header:
             samples.append(line.split(",")[1])
-        if line == "Lane,Sample_ID,Sample_Name,Sample_Plate,Sample_Well,I7_Index_ID,index,I5_Index_ID,index2,Sample_Project,Description":
+        if line == "Lane,Sample_ID,Sample_Name,Sample_Plate,Sample_Well,I7_Index_ID,"\
+                   "index,I5_Index_ID,index2,Sample_Project,Description":
             header = True
 
 if len(samples) == 0:
