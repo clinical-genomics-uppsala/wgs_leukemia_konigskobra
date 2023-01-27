@@ -1,6 +1,6 @@
 __author__ = "Martin Rippin, Nina Hollfelder"
 __copyright__ = "Copyright 2021, Martin Rippin"
-__email__ = "martin.rippin@scilifelab.uu.se, nina.hollfelder@scilifelab.uu.se"
+__email__ = "nina.hollfelder@scilifelab.uu.se"
 __license__ = "GPL-3"
 
 
