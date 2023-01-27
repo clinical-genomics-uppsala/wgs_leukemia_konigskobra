@@ -1,6 +1,6 @@
-__author__ = "Martin Rippin"
+__author__ = "Martin Rippin, Arielle R. Munters, Nina Hollfelder"
 __copyright__ = "Copyright 2022, Martin Rippin"
-__email__ = "martin.rippin@igp.uu.se"
+__email__ = "arielle.munters@scilifelab.uu.se, nina.hollfelder@scilifelab.uu.se"
 __license__ = "GPL-3"
 
 import pandas as pd
@@ -97,9 +97,9 @@ def compile_output_list(wildcards):
     )
     output_list.append(
         [
-            "Results/%s/%s/SV/%s_manta_TN.%s.tsv" % (samples.loc[(sample)]["project"], sample, sample, diagnosis)
+            "Results/%s/%s/SV/%s_manta_TN%s.tsv" % (samples.loc[(sample)]["project"], sample, sample, diagnosis)
             for sample in get_samples(samples)
-            for diagnosis in ["aml", "all"]
+            for diagnosis in [".aml", ".all", ""]
         ]
     )
     output_list.append(
