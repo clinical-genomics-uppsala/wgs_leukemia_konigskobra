@@ -13,6 +13,7 @@ rule cnvkit_table:
             locus=["chr" + str(i) for i in range(1, 23)] + ["chrX", "chrY"],
         ),
         cnvkit_scatter_whole="cnv_sv/cnvkit_scatter/{sample}_{type}.png",
+        cyto=config["cnvkit_table"]["cyto_coordinates"],
     output:
         temp("cnv_sv/cnvkit_table/{sample}_{type}.CNV.xlsx"),
     params:
