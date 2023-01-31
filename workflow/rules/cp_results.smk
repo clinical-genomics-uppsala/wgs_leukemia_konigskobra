@@ -4,6 +4,39 @@ __email__ = "arielle.munters@scilifelab.uu.se, nina.hollfelder@scilifelab.uu.se"
 __license__ = "GPL-3"
 
 
+localrules:
+    cp_vcf_all,
+    cp_tbi_all,
+    cp_vcf_aml,
+    cp_tbi_aml,
+    cp_vcf_tn,
+    cp_tbi_tn,
+    cp_vcf_t,
+    cp_tbi_t,
+    cp_cram,
+    cp_crai,
+    cp_tsv_mutectcaller_all,
+    cp_tsv_manta_all,
+    cp_tsv_mutectcaller_aml,
+    cp_tsv_manta_aml,
+    cp_manta_vcf,
+    cp_manta_tbi,
+    cp_manta_all_vcf,
+    cp_manta_all_tbi,
+    cp_manta_aml_vcf,
+    cp_manta_aml_tbi,
+    cp_pindel_vcf,
+    cp_pindel_tbi,
+    cp_cnvkit_table,
+    cp_cnvkit_vcf,
+    cp_cnvkit_tbi,
+    cp_cnvkit_diagram,
+    cp_cnvkit_scatter_whole,
+    cp_cnvkit_scatter,
+    cp_multiqc,
+    cp_spring_archive,
+
+
 rule cp_vcf_all:
     input:
         "parabricks/pbrun_mutectcaller_tn/{sample}.vep.all.vcf.gz",
@@ -476,7 +509,7 @@ rule cp_cnvkit_diagram:
     input:
         "cnv_sv/cnvkit_diagram/{sample}_T.png",
     output:
-        "Results/{project}/{sample}/CNV/{sample}_T.png",
+        "Results/{project}/{sample}/CNV/{sample}_T_diagram.png",
     threads: config.get("cp_cnvkit_diagram", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_cnvkit_diagram", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -486,6 +519,24 @@ rule cp_cnvkit_diagram:
         time=config.get("cp_cnvkit_diagram", {}).get("time", config["default_resources"]["time"]),
     container:
         config.get("cp_cnvkit_diagram", {}).get("container", config["default_container"])
+    shell:
+        "cp {input} {output}"
+
+
+rule cp_cnvkit_scatter_whole:
+    input:
+        "cnv_sv/cnvkit_scatter/{sample}_T.png",
+    output:
+        "Results/{project}/{sample}/CNV/{sample}_T.png",
+    threads: config.get("cp_cnvkit_scatter", {}).get("threads", config["default_resources"]["threads"])
+    resources:
+        mem_mb=config.get("cp_cnvkit_scatter", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
+        mem_per_cpu=config.get("cp_cnvkit_scatter", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
+        partition=config.get("cp_cnvkit_scatter", {}).get("partition", config["default_resources"]["partition"]),
+        threads=config.get("cp_cnvkit_scatter", {}).get("threads", config["default_resources"]["threads"]),
+        time=config.get("cp_cnvkit_scatter", {}).get("time", config["default_resources"]["time"]),
+    container:
+        config.get("cp_cnvkit_scatter", {}).get("container", config["default_container"])
     shell:
         "cp {input} {output}"
 

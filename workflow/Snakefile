@@ -147,6 +147,26 @@ use rule cnvkit_scatter from cnv_sv as cnv_sv_cnvkit_scatter with:
             "cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.benchmark.tsv",
             config.get("cnvkit_scatter", {}).get("benchmark_repeats", 1),
         )
+    message:
+        "{rule}: Plot cnvs into cnv_sv/cnvkit_scatter/{wildcards.sample}_{wildcards.type}_{wildcards.locus}.png"
+
+
+use rule cnvkit_scatter from cnv_sv as cnv_sv_cnvkit_scatter_whole with:
+    input:
+        segments="cnv_sv/cnvkit_call/{sample}_{type}.loh.cns",
+        segment_regions="cnv_sv/cnvkit_batch/{sample}/{sample}_{type}.cnr",
+        vcf="parabricks/pbrun_mutectcaller_t/{sample}_{type}.vep.filter.germline.vcf",
+    output:
+        plot="cnv_sv/cnvkit_scatter/{sample}_{type}.png",
+    params:
+        extra=config.get("cnvkit_scatter_whole", {}).get("extra", ""),
+    log:
+        "cnv_sv/cnvkit_scatter/{sample}_{type}.log",
+    benchmark:
+        repeat(
+            "cnv_sv/cnvkit_scatter/{sample}_{type}.benchmark.tsv",
+            config.get("cnvkit_scatter_whole", {}).get("benchmark_repeats", 1),
+        )
 
 
 use rule cnvkit_vcf from cnv_sv as cnv_sv_cnvkit_vcf with:
