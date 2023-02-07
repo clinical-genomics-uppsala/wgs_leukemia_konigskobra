@@ -19,6 +19,9 @@ localrules:
     cp_tsv_manta_all,
     cp_tsv_mutectcaller_aml,
     cp_tsv_manta_aml,
+    cp_tsv_manta_del,
+    cp_tsv_manta_dup,
+    cp_tsv_manta_ins,
     cp_manta_vcf,
     cp_manta_tbi,
     cp_manta_all_vcf,
@@ -258,6 +261,60 @@ rule cp_tsv_manta_no_diagnosis:
         "tsv_files/{sample}_manta_tn.tsv",
     output:
         "Results/{project}/{sample}/SV/{sample}_manta_TN.tsv",
+    threads: config.get("cp_tsv_manta_no_diagnosis", {}).get("threads", config["default_resources"]["threads"])
+    resources:
+        mem_mb=config.get("cp_tsv_manta_no_diagnosis", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
+        mem_per_cpu=config.get("cp_tsv_manta_no_diagnosis", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
+        partition=config.get("cp_tsv_manta_no_diagnosis", {}).get("partition", config["default_resources"]["partition"]),
+        threads=config.get("cp_tsv_manta_no_diagnosis", {}).get("threads", config["default_resources"]["threads"]),
+        time=config.get("cp_tsv_manta_no_diagnosis", {}).get("time", config["default_resources"]["time"]),
+    container:
+        config.get("cp_tsv_manta_no_diagnosis", {}).get("container", config["default_container"])
+    shell:
+        "cp {input} {output}"
+
+
+rule cp_tsv_manta_del:
+    input:
+        "tsv_files/{sample}_manta_tn.del.tsv",
+    output:
+        "Results/{project}/{sample}/SV/{sample}_manta_TN.del.tsv",
+    threads: config.get("cp_tsv_manta_no_diagnosis", {}).get("threads", config["default_resources"]["threads"])
+    resources:
+        mem_mb=config.get("cp_tsv_manta_no_diagnosis", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
+        mem_per_cpu=config.get("cp_tsv_manta_no_diagnosis", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
+        partition=config.get("cp_tsv_manta_no_diagnosis", {}).get("partition", config["default_resources"]["partition"]),
+        threads=config.get("cp_tsv_manta_no_diagnosis", {}).get("threads", config["default_resources"]["threads"]),
+        time=config.get("cp_tsv_manta_no_diagnosis", {}).get("time", config["default_resources"]["time"]),
+    container:
+        config.get("cp_tsv_manta_no_diagnosis", {}).get("container", config["default_container"])
+    shell:
+        "cp {input} {output}"
+
+
+rule cp_tsv_manta_ins:
+    input:
+        "tsv_files/{sample}_manta_tn.ins.tsv",
+    output:
+        "Results/{project}/{sample}/SV/{sample}_manta_TN.ins.tsv",
+    threads: config.get("cp_tsv_manta_no_diagnosis", {}).get("threads", config["default_resources"]["threads"])
+    resources:
+        mem_mb=config.get("cp_tsv_manta_no_diagnosis", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
+        mem_per_cpu=config.get("cp_tsv_manta_no_diagnosis", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
+        partition=config.get("cp_tsv_manta_no_diagnosis", {}).get("partition", config["default_resources"]["partition"]),
+        threads=config.get("cp_tsv_manta_no_diagnosis", {}).get("threads", config["default_resources"]["threads"]),
+        time=config.get("cp_tsv_manta_no_diagnosis", {}).get("time", config["default_resources"]["time"]),
+    container:
+        config.get("cp_tsv_manta_no_diagnosis", {}).get("container", config["default_container"])
+    shell:
+        "cp {input} {output}"
+
+
+rule cp_tsv_manta_dup:
+    input:
+        "tsv_files/{sample}_manta_tn.dup.tsv",
+    output:
+        "Results/{project}/{sample}/SV/{sample}_manta_TN.dup.tsv",
     threads: config.get("cp_tsv_manta_no_diagnosis", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("cp_tsv_manta_no_diagnosis", {}).get("mem_mb", config["default_resources"]["mem_mb"]),

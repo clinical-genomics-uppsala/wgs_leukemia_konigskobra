@@ -103,7 +103,7 @@ def compile_output_list(wildcards):
         [
             "Results/%s/%s/SV/%s_manta_TN%s.tsv" % (samples.loc[(sample)]["project"], sample, sample, diagnosis)
             for sample in get_samples(samples)
-            for diagnosis in [".aml", ".all", ""]
+            for diagnosis in [".aml", ".all", "", ".del", ".ins", ".dup"]
         ]
     )
     output_list.append(
