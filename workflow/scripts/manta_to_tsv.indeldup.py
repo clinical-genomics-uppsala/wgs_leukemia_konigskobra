@@ -50,7 +50,7 @@ datei = vcf.Reader(open(input_file, "r"))
 
 with open(output_file_ins, "wt") as tsv:
     tsv_writer = csv.writer(tsv, delimiter='\t')
-    tsv_writer.writerow(["#POSITION", "REFERENCE" "ALTERNATIVE", "LENGTH", "MANTAID", "GENES", "HOMLENGTH", "HOMSEQ"])
+    tsv_writer.writerow(["#POSITION", "REFERENCE", "ALTERNATIVE", "LENGTH", "MANTAID", "GENES", "HOMLENGTH", "HOMSEQ"])
     for row in datei:
         if "MantaINS" in row.ID and not bool(row.FILTER):
             genes = row.INFO["ANN"][0].split("|")
