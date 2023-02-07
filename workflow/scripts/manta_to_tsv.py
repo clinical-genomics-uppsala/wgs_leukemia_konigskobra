@@ -17,4 +17,5 @@ with open(output_file, "wt") as tsv:
         if "MantaBND" in row.ID and not bool(row.FILTER):
             genes = row.INFO["ANN"][0].split("|")
             manta_id = ":".join(row.ID.split(":")[0:2])
-            tsv_writer.writerow([row.CHROM + ":" + str(row.POS)[1:-1], manta_id, row.ALT, genes[3] + "(" + genes[4] + ")", row.INFO["BND_DEPTH"]])
+            tsv_writer.writerow([row.CHROM + ":" + str(row.POS)[1:-1], manta_id, row.ALT,
+                                genes[3] + "(" + genes[4] + ")", row.INFO["BND_DEPTH"]])

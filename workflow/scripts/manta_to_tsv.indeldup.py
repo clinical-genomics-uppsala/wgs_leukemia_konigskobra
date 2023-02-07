@@ -21,7 +21,8 @@ with open(output_file_dels, "wt") as tsv:
             dellength = row.INFO["SVLEN"]
             pos2 = row.INFO["END"]
             manta_id = ":".join(row.ID.split(":")[0:2])
-            tsv_writer.writerow([row.CHROM + ":" + str(row.POS), row.CHROM + ":" + str(pos2), str(dellength)[1:-1], manta_id, genes[3] + "(" + genes[4] + ")"])
+            tsv_writer.writerow([row.CHROM + ":" + str(row.POS), row.CHROM + ":" + str(pos2),
+                                str(dellength)[1:-1], manta_id, genes[3] + "(" + genes[4] + ")"])
 
 
 datei = vcf.Reader(open(input_file, "r"))
@@ -55,7 +56,7 @@ with open(output_file_ins, "wt") as tsv:
             genes = row.INFO["ANN"][0].split("|")
             dellength = row.INFO["SVLEN"]
             pos2 = row.INFO["END"]
-            try: 
+            try:
                 homlen = row.INFO["HOMLEN"]
                 homseq = row.INFO["HOMSEQ"]
             except KeyError:
@@ -64,5 +65,3 @@ with open(output_file_ins, "wt") as tsv:
             manta_id = ":".join(row.ID.split(":")[0:2])
             tsv_writer.writerow([row.CHROM + ":" + str(row.POS), row.REF, str(row.ALT)[1:-1], str(dellength)[1:-1],
                                  manta_id, genes[3] + "(" + genes[4] + ")", str(homlen)[1:-1], str(homseq)[1:-1]])
-
-
