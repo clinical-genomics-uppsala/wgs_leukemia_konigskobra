@@ -94,22 +94,48 @@ stanza is needed and should specify the number of GPUs available.
 snakemake --profile my-profile
 ```
 
-### Relevant output files
+### Output files
+
+.fastq files are archived as compressed file pair as .spring: `Archive/{project}/{sample}_{flowcell}_{lane}_{barcode}_{type}.spring`
+
+The MultiQC html report can be found here: `Results/MultiQC_TN.html`
+
+All results (as described in table below) are located in: `Results/{project}/{sample}/`
 
 | File | Description |
 |---|---|
-| `cnv_sv/cnvkit_diagram/{sample}_T.png` | chromosome diagram from cnvkit |
-| `cnv_sv/cnvkit_scatter/{sample}_T_{chromosome}.png` | scatter plot per chromosome from cnvkit |
-| `cnv_sv/cnvkit_vcf/{sample}_T.vcf` | `.vcf` output from cnvkit |
-| `cnv_sv/pindel/{sample}.vcf` | `.vcf` output from pindel |
-| `compression/crumble/{sample}_{type}.crumble.cram` | crumbled `.cram` file |
-| `compression/crumble/{sample}_{type}.crumble.cram.crai` | index for crumbled `.cram` file |
-| `compression/spring/{sample}_{flowcell}_{lane}_{barcode}_{type}.spring` | compressed `.fastq` file pair |
-| `tsv_files/{sample}_mutectcaller_tn.aml.tsv` | `.tsv` file for excel containing SNVs from mutect2 for AML |
-| `tsv_files/{sample}_mutectcaller_tn.all.tsv` | `.tsv` file for excel containing SNVs from mutect2 for ALL |
-| `tsv_files/{sample}_manta_tn.aml.tsv` | `.tsv` file for excel containing SVs from manta for AML |
-| `tsv_files/{sample}_manta_tn.all.tsv` | `.tsv` file for excel containing SVs from manta for ALL |
-| `qc/multiqc/multiqc_DNA.html` | `.html` report from MultiQC |
+| `Cram/{sample}_{type}.crumble.cram` | crumbled `.cram` file |
+| `Cram/{sample}_{type}.crumble.cram.crai` | index for crumbled `.cram` file |
+| `SNV_indels/{sample}_T.vep.vcf.gz` | `.vcf` output from VEP for tumor_only |
+| `SNV_indels/{sample}_T.vep.vcf.gz.tbi` | index for `.vcf` output from VEP for tumor_only |
+| `SNV_indels/{sample}_TN.vep.vcf.gz` | `.vcf` output from VEP for tumor/normal |
+| `SNV_indels/{sample}_TN.vep.vcf.gz.tbi` | index for `.vcf` output from VEP for tumor/normal|
+| `SNV_indels/{sample}_TN.vep.all.vcf.gz` |  `.vcf` output from VEP for tumor/normal, hard-filtered for ALL genes |
+| `SNV_indels/{sample}_TN.vep.all.vcf.gz.tbi` | index for  `.vcf` output from VEP for tumor/normal, hard-filtered for ALL genes |
+| `SNV_indels/{sample}_TN.vep.aml.vcf.gz` |  `.vcf` output from VEP for tumor/normal, hard-filtered for AML genes  |
+| `SNV_indels/{sample}_TN.vep.aml.vcf.gz.tbi` | index for `.vcf` output from VEP for tumor/normal, hard-filtered for AML genes  |
+| `SNV_indels/{sample}_mutectcaller_TN.all.tsv` | `.tsv` file for excel containing SNVs from mutect2 for ALL  |
+| `SNV_indels/{sample}_mutectcaller_TN.aml.tsv` | `.tsv` file for excel containing SNVs from mutect2 for AML  |
+| `SNV_indels/{sample}.pindel.vcf.gz` | `.vcf` output from pindel  |
+| `SNV_indels/{sample}.pindel.vcf.gz.tbi` | index for `.vcf` output from pindel  |
+| `CNV/{sample}_T.vcf.gz` | `.vcf` output from cnvkit |
+| `CNV/{sample}_T.vcf.gz.tbi` | index for `.vcf` output from cnvkit |
+| `CNV/{sample}_{type}.CNV.xlsx` | Excel file containing overview of CNVkit results |
+| `CNV/{sample}_T.png` | scatter plot from cnvkit for entire genome |
+| `CNV/{sample}_T_chr{chr}.png` | scatter plot per chromosome from cnvkit |
+| `SV/{sample}_manta_TN.ssa.vcf.gz` | `.vcf` output from Manta |
+| `SV/{sample}_manta_TN.ssa.vcf.gz.tbi` | index for `.vcf` output from Manta  |
+| `SV/{sample}_manta_TN.ssa.all.vcf.gz` | `.vcf` output from Manta filtered for ALL genes |
+| `SV/{sample}_manta_TN.ssa.all.vcf.gz.tbi` | index for `.vcf` output from Manta filtered for ALL genes |
+| `SV/{sample}_manta_TN.ssa.aml.vcf.gz` | `.vcf` output from Manta filtered for AML genes |
+| `SV/{sample}_manta_TN.ssa.aml.vcf.gz.tbi` | index for `.vcf` output from Manta filtered for AML genes |
+| `SV/{sample}_manta_TN.del.tsv` | `.tsv` file for excel containing deletions found by Manta (filtered) |
+| `SV/{sample}_manta_TN.ins.tsv` | `.tsv` file for excel containing insertions found by Manta (filtered) |
+| `SV/{sample}_manta_TN.dup.tsv` | `.tsv` file for excel containing duplications found by Manta (filtered) |
+| `SV/{sample}_manta_TN.bnd.tsv` | `.tsv` file for excel containing breakends found by Manta (filtered) |
+| `SV/{sample}_manta_TN.bnd.all.tsv` | `.tsv` file for excel containing breakends found by Manta (filtered), filtered for ALL genes |
+| `SV/{sample}_manta_TN.bnd.aml.tsv` |  `.tsv` file for excel containing breakends found by Manta (filtered), filtered for AML genes|
+
 
 ## :judge: Rule Graph
 
