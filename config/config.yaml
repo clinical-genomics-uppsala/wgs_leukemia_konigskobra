@@ -1,6 +1,7 @@
 resources: "resources.yaml"
 samples: "samples.tsv"
 units: "units.tsv"
+output: "config/output_files.json"
 
 modules:
   annotation: "e58432c3467db31621ab51a16034a026cf2a2c84"
@@ -46,7 +47,7 @@ cnvkit_table:
   cyto_coordinates: ""
   log_thresholds: ""
   ploidy: ""
-  
+
 cnvkit_vcf:
   container: "docker://python:3.9.9-slim-buster"
 
@@ -145,6 +146,9 @@ picard_collect_multiple_metrics:
     - "quality_distribution.pdf"
 
 picard_collect_wgs_metrics:
+  container: "docker://hydragenetics/picard:2.25.0"
+
+picard_update_vcf_sequence_dictionary:
   container: "docker://hydragenetics/picard:2.25.0"
 
 pindel_call:

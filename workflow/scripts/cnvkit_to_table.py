@@ -78,8 +78,6 @@ with open(snakemake.input.cns, 'r+') as cnsfile:
                            (cnv_start >= bed_start and cnv_start <= bed_end) or
                            (cnv_end >= bed_start and cnv_end <= bed_end) or
                            (cnv_start <= bed_start and cnv_end >= bed_end)):
-
-
                             outline = [cyto_coordinates, cnv_chr, cnv_start, cnv_end, float(cnv[cns_header.index('log2')]),
                                        cnv_baf, cnv[cns_header.index('cn')], cnv[cns_header.index('cn1')],
                                        cnv[cns_header.index('cn2')], cnv[cns_header.index('depth')],
