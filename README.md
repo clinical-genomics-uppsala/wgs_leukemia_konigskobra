@@ -11,13 +11,14 @@ Snakemake workflow to analyse hematological malignancies in whole genome data
 
 This snakemake workflow uses modules from hydragenetics to process `.fastq` files and obtain different kind
 of variants (SNV, indels, CNV, SV). Alongside diagnosis-filtered `.vcf` files, the workflow produces a
-multiqc report `.html` file and some CNV plots. One of the modules contains the **commercial**
+multiqc report `.html` file and some CNV plots and `.tsv` files with relevant information from mutect and Manta. One of the modules contains the **commercial**
 [parabricks toolkit](https://docs.nvidia.com/clara/parabricks/3.7.0/index.html) which can be replaced by
 opensource GATK tools if required. The following modules are currently part of this pipeline:
 
 - annotation
 - cnv_sv
 - compression
+- filtering
 - misc
 - parabricks
 - prealignment
@@ -136,6 +137,24 @@ All results (as described in table below) are located in: `Results/{project}/{sa
 | `SV/{sample}_manta_TN.bnd.all.tsv` | `.tsv` file for excel containing breakends found by Manta (filtered), filtered for ALL genes |
 | `SV/{sample}_manta_TN.bnd.aml.tsv` |  `.tsv` file for excel containing breakends found by Manta (filtered), filtered for AML genes|
 
+
+### Program versions
+
+default container: `docker://hydragenetics/common:0.1.0`
+
+| Program | Version | Container | 
+|---|---|---|
+| Arriba | 2.3.0 | `docker://hydragenetics/arriba:2.3.0` |
+| fastp | 0.20.1 | `docker://hydragenetics/fastp:0.20.1` |
+| FastQC | 0.11.9 | `docker://hydragenetics/fastqc:0.11.9` |
+| FusionCatcher | 1.33 | `docker://blcdsdockerregistry/fusioncatcher:1.33` |
+| Mosdepth | 0.3.2 | `docker://hydragenetics/mosdepth:0.3.2` |
+| MultiQC | 1.11 | `docker://hydragenetics/multiqc:1.11` |
+| RSeQC | 4.0.0 | `docker://hydragenetics/rseqc:4.0.0` |
+| SortMeRNA | 4.3.4 | `docker://hydragenetics/sortmerna:4.3.4` |
+| SPRING | 1.0.1 | `docker://hydragenetics/spring:1.0.1` |
+| STAR | 2.7.10a | `docker://hydragenetics/star:2.7.10a` |
+| STAR-Fusion | 1.10.1 | `docker://trinityctat/starfusion:1.10.1` |
 
 ## :judge: Rule Graph
 
