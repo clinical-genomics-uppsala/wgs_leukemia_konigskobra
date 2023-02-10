@@ -140,21 +140,30 @@ All results (as described in table below) are located in: `Results/{project}/{sa
 
 ### Program versions
 
-default container: `docker://hydragenetics/common:0.1.0`
+default container: `docker://hydragenetics/common:0.1.9`
 
 | Program | Version | Container | 
 |---|---|---|
 | Arriba | 2.3.0 | `docker://hydragenetics/arriba:2.3.0` |
+| CNVkit | 0.9.9 | `docker://hydragenetics/cnvkit:0.9.9` `docker://python:3.9.9-slim-buster` |
+| Crumble | 0.8.3 | `docker://hydragenetics/crumble:0.8.3` |
 | fastp | 0.20.1 | `docker://hydragenetics/fastp:0.20.1` |
 | FastQC | 0.11.9 | `docker://hydragenetics/fastqc:0.11.9` |
 | FusionCatcher | 1.33 | `docker://blcdsdockerregistry/fusioncatcher:1.33` |
+| ImageMagick | 7.1.0_20 | `docker://hydragenetics/imagemagick:7.1.0_20` |
+| Manta | 1.6.0 | `docker://hydragenetics/manta:1.6.0` |
 | Mosdepth | 0.3.2 | `docker://hydragenetics/mosdepth:0.3.2` |
 | MultiQC | 1.11 | `docker://hydragenetics/multiqc:1.11` |
+| Picard | 2.25.0 | `docker://hydragenetics/picard:2.25.0` |
+| Pindel | 0.2.5b9 | `docker://hydragenetics/pindel:0.2.5b9` |
 | RSeQC | 4.0.0 | `docker://hydragenetics/rseqc:4.0.0` |
+| simple_sv_annotation.py  | 2019.02.18 | `docker://hydragenetics/simple_sv_annotation:2019.02.18` |
+| snpEff | 5.0 | `docker://hydragenetics/snpeff:5.0` |
 | SortMeRNA | 4.3.4 | `docker://hydragenetics/sortmerna:4.3.4` |
 | SPRING | 1.0.1 | `docker://hydragenetics/spring:1.0.1` |
 | STAR | 2.7.10a | `docker://hydragenetics/star:2.7.10a` |
 | STAR-Fusion | 1.10.1 | `docker://trinityctat/starfusion:1.10.1` |
+| VEP | 105 | `docker://hydragenetics/vep:105` |
 
 ## :judge: Rule Graph
 
