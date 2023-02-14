@@ -67,9 +67,6 @@ fastqc:
 filter_vcf:
   germline: "config/config_germline_filter.yaml"
 
-imagemagick_convert:
-  container: "docker://hydragenetics/imagemagick:7.1.0_20"
-
 manta_run_workflow_tn:
   bed_files:
     all: ""
