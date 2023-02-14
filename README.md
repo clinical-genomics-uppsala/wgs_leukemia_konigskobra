@@ -115,8 +115,8 @@ All results (as described in table below) are located in: `Results/{project}/{sa
 | `SNV_indels/{sample}_TN.vep.all.vcf.gz.tbi` | index for  `.vcf` output from VEP for tumor/normal, hard-filtered for ALL genes |
 | `SNV_indels/{sample}_TN.vep.aml.vcf.gz` |  `.vcf` output from VEP for tumor/normal, hard-filtered for AML genes  |
 | `SNV_indels/{sample}_TN.vep.aml.vcf.gz.tbi` | index for `.vcf` output from VEP for tumor/normal, hard-filtered for AML genes  |
-| `SNV_indels/{sample}_mutectcaller_TN.all.tsv` | `.tsv` file for excel containing SNVs from mutect2 for ALL  |
-| `SNV_indels/{sample}_mutectcaller_TN.aml.tsv` | `.tsv` file for excel containing SNVs from mutect2 for AML  |
+| `SNV_indels/{sample}_mutectcaller_TN.all.tsv` | `.tsv` file for excel containing SNVs and small indels from mutect2 for ALL  |
+| `SNV_indels/{sample}_mutectcaller_TN.aml.tsv` | `.tsv` file for excel containing SNVs and small indels from mutect2 for AML  |
 | `SNV_indels/{sample}.pindel.vcf.gz` | `.vcf` output from pindel  |
 | `SNV_indels/{sample}.pindel.vcf.gz.tbi` | index for `.vcf` output from pindel  |
 | `CNV/{sample}_T.vcf.gz` | `.vcf` output from cnvkit |
@@ -150,7 +150,6 @@ default container: `docker://hydragenetics/common:0.1.9`
 | fastp | 0.20.1 | `docker://hydragenetics/fastp:0.20.1` |
 | FastQC | 0.11.9 | `docker://hydragenetics/fastqc:0.11.9` |
 | FusionCatcher | 1.33 | `docker://blcdsdockerregistry/fusioncatcher:1.33` |
-| ImageMagick | 7.1.0_20 | `docker://hydragenetics/imagemagick:7.1.0_20` |
 | Manta | 1.6.0 | `docker://hydragenetics/manta:1.6.0` |
 | Mosdepth | 0.3.2 | `docker://hydragenetics/mosdepth:0.3.2` |
 | MultiQC | 1.11 | `docker://hydragenetics/multiqc:1.11` |
