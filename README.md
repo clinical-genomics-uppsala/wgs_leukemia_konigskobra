@@ -107,7 +107,7 @@ All results (as described in table below) are located in: `Results/{project}/{sa
 |---|---|
 | `Cram/{sample}_{type}.crumble.cram` | crumbled `.cram` file |
 | `Cram/{sample}_{type}.crumble.cram.crai` | index for crumbled `.cram` file |
-| `SNV_indels/{sample}_T.vep.vcf.gz` | `.vcf` output from VEP for tumor_only |
+| `SNV_indels/{sample}_T.vep.vcf.gz` | `.vcf` output for SNV and small indels annotated with VEP for tumor_only |
 | `SNV_indels/{sample}_T.vep.vcf.gz.tbi` | index for `.vcf` output from VEP for tumor_only |
 | `SNV_indels/{sample}_TN.vep.vcf.gz` | `.vcf` output from VEP for tumor/normal |
 | `SNV_indels/{sample}_TN.vep.vcf.gz.tbi` | index for `.vcf` output from VEP for tumor/normal|
