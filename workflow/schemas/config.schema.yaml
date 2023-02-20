@@ -459,7 +459,6 @@ required:
   - fastp_pe
   - fastqc
   - filter_vcf
-  - imagemagick_convert
   - manta_run_workflow_tn
   - mosdepth
   - multiqc

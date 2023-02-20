@@ -1,6 +1,7 @@
 resources: "resources.yaml"
 samples: "samples.tsv"
 units: "units.tsv"
+output: "config/output_files.json"
 
 modules:
   alignment: "906d25d0d4791eb5a54cba9954fddf29e27b85dd"
