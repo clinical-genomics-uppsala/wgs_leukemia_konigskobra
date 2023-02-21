@@ -47,6 +47,15 @@ wildcard_constraints:
     unit="N|T|R",
     bed="aml|all",
 
+
+def type_generator(types):
+    if 'N' in types and 'T' in types:
+        types.add('TN')
+        return types
+    else:
+        return types
+
+
 def compile_output_list(wildcards):
     output_files = []
     types = set([unit.type for unit in units.itertuples()])
@@ -66,13 +75,14 @@ def compile_output_list(wildcards):
                 )
                 for chromosome_number in chromosome_numbers
                 for sample in get_samples(samples)
-                for unit_type in get_unit_types(units, sample)
+                for unit_type in type_generator(get_unit_types(units, sample))
                 if unit_type in set(output_json[output]["types"]).intersection(types)
                 for flowcell in set([u.flowcell for u in units.loc[(sample, unit_type)].dropna().itertuples()])
                 for barcode in set([u.barcode for u in units.loc[(sample, unit_type)].dropna().itertuples()])
                 for lane in set([u.lane for u in units.loc[(sample, unit_type)].dropna().itertuples()])
             ]
         )
+    print(set(output_files))
     return list(set(output_files))
 
 
