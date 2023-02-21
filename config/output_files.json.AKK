@@ -13,10 +13,18 @@
   "Results/{project}/{sample}/Cram/{sample}_{type}.crumble.cram.crai": {"name": "_results_crai", "file": "compression/crumble/{sample}_{type}.crumble.cram.crai", "types": ["T", "N"]},
   "Results/{project}/{sample}/SNV_indels/{sample}_T.vep.vcf.gz": {"name": "_results_vcf_t", "file": "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf.gz", "types": ["T", "N"]},
   "Results/{project}/{sample}/SNV_indels/{sample}_T.vep.vcf.gz.tbi": {"name": "_results_tbi_t", "file": "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf.gz.tbi", "types": ["T", "N"]},
+  "Results/{project}/{sample}/SNV_indels/{sample}_TN.vep.vcf.gz": {"name": "_results_vcf_tn", "file": "parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.gz", "types": ["T", "N"]},
+  "Results/{project}/{sample}/SNV_indels/{sample}_TN.vep.vcf.gz.tbi": {"name": "_results_tbi_tn", "file": "parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.gz.tbi", "types": ["T", "N"]},
+  "Results/{project}/{sample}/SNV_indels/{sample}_TN.vep.all.vcf.gz": {"name": "_results_vcf_all", "file": "parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.all.vcf.gz", "types": ["T", "N"]},
+  "Results/{project}/{sample}/SNV_indels/{sample}_TN.vep.all.vcf.gz.tbi": {"name": "_results_tbi_all", "file": "parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.all.vcf.gz.tbi", "types": ["T", "N"]},
+  "Results/{project}/{sample}/SNV_indels/{sample}_TN.vep.aml.vcf.gz": {"name": "_results_vcf_aml", "file": "parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.aml.vcf.gz", "types": ["T", "N"]},
+  "Results/{project}/{sample}/SNV_indels/{sample}_TN.vep.aml.vcf.gz.tbi": {"name": "_results_tbi_aml", "file": "parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.aml.vcf.gz.tbi", "types": ["T", "N"]},
 
   "Results/{project}/{sample}/SNV_indels/{sample}_mutectcaller_T.all.tsv": {"name": "_results_tsv_all_t", "file": "tsv_files/{sample}_mutectcaller_t.all.tsv", "types": ["T"]},
   "Results/{project}/{sample}/SNV_indels/{sample}_mutectcaller_T.aml.tsv": {"name": "_results_tsv_aml_t", "file": "tsv_files/{sample}_mutectcaller_t.aml.tsv", "types": ["T"]},
 
+  "Results/{project}/{sample}/SNV_indels/{sample}_mutectcaller_TN.all.tsv": {"name": "_results_tsv_all", "file": "tsv_files/{sample}_mutectcaller_tn.all.tsv", "types": ["T", "N"]},
+  "Results/{project}/{sample}/SNV_indels/{sample}_mutectcaller_TN.aml.tsv": {"name": "_results_tsv_aml", "file": "tsv_files/{sample}_mutectcaller_tn.aml.tsv", "types": ["T", "N"]},
   "Results/{project}/{sample}/SNV_indels/{sample}.pindel.vcf.gz": {"name": "_results_pindel_vcf", "file": "cnv_sv/pindel/{sample}.vcf.gz", "types": ["T", "N"]},
   "Results/{project}/{sample}/SNV_indels/{sample}.pindel.vcf.gz.tbi": {"name": "_results_pindel_tbi", "file": "cnv_sv/pindel/{sample}.vcf.gz.tbi", "types": ["T", "N"]},
   "Results/{project}/{sample}/CNV/{sample}_T.vcf.gz": {"name": "_results_cnvkit_vcf", "file": "cnv_sv/cnvkit_vcf/{sample}_T.vcf.gz", "types": ["T", "N"]},
@@ -39,5 +47,17 @@
   "Results/{project}/{sample}/SV/{sample}_manta_T.bnd.all.tsv": {"name": "_results_manta_t_tsv_bnd_all", "file": "tsv_files/{sample}_manta_t.all.tsv", "types": ["T"]},
   "Results/{project}/{sample}/SV/{sample}_manta_T.bnd.aml.tsv": {"name": "_results_manta_t_tsv_bnd_aml", "file": "tsv_files/{sample}_manta_t.aml.tsv", "types": ["T"]},
 
+  "Results/{project}/{sample}/SV/{sample}_manta_TN.ssa.vcf.gz": {"name": "_results_manta_tn_vcf", "file": "cnv_sv/manta_run_workflow_tn/{sample}.ssa.vcf.gz", "types": ["T", "N"]},
+  "Results/{project}/{sample}/SV/{sample}_manta_TN.ssa.vcf.gz.tbi": {"name": "_results_manta_tn_tbi", "file": "cnv_sv/manta_run_workflow_tn/{sample}.ssa.vcf.gz.tbi", "types": ["T", "N"]},
+  "Results/{project}/{sample}/SV/{sample}_manta_TN.ssa.all.vcf.gz": {"name": "_results_manta_tn_vcf_all", "file": "cnv_sv/manta_run_workflow_tn/{sample}.ssa.include.all.vcf.gz", "types": ["T", "N"]},
+  "Results/{project}/{sample}/SV/{sample}_manta_TN.ssa.all.vcf.gz.tbi": {"name": "_results_manta_tn_tbi_all", "file": "cnv_sv/manta_run_workflow_tn/{sample}.ssa.include.all.vcf.gz.tbi", "types": ["T", "N"]},
+  "Results/{project}/{sample}/SV/{sample}_manta_TN.ssa.aml.vcf.gz": {"name": "_results_manta_tn_vcf_aml", "file": "cnv_sv/manta_run_workflow_tn/{sample}.ssa.include.aml.vcf.gz", "types": ["T", "N"]},
+  "Results/{project}/{sample}/SV/{sample}_manta_TN.ssa.aml.vcf.gz.tbi": {"name": "_results_manta_tn_tbi_aml", "file": "cnv_sv/manta_run_workflow_tn/{sample}.ssa.include.aml.vcf.gz.tbi", "types": ["T", "N"]},
+  "Results/{project}/{sample}/SV/{sample}_manta_TN.del.tsv": {"name": "_results_manta_tsv_del", "file": "tsv_files/{sample}_manta_tn.del.tsv", "types": ["T", "N"]},
+  "Results/{project}/{sample}/SV/{sample}_manta_TN.ins.tsv": {"name": "_results_manta_tsv_ins", "file": "tsv_files/{sample}_manta_tn.ins.tsv", "types": ["T", "N"]},
+  "Results/{project}/{sample}/SV/{sample}_manta_TN.dup.tsv": {"name": "_results_manta_tsv_dup", "file": "tsv_files/{sample}_manta_tn.dup.tsv", "types": ["T", "N"]},
+  "Results/{project}/{sample}/SV/{sample}_manta_TN.bnd.tsv": {"name": "_results_manta_tsv_bnd", "file": "tsv_files/{sample}_manta_tn.tsv", "types": ["T", "N"]},
+  "Results/{project}/{sample}/SV/{sample}_manta_TN.bnd.all.tsv": {"name": "_results_manta_tsv_bnd_all", "file": "tsv_files/{sample}_manta_tn.all.tsv", "types": ["T", "N"]},
+  "Results/{project}/{sample}/SV/{sample}_manta_TN.bnd.aml.tsv": {"name": "_results_manta_tsv_bnd_aml", "file": "tsv_files/{sample}_manta_tn.aml.tsv", "types": ["T", "N"]},
   "Archive/{project}/{sample}_{flowcell}_{lane}_{barcode}_{type}.spring": {"name": "_archives_spring", "file": "compression/spring/{sample}_{flowcell}_{lane}_{barcode}_{type}.spring", "types": ["T", "N", "R"]}
 }

@@ -11,7 +11,7 @@ modules:
   filtering: "b7f4dc3"
   fusions: "1d538b680b6896d733bf57fb1e889c974c1f6c61"
   parabricks: "v0.2.0"
-  prealignment: "v0.2.0"
+  prealignment: "v0.5.0"
   qc: "178be68"
   misc: "v0.1.0"
 
@@ -144,7 +144,7 @@ multiqc:
         - "qc/mosdepth_bed/{sample}_{type}.mosdepth.summary.txt"
         - "qc/rseqc_gene_body_coverage/{sample}_{type}.geneBodyCoverage.txt"
         - "qc/rseqc_inner_distance/{sample}_{type}.inner_distance.txt"
-        - "prealignment/fastp_pe/{sample}_{flowcell}_{lane}_{barcode}_{type}.json"
+        - "prealignment/fastp_pe/{sample}_{flowcell}_{lane}_{barcode}_{type}_fastp.json"
         - "prealignment/sortmerna/{sample}_{type}.rrna.log"
 
 pbrun_mutectcaller_t:
