@@ -45,7 +45,7 @@ with open(config["output"]) as output:
 wildcard_constraints:
     sample="|".join(samples.index),
     unit="N|T|R",
-
+    bed="aml|all",
 
 def compile_output_list(wildcards):
     output_files = []

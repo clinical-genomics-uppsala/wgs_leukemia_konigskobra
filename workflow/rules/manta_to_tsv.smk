@@ -6,7 +6,8 @@ __license__ = "GPL-3"
 
 rule manta_to_tsv:
     input:
-        vcf="cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.{bed}.vcf",
+        vcf="cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.gz",
+	tbi="cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.gz.tbi",
     output:
         tsv=temp("tsv_files/{sample}_manta_{analysis}.{bed}.tsv"),
     log:

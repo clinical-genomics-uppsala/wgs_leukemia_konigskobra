@@ -235,7 +235,6 @@ properties:
         type: string
         description: name or path to docker/singularity container
     required:
-      - bed_files
       - container
 
   mosdepth:
