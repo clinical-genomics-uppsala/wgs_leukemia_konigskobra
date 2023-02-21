@@ -82,7 +82,6 @@ def compile_output_list(wildcards):
                 for lane in set([u.lane for u in units.loc[(sample, unit_type)].dropna().itertuples()])
             ]
         )
-    print(set(output_files))
     return list(set(output_files))
 
 
