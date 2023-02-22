@@ -28,9 +28,9 @@ ruleorder: _results_tbi_aml > misc_tabix
 ruleorder: _results_tbi_t > misc_tabix
 ruleorder: _results_cnvkit_tbi > misc_tabix
 ruleorder: _results_crai > misc_samtools_index
-ruleorder: filtering_bcftools_filter_include_region_sv > filtering_bcftools_filter_include_region
-ruleorder: filtering_bcftools_filter_include_region_snv_t > filtering_bcftools_filter_include_region
-ruleorder: filtering_bcftools_filter_include_region_snv_tn > filtering_bcftools_filter_include_region
+#ruleorder: filtering_bcftools_filter_include_region_sv > filtering_bcftools_filter_include_region
+#ruleorder: filtering_bcftools_filter_include_region_snv_t > filtering_bcftools_filter_include_region
+#ruleorder: filtering_bcftools_filter_include_region_snv_tn > filtering_bcftools_filter_include_region
 ruleorder: _results_vcf_t > misc_bgzip
 ruleorder: _results_tbi_t > misc_tabix
 ruleorder: _results_vcf_tn > misc_bgzip
@@ -39,7 +39,7 @@ ruleorder: _results_vcf_aml > misc_bgzip
 ruleorder: _results_tbi_aml > misc_tabix
 ruleorder: _results_vcf_all > misc_bgzip
 ruleorder: _results_tbi_all > misc_tabix
-ruleorder: filtering_bcftools_filter_include_region > misc_bgzip
+#ruleorder: filtering_bcftools_filter_include_region > misc_bgzip
 ruleorder: parabricks_pbrun_fq2bam > alignment_samtools_index
 ruleorder: _results_star_crai > alignment_samtools_index
 ruleorder: qc_multiqc_dna > qc_multiqc
@@ -306,7 +306,7 @@ module filtering:
         config
 
 
-use rule * from filtering as filtering_*
+use rule filter_vcf from filtering as filtering_filter_vcf
 
 
 use rule bcftools_filter_include_region from filtering as filtering_bcftools_filter_include_region_snv_t with:
@@ -354,15 +354,15 @@ use rule bcftools_filter_include_region from filtering as filtering_bcftools_fil
         vcf="cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.vcf.gz",
         tabix="cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.vcf.gz.tbi",
     output:
-        vcf=temp("cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.gz"),
+        vcf=temp("cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf"),
     params:
         filter=lambda wildcards: "-R %s" % config["bcftools_SV"][wildcards.bed],
         extra=config.get("bcftools_SV", {}).get("extra", ""),
     log:
-        "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.gz.log",
+        "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.log",
     benchmark:
         repeat(
-            "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.gz.benchmark.tsv",
+            "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.benchmark.tsv",
             config.get("bcftools_SV", {}).get("benchmark_repeats", 1),
         )
     message:
