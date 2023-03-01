@@ -1,5 +1,5 @@
 {
-  "Results/MultiQC_TN.html": {"name": "_results_multiqc_dna", "file": "qc/multiqc/multiqc_DNA.html",  "types": ["TN"]},
+  "Results/MultiQC_TN.html": {"name": "_results_multiqc_dna", "file": "qc/multiqc/multiqc_DNA.html",  "types": ["T", "N"]},
   "Results/MultiQC_R.html": {"name": "_results_multiqc_rna", "file": "qc/multiqc/multiqc_RNA.html",  "types": ["R"]},
 
   "Results/{project}/{sample}/RNA_fusions/{sample}_R.arriba.tsv": {"name": "_results_arriba", "file": "fusions/arriba/{sample}_R.fusions.tsv", "types": ["R"]},

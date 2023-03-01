@@ -9,6 +9,7 @@ include: "rules/cnvkit_table.smk"
 include: "rules/manta_to_tsv.smk"
 include: "rules/mutectcaller_to_tsv.smk"
 include: "rules/sample_order_multiqc.smk"
+include: "rules/cnvkit.smk"
 
 
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
@@ -45,6 +46,7 @@ ruleorder: _results_star_crai > alignment_samtools_index
 ruleorder: qc_multiqc_dna > qc_multiqc
 ruleorder: annotation_simple_sv_annotation_tn > misc_bgzip
 ruleorder: _results_crai > misc_samtools_index
+ruleorder: cnvkit_call_no_custom_purity > cnv_sv_cnvkit_call
 
 
 rule all:
