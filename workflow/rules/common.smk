@@ -58,7 +58,7 @@ def type_generator(types):
 
 def compile_output_list(wildcards):
     output_files = []
-    types = set([unit.type for unit in units.itertuples()])
+    types = type_generator(set([unit.type for unit in units.itertuples()]))
     chromosome_numbers = ["X", "Y"]
     chromosome_numbers.extend(range(1, 23))
     for output in output_json:
@@ -75,11 +75,26 @@ def compile_output_list(wildcards):
                 )
                 for chromosome_number in chromosome_numbers
                 for sample in get_samples(samples)
-                for unit_type in type_generator(get_unit_types(units, sample))
-                if unit_type in set(output_json[output]["types"]).intersection(types)
+                for unit_type in get_unit_types(units, sample)
+                if unit_type in set(output_json[output]["types"])
                 for flowcell in set([u.flowcell for u in units.loc[(sample, unit_type)].dropna().itertuples()])
                 for barcode in set([u.barcode for u in units.loc[(sample, unit_type)].dropna().itertuples()])
                 for lane in set([u.lane for u in units.loc[(sample, unit_type)].dropna().itertuples()])
+            ]
+        )
+    for output in output_json:
+        output_files += set(
+            [
+                output.format(
+                    sample=sample,
+                    type=unit_type,
+                    project=samples.loc[(sample)]["project"],
+                    chr=chromosome_number,
+                )
+                for chromosome_number in chromosome_numbers
+                for sample in get_samples(samples)
+                for unit_type in type_generator(get_unit_types(units, sample))
+                if unit_type in set(output_json[output]["types"]) and unit_type=='TN'
             ]
         )
     return list(set(output_files))
