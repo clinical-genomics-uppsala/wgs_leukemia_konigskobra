@@ -28,9 +28,9 @@ properties:
       - threads
       - time
 
-  bedtools_intersect:
+  arriba:
     type: object
-    description: resource definitions for bedtools_intersect
+    description: resource definitions for arriba
     properties:
       mem_mb:
         type: integer
@@ -227,7 +227,27 @@ properties:
       time:
         type: string
         description: max execution time
- 
+
+  fusioncatcher:
+    type: object
+    description: resource definitions for fusioncatcher
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+         
   germline_vcf:
     type: object
     description: resource definitions for germline_vcf
@@ -248,9 +268,9 @@ properties:
         type: string
         description: max execution time
  
-  imagemagick_convert:
+  manta_run_workflow_t:
     type: object
-    description: resource definitions for imagemagick_convert
+    description: resource definitions for manta_run_workflow_t
     properties:
       mem_mb:
         type: integer
@@ -267,7 +287,7 @@ properties:
       time:
         type: string
         description: max execution time
- 
+
   manta_run_workflow_tn:
     type: object
     description: resource definitions for manta_run_workflow_tn
@@ -576,7 +596,27 @@ properties:
       time:
         type: string
         description: max execution time
- 
+
+  sortmerna:
+    type: object
+    description: resource definitions for sortmerna
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+         
   spring:
     type: object
     description: resource definitions for spring
@@ -597,6 +637,46 @@ properties:
         type: string
         description: max execution time
  
+  star:
+    type: object
+    description: resource definitions for star
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+
+  star_fusion:
+    type: object
+    description: resource definitions for star_fusion
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+
   vep:
     type: object
     description: resource definitions for vep
