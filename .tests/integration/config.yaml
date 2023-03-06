@@ -38,16 +38,16 @@ arriba:
 arriba_draw_fusion:
   container: "docker://hydragenetics/arriba:2.3.0"
   cytobands: "/path/to/file.tsv"
-  gtf: "/path/to/file/Homo_sapiens.GRCh38.93.chr.gtf"
-  protein_domains: "/path/to/file.gff3"
+  gtf: "reference/assembly.gtf"
+  protein_domains: "reference/proteindomain.gff3"
 
 bcftools_SNV:
-  all: "/path/to/all.bed"
-  aml: "/path/to/aml.bed"
+  all: "reference/all.bed"
+  aml: "reference/aml.bed"
 
 bcftools_SV:
-  all: "/path/to/all.bed"
-  aml: "/path/to/aml.bed"
+  all: "reference/all.bed"
+  aml: "reference/aml.bed"
 
 cnvkit_batch:
   container: "docker://hydragenetics/cnvkit:0.9.9"
