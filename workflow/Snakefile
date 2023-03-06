@@ -249,9 +249,6 @@ use rule manta_run_workflow_t from cnv_sv as cnv_sv_manta_run_workflow_t with:
         bai_t="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
         ref=config["reference"]["fasta"],
         scrpt="cnv_sv/manta_run_workflow_t/{sample}/runWorkflow.py",
-    output:
-        tum_sv_vcf="cnv_sv/manta_run_workflow_t/{sample}/results/variants/tumorSV.vcf.gz",
-        tum_sv_tbi="cnv_sv/manta_run_workflow_t/{sample}/results/variants/tumorSV.vcf.gz.tbi",
 
 
 use rule pindel_call from cnv_sv as cnv_sv_pindel_call with:
