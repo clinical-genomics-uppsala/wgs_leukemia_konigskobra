@@ -35,6 +35,12 @@ arriba:
   extra: "-p abc.gff3 -k abc.tsv.gz"
   gtf: "reference/assembly.gtf"
 
+arriba_draw_fusion:
+  container: "docker://hydragenetics/arriba:2.3.0"
+  cytobands: "/path/to/file.tsv"
+  gtf: "/path/to/file/Homo_sapiens.GRCh38.93.chr.gtf"
+  protein_domains: "/path/to/file.gff3"
+
 bcftools_SNV:
   all: "/path/to/all.bed"
   aml: "/path/to/aml.bed"
