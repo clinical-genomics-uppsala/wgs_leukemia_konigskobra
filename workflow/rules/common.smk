@@ -49,8 +49,8 @@ wildcard_constraints:
 
 
 def type_generator(types):
-    if 'N' in types and 'T' in types:
-        types.add('TN')
+    if "N" in types and "T" in types:
+        types.add("TN")
         return types
     else:
         return types
@@ -94,7 +94,7 @@ def compile_output_list(wildcards):
                 for chromosome_number in chromosome_numbers
                 for sample in get_samples(samples)
                 for unit_type in type_generator(get_unit_types(units, sample))
-                if unit_type in set(output_json[output]["types"]) and unit_type=='TN'
+                if unit_type in set(output_json[output]["types"]) and unit_type == "TN"
             ]
         )
     return list(set(output_files))

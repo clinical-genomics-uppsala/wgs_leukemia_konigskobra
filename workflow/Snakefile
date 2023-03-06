@@ -149,7 +149,9 @@ module alignment:
 
 use rule star from alignment as alignment_star
 
+
 use rule samtools_index from alignment as alignment_samtools_index
+
 
 module cnv_sv:
     snakefile:
@@ -354,7 +356,6 @@ use rule bcftools_filter_include_region from filtering as filtering_bcftools_fil
         "{rule}: Use bcftools to include variants in vcf overlapping bed: {output.vcf}"
 
 
-
 module fusions:
     snakefile:
         github(
@@ -387,7 +388,6 @@ use rule star_fusion from fusions as fusions_star_fusion with:
         fusions="fusions/star_fusion/{sample}_{type}/star-fusion.fusion_predictions.tsv",
         fusions_abridged="fusions/star_fusion/{sample}_{type}/star-fusion.fusion_predictions.abridged.tsv",
         sj="fusions/star_fusion/{sample}_{type}/SJ.out.tab",
-
 
 
 module parabricks:
@@ -500,7 +500,6 @@ use rule picard_collect_wgs_metrics from qc as qc_picard_collect_wgs_metrics wit
 use rule samtools_stats from qc as qc_samtools_stats with:
     input:
         bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
-
 
 
 use rule mosdepth_bed from qc as qc_mosdepth_bed_rna with:

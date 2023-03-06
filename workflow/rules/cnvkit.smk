@@ -32,4 +32,3 @@ rule cnvkit_call_no_custom_purity:
         "(cnvkit.py call {input.segment} "
         "-v {input.vcf} "
         "-o {output.segment}) &> {log}"
-
