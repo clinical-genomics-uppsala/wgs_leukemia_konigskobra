@@ -225,8 +225,8 @@ spring:
 sortmerna:
   container: "docker://hydragenetics/sortmerna:4.3.4"
   fasta:
-    - "/reference/id.fasta"
-  index: "/reference/idx"
+    - "reference/id.fasta"
+  index: "reference/idx"
 
 star:
   container: "docker://hydragenetics/star:2.7.10a"
