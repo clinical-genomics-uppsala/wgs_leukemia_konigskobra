@@ -400,16 +400,26 @@ properties:
             type: object
             description: information to compile report correctly
             properties:
+              config:
+                type: string 
+                description: MultiQC report config
               included_unit_types:
                 type: array
                 description: unit types to be part of this report
               qc_files:
                 type: array
                 description: file names which should be included in report
+            required:
+              - config
+              - included_unit_types
+              - qc_files
           RNA:
             type: object
             description: information to compile report correctly
             properties:
+              config: 
+                type: string
+                description: MultiQC report config
               included_unit_types:
                 type: array
                 description: unit type to be part of this report

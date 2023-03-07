@@ -37,7 +37,7 @@ arriba:
 
 arriba_draw_fusion:
   container: "docker://hydragenetics/arriba:2.3.0"
-  cytobands: "/path/to/file.tsv"
+  cytobands: "reference/cytobands.tsv"
   gtf: "reference/assembly.gtf"
   protein_domains: "reference/proteindomain.gff3"
 
@@ -161,16 +161,6 @@ multiqc:
         - "prealignment/fastp_pe/{sample}_{flowcell}_{lane}_{barcode}_{type}_fastp.json"
         - "prealignment/sortmerna/{sample}_{type}.rrna.log"
 
-pbrun_mutectcaller_t:
-  bed_files:
-    all: "reference/all.bed"
-    aml: "reference/aml.bed"
-
-pbrun_mutectcaller_tn:
-  bed_files:
-    all: "reference/all.bed"
-    aml: "reference/aml.bed"
-
 picard_collect_alignment_summary_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
 
@@ -235,8 +225,8 @@ spring:
 sortmerna:
   container: "docker://hydragenetics/sortmerna:4.3.4"
   fasta:
-    - "/path/to/id.fasta"
-  index: "/path/idx"
+    - "/reference/id.fasta"
+  index: "/reference/idx"
 
 star:
   container: "docker://hydragenetics/star:2.7.10a"

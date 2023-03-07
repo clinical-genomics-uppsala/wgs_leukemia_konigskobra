@@ -49,9 +49,6 @@ bcftools_SV:
   all: ""
   aml: ""
 
-bedtools_intersect:
-  extra: "-header"
-
 cnvkit_batch:
   container: "docker://hydragenetics/cnvkit:0.9.9"
   method: "wgs"
@@ -121,7 +118,7 @@ multiqc:
   container: "docker://hydragenetics/multiqc:1.11"
   reports:
     DNA:
-      config: ""
+      config: "config/multiqc_dna_config.yaml"
       included_unit_types: ['T', 'N']
       qc_files:
         - "qc/fastqc/{sample}_{type}_{flowcell}_{lane}_{barcode}_{read}_fastqc.zip"
@@ -161,16 +158,6 @@ multiqc:
         - "qc/rseqc_inner_distance/{sample}_{type}.inner_distance_freq.txt"
         - "prealignment/fastp_pe/{sample}_{flowcell}_{lane}_{barcode}_{type}_fastp.json"
         - "prealignment/sortmerna/{sample}_{type}.rrna.log"
-
-pbrun_mutectcaller_t:
-  bed_files:
-    all: ""
-    aml: ""
-
-pbrun_mutectcaller_tn:
-  bed_files:
-    all: ""
-    aml: ""
 
 picard_collect_alignment_summary_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
