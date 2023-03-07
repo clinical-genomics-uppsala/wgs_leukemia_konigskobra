@@ -7,6 +7,10 @@ properties:
   tumor_content:
     type: string
     description: Tumor content
+  project:
+    type: string
+    description: Project name
 required:
   - sample
   - tumor_content
+  - project

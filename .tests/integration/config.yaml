@@ -4,18 +4,21 @@ units: "units.tsv"
 output: "../../config/output_files.json"
 
 modules:
+  alignment: "906d25d0d4791eb5a54cba9954fddf29e27b85dd"
   annotation: "e58432c3467db31621ab51a16034a026cf2a2c84"
-  cnv_sv: "4b3f69ef0f0781b7943ca27ca16b940470c27118"
+  cnv_sv: "c81d30d"
   compression: "v1.1.0"
   filtering: "b7f4dc3"
+  fusions: "12f8354"
   parabricks: "v0.2.0"
-  prealignment: "v0.2.0"
+  prealignment: "v0.5.0"
   qc: "178be68"
   misc: "v0.1.0"
 
 default_container: "docker://hydragenetics/common:0.1.9"
 
 reference:
+  design_bed: "/reference/homo_sapiens.wgs.bed"
   fai: "reference/reference.fasta.fai"
   fasta: "reference/reference.fasta"
   genome_dir: "reference"
@@ -25,8 +28,26 @@ reference:
 
 trimmer_software: "fastp_pe"
 
-bedtools_intersect:
-  extra: "-header"
+arriba:
+  assembly: "reference/assembly.fasta"
+  blacklist: "reference/arriba_blacklist.txt"
+  container: "docker://hydragenetics/arriba:2.2.1"
+  extra: "-p abc.gff3 -k abc.tsv.gz"
+  gtf: "reference/assembly.gtf"
+
+arriba_draw_fusion:
+  container: "docker://hydragenetics/arriba:2.3.0"
+  cytobands: "reference/cytobands.tsv"
+  gtf: "reference/assembly.gtf"
+  protein_domains: "reference/proteindomain.gff3"
+
+bcftools_SNV:
+  all: "reference/all.bed"
+  aml: "reference/aml.bed"
+
+bcftools_SV:
+  all: "reference/all.bed"
+  aml: "reference/aml.bed"
 
 cnvkit_batch:
   container: "docker://hydragenetics/cnvkit:0.9.9"
@@ -49,6 +70,7 @@ cnvkit_scatter_whole:
 
 cnvkit_table:
   bedfile: "reference/cna_genes.bed"
+  container: "/path/python3.9-0.1.0.sif"
   cyto_coordinates: "reference/cyto_coordinates.txt"
   # log_thresholds: "-0.19,0.2"
   # ploidy: "3"
@@ -57,6 +79,9 @@ cnvkit_vcf:
   container: "docker://python:3.9.9-slim-buster"
 
 config_manta_tn:
+  container: "docker://hydragenetics/manta:v1.6.0"
+
+config_manta_t:
   container: "docker://hydragenetics/manta:v1.6.0"
 
 crumble:
@@ -72,19 +97,24 @@ fastqc:
 filter_vcf:
   germline: "../../config/config_germline_filter.yaml"
 
-imagemagick_convert:
-  container: "docker://hydragenetics/imagemagick:7.1.0_20"
+fusioncatcher:
+  container: "docker://hydragenetics/fusioncatcher:1.33"
+  genome_path: "reference/fusioncatcher"
+
+manta_run_workflow_t:
+  container: "docker://hydragenetics/manta:v1.6.0"
 
 manta_run_workflow_tn:
-  bed_files:
-    all: "reference/all.bed"
-    aml: "reference/aml.bed"
   container: "docker://hydragenetics/manta:v1.6.0"
 
 mosdepth:
   by: "500"
   container: "docker://hydragenetics/mosdepth:0.3.2"
   extra: "--fast-mode --no-per-base"
+
+mosdepth_bed:
+  container: "docker://hydragenetics/mosdepth:0.3.2"
+  design_bed: "reference/exome.bed"
 
 multiqc:
   container: "docker://hydragenetics/multiqc:1.11"
@@ -93,7 +123,6 @@ multiqc:
       config: "../../config/multiqc_dna_config.yaml"
       included_unit_types: ['T', 'N']
       qc_files:
-        - "prealignment/fastp_pe/{sample}_{flowcell}_{lane}_{barcode}_{type}.json"
         - "qc/fastqc/{sample}_{type}_{flowcell}_{lane}_{barcode}_{read}_fastqc.zip"
         - "qc/mosdepth/{sample}_{type}.mosdepth.global.dist.txt"
         - "qc/mosdepth/{sample}_{type}.mosdepth.region.dist.txt"
@@ -105,7 +134,7 @@ multiqc:
         - "qc/picard_collect_gc_bias_metrics/{sample}_{type}.gc_bias.pdf"
         - "qc/picard_collect_gc_bias_metrics/{sample}_{type}.gc_bias.detail_metrics"
         - "qc/picard_collect_gc_bias_metrics/{sample}_{type}.gc_bias.summary_metrics"
-        - "qc/picard_collect_hs_metrics/{sample}_{type}.HsMetrics.txt" #behover bed
+        - "qc/picard_collect_hs_metrics/{sample}_{type}.HsMetrics.txt"
         - "qc/picard_collect_multiple_metrics/{sample}_{type}.alignment_summary_metrics"
         - "qc/picard_collect_multiple_metrics/{sample}_{type}.base_distribution_by_cycle_metrics"
         - "qc/picard_collect_multiple_metrics/{sample}_{type}.base_distribution_by_cycle.pdf"
@@ -117,11 +146,20 @@ multiqc:
         - "qc/picard_collect_multiple_metrics/{sample}_{type}.quality_distribution.pdf"
         - "qc/picard_collect_wgs_metrics/{sample}_{type}.txt"
         - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
-
-pbrun_mutectcaller_tn:
-  bed_files:
-    all: "reference/all.bed"
-    aml: "reference/aml.bed"
+    RNA:
+      included_unit_types: ["R"]
+      qc_files:
+        - "qc/fastqc/{sample}_{type}_{flowcell}_{lane}_{barcode}_{read}_fastqc.zip"
+        - "qc/mosdepth_bed/{sample}_{type}.mosdepth.global.dist.txt"
+        - "qc/mosdepth_bed/{sample}_{type}.mosdepth.region.dist.txt"
+        - "qc/mosdepth_bed/{sample}_{type}.mosdepth.summary.txt"
+        - "qc/mosdepth_bed/{sample}_{type}.regions.bed.gz"
+        - "qc/mosdepth_bed/{sample}_{type}.regions.bed.gz.csi"
+        - "qc/rseqc_gene_body_coverage/{sample}_{type}.geneBodyCoverage.txt"
+        - "qc/rseqc_inner_distance/{sample}_{type}.inner_distance.txt"
+        - "qc/rseqc_inner_distance/{sample}_{type}.inner_distance_freq.txt"
+        - "prealignment/fastp_pe/{sample}_{flowcell}_{lane}_{barcode}_{type}_fastp.json"
+        - "prealignment/sortmerna/{sample}_{type}.rrna.log"
 
 picard_collect_alignment_summary_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
@@ -130,6 +168,9 @@ picard_collect_duplication_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
 
 picard_collect_gc_bias_metrics:
+  container: "docker://hydragenetics/picard:2.25.0"
+
+picard_collect_hs_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
 
 picard_collect_multiple_metrics:
@@ -158,6 +199,14 @@ pindel_call:
 pindel2vcf:
   container: "docker://hydragenetics/pindel:0.2.5b9"
 
+rseqc_gene_body_coverage:
+  bed: "reference/gene_model.bed"
+  container: "docker://hydragenetics/rseqc:4.0.0"
+
+rseqc_inner_distance:
+  bed: "reference/gene_model.bed"
+  container: "docker://hydragenetics/rseqc:4.0.0"
+
 sample_order_multiqc:
   sample_sheet: "SampleSheet.csv"
 
@@ -172,6 +221,20 @@ snpeff:
 
 spring:
   container: "docker://hydragenetics/spring:1.0.1"
+
+sortmerna:
+  container: "docker://hydragenetics/sortmerna:4.3.4"
+  fasta:
+    - "reference/id.fasta"
+  index: "reference/idx"
+
+star:
+  container: "docker://hydragenetics/star:2.7.10a"
+  genome_index: "reference/star_index"
+
+star_fusion:
+  container: "docker://hydragenetics/star-fusion:1.10.1"
+  genome_path: "reference/star_fusion"
 
 vep:
   container: "docker://hydragenetics/vep:105"

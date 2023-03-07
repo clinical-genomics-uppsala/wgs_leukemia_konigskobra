@@ -14,10 +14,17 @@ properties:
     type: string
     description: path to units.tsv file
 
+  output:
+    type: string
+    description: path to output_files.json file
+
   modules:
     type: object
     description: map module to version/branch/tag
     properties:
+      alignment:
+        type: string
+        description: version/branch/tag
       annotation:
         type: string
         description: version/branch/tag
@@ -28,6 +35,9 @@ properties:
         type: string
         description: version/branch/tag
       filtering:
+        type: string
+        description: version/branch/tag
+      fusions:
         type: string
         description: version/branch/tag
       parabricks:
@@ -43,12 +53,14 @@ properties:
         type: string
         description: version/branch/tag
     required:
+      - alignment
       - annotation
       - cnv_sv
       - compression
       - parabricks
       - prealignment
       - filtering
+      - fusions
       - qc
       - misc
 
@@ -59,12 +71,21 @@ properties:
   reference:
     type: object
     properties:
+      design_bed:
+        type: string
+        description: path to reference design bed file
+      design_intervals:
+        type: string
+        description: path to design intervals file for hsmetrics
       fai:
         type: string
         description: path to reference fasta index file
       fasta:
         type: string
         description: path to reference fasta file
+      genome_dir: 
+        type: string
+        description: path to genome directory for star align
       sites:
         type: string
         description: path to known sites list file
@@ -72,8 +93,11 @@ properties:
         type: string
         description: path to wgs interval file
     required:
+      - design_bed
+      - design_intervals
       - fai
       - fasta
+      - genome_dir
       - sites
       - wgs_intervals
 
@@ -81,13 +105,50 @@ properties:
     type: string
     description: name of rule to be used for trimming
 
-  bedtools_intersect:
+  arriba:
     type: object
-    description: parameters for bedtools_intersect
     properties:
-      extra:
+      assembly:
+        type: string
+        description: path to assembly fasta file
+      blacklist:
+        type: string
+        description: path to blacklist tsv.gz file  
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      extra: 
         type: string
         description: extra parameters to be forwarded
+      gtf:
+        type: string
+        description: path to gtf file 
+    required:
+      - assembly
+      - blacklist
+      - container
+      - gtf
+
+  arriba_draw_fusion:
+    type: object
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      cytobands:
+        type: string
+        description: path to cytobands tsv file 
+      gtf:
+        type: string
+        description: path to gtf file 
+      protein_domains:
+        type: string
+        description: path to protein domains gff file
+    required:
+      - container
+      - cytobands
+      - gtf
+      - protein_domains 
 
   cnvkit_batch:
     type: object
@@ -104,6 +165,8 @@ properties:
         description: path to panel of normals file
     required:
       - container
+      - method
+      - normal_reference
 
   cnvkit_call:
     type: object
@@ -138,9 +201,60 @@ properties:
     required:
       - container
 
+  cnvkit_scatter_whole:
+    type: object
+    description: parameters for cnvkit_scatter_whole
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      extra:
+        type: string
+        description: extra parameters to be forwarded
+    required:
+      - container
+
+  cnvkit_table:
+    type: object
+    description: parameters for cnvkit_scatter_whole
+    properties:
+      bedfile:
+        type: string
+        description: path to bed file 
+      container:
+        type: string
+        description: name or path to docker/singularity python container
+      cyto_coordinates:
+        type: string
+        description: path to a cyto coordinate txt file 
+    required:
+      - bedfile
+      - container
+      - cyto_coordinates
+
   cnvkit_vcf:
     type: object
     description: parameters for cnvkit_vcf
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  config_manta_t:
+    type: object
+    description: parameters for config_manta_t
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  config_manta_tn:
+    type: object
+    description: parameters for config_manta_tn
     properties:
       container:
         type: string
@@ -158,16 +272,6 @@ properties:
       extra:
         type: string
         description: extra parameters to be forwarded
-    required:
-      - container
-
-  config_manta_tn:
-    type: object
-    description: parameters for config_manta_tn
-    properties:
-      container:
-        type: string
-        description: name or path to docker/singularity container
     required:
       - container
 
@@ -204,9 +308,22 @@ properties:
       required:
         - germline
 
-  imagemagick_convert:
+  fusioncatcher:
     type: object
-    description: parameters for imagemagick_convert
+    properties:
+      container:
+        type: string
+        description: name or path of container
+      genome_path:
+        type: string
+        description: path to fusionscatcher genome resource dir
+    required:
+      - container
+      - genome_path
+
+  manta_run_workflow_t:
+    type: object
+    description: parameters for manta_run_workflow_t
     properties:
       container:
         type: string
@@ -235,7 +352,6 @@ properties:
         type: string
         description: name or path to docker/singularity container
     required:
-      - bed_files
       - container
 
   mosdepth:
@@ -255,6 +371,20 @@ properties:
       - by
       - container
 
+  mosdepth_bed:
+    type: object
+    description: parameters for mosdepth_bed
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      design_bed:
+        type: string
+        description: path to design bed file
+    required:
+      - container
+      - design_bed
+
   multiqc:
     type: object
     description: parameters for multiqc
@@ -270,9 +400,29 @@ properties:
             type: object
             description: information to compile report correctly
             properties:
+              config:
+                type: string 
+                description: MultiQC report config
               included_unit_types:
                 type: array
                 description: unit types to be part of this report
+              qc_files:
+                type: array
+                description: file names which should be included in report
+            required:
+              - config
+              - included_unit_types
+              - qc_files
+          RNA:
+            type: object
+            description: information to compile report correctly
+            properties:
+              config: 
+                type: string
+                description: MultiQC report config
+              included_unit_types:
+                type: array
+                description: unit type to be part of this report
               qc_files:
                 type: array
                 description: file names which should be included in report
@@ -281,32 +431,10 @@ properties:
               - qc_files
         required:
           - DNA
-      qc_files:
-        type: array
-        description: list of input files containing appropriate variables
+          - RNA
     required:
       - container
       - reports
-
-  pbrun_mutectcaller_tn:
-    type: object
-    description: parameters for pbrun_mutectcaller_tn
-    properties:
-      bed_files:
-        type: object
-        description: map of bedfiles
-        properties:
-          all:
-            type: string
-            description: path to bed file containing relevant genes for ALL
-          aml:
-            type: string
-            description: path to bed file containing relevant genes for AML
-        required:
-          - all
-          - aml
-    required:
-      - bed_files
 
   picard_collect_alignment_summary_metrics:
     type: object
@@ -329,6 +457,16 @@ properties:
       - container
 
   picard_collect_gc_bias_metrics:
+    type: object
+    description: parameters for picard_collect_gc_bias_metrics
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  picard_collect_hs_metrics:
     type: object
     description: parameters for picard_collect_gc_bias_metrics
     properties:
@@ -361,6 +499,16 @@ properties:
     required:
       - container
 
+  picard_update_vcf_sequence_dictionary:
+    type: object
+    description: parameters for picard_update_vcf_sequence_dictionary
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
   pindel_call:
     type: object
     description: parameters for pindel_call
@@ -384,6 +532,41 @@ properties:
         description: name or path to docker/singularity container
     required:
       - container
+
+  rseqc_gene_body_coverage:
+    type: object
+    properties:
+      bed:
+        type: string
+        description: path to bed file
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - bed
+      - container
+
+  rseqc_inner_distance:
+    type: object
+    properties:
+      bed:
+        type: string
+        description: path to bed file
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - bed
+      - container
+
+  sample_order_multiqc:
+    type: object
+    properties:
+      sample_sheet: 
+        type: string
+        description: Path to SampleSheet.csv
+    required:
+      - sample_sheet
 
   simple_sv_annotation:
     type: object
@@ -417,6 +600,24 @@ properties:
       - container
       - db
 
+  sortmerna:
+    type: object
+    description: parameters for sortmerna
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      fasta:
+        type: array
+        description: list of paths to fasta files containing ribosomal rna sequences
+      index:
+        type: string
+        description: path to sortmerna index for fasta files
+    required:
+      - container
+      - fasta
+      - index
+
   spring:
     type: object
     description: parameters for spring
@@ -426,6 +627,40 @@ properties:
         description: name or path to docker/singularity container
     required:
       - container
+
+  star:
+    type: object
+    description: parameters for star
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      genome_index:
+        type: string
+        description: path to genome resource
+      extra:
+        type: string
+        description: extra parameters to be forwarded
+    required:
+      - container
+      - genome_index
+
+  star_fusion:
+    type: object
+    description: parameters for star_fusion
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      genome_path:
+        type: string
+        description: path to genome resource
+      extra:
+        type: string
+        description: extra parameters to be forwarded
+    required:
+      - container
+      - genome_path
 
   vep:
     type: object
@@ -445,33 +680,46 @@ required:
   - resources
   - samples
   - units
+  - output
   - modules
   - default_container
   - reference
   - trimmer_software
+  - arriba
+  - arriba_draw_fusion
   - cnvkit_batch
   - cnvkit_call
   - cnvkit_diagram
   - cnvkit_scatter
+  - cnvkit_scatter_whole
+  - cnvkit_table
   - cnvkit_vcf
+  - config_manta_t
   - config_manta_tn
   - crumble
   - fastp_pe
   - fastqc
   - filter_vcf
-  - imagemagick_convert
+  - manta_run_workflow_t
   - manta_run_workflow_tn
   - mosdepth
+  - mosdepth_bed
   - multiqc
-  - pbrun_mutectcaller_tn
   - picard_collect_alignment_summary_metrics
   - picard_collect_duplication_metrics
   - picard_collect_gc_bias_metrics
+  - picard_collect_hs_metrics
   - picard_collect_multiple_metrics
   - picard_collect_wgs_metrics
+  - picard_update_vcf_sequence_dictionary
   - pindel_call
   - pindel2vcf
+  - rseqc_gene_body_coverage
+  - rseqc_inner_distance
+  - sample_order_multiqc
   - simple_sv_annotation
   - snpeff
   - spring
+  - star
+  - star_fusion
   - vep
