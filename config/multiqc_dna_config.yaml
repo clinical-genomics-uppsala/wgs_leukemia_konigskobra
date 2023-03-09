@@ -4,7 +4,7 @@ extra_fn_clean_exts: ##from this until end
     - type: regex
       pattern: '_fastq[12]'
 extra_fn_clean_trim:
-  - 'Sample_VE-3297_'
+  - 'Sample_WA-3560_'
 
 custom content:
   order:

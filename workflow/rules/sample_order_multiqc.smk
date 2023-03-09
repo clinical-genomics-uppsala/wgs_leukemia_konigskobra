@@ -8,8 +8,10 @@ rule sample_order_multiqc:
     input:
         sample_sheet=config["sample_order_multiqc"]["sample_sheet"],
     output:
-        replacement="qc/multiqc/sample_replacement.tsv",
-        order="qc/multiqc/sample_order.tsv",
+        replacement_rna="qc/multiqc/sample_replacement_rna.tsv",
+        order_rna="qc/multiqc/sample_order_rna.tsv",
+        replacement_dna="qc/multiqc/sample_replacement_dna.tsv",
+        order_dna="qc/multiqc/sample_order_dna.tsv",
     params:
         extra=config.get("sample_order_multiqc", {}).get("extra", ""),
     log:
