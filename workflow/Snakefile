@@ -404,6 +404,10 @@ module parabricks:
 use rule * from parabricks as parabricks_*
 
 
+use rule pbrun_fq2bam from parabricks as parabricks_pbrun_fq2bam with:
+    priority:
+        5
+
 module prealignment:
     snakefile:
         github(

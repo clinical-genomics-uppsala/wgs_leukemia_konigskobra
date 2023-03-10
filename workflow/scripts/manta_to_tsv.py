@@ -17,7 +17,10 @@ with open(output_file, "wt") as tsv:
         if "MantaBND" in row.ID and not any(x in ["MinQUAL", "MinGQ", "MinSomaticScore",
                                                   "Ploidy", "MaxDepth", "MaxMQ0Frac", "NoPairSupport",
                                                   "SampleFT", "HomRef"] for x in row.FILTER):
-            genes = row.INFO["ANN"][0].split("|")
+            try:
+                genes = row.INFO["ANN"][0].split("|")
+            except KeyError:
+                genes = ["NA", "NA", "NA", "NA", "NA"]
             manta_id = ":".join(row.ID.split(":")[0:2])
             tsv_writer.writerow([row.CHROM + ":" + str(row.POS), manta_id, str(row.ALT)[1:-1],
                                 genes[3] + "(" + genes[4] + ")", row.INFO["BND_DEPTH"], row.FILTER])
