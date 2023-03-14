@@ -527,7 +527,7 @@ use rule mosdepth_bed from qc as qc_mosdepth_bed_rna with:
 #         ),
 
 
-use rule rseqc_gene_body_converage from qc as qc_rseqc_gene_body_converage with:
+use rule rseqc_gene_body_coverage from qc as qc_rseqc_gene_body_coverage with:
     output:
         pdf="qc/rseqc_gene_body_coverage/{sample}_{type}.geneBodyCoverage.curves.pdf",
         rscrpt=temp("qc/rseqc_gene_body_coverage/{sample}_{type}.geneBodyCoverage.r"),
