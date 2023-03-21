@@ -83,7 +83,10 @@ properties:
       fasta:
         type: string
         description: path to reference fasta file
-      genome_dir: 
+      fasta_rna:
+        type: string
+        description: path to reference fasta file for rna used by picard_collect_alignment_summary_metrics
+      genome_dir:
         type: string
         description: path to genome directory for star align
       sites:
@@ -97,6 +100,7 @@ properties:
       - design_intervals
       - fai
       - fasta
+      - fasta_rna
       - genome_dir
       - sites
       - wgs_intervals
@@ -113,16 +117,16 @@ properties:
         description: path to assembly fasta file
       blacklist:
         type: string
-        description: path to blacklist tsv.gz file  
+        description: path to blacklist tsv.gz file
       container:
         type: string
         description: name or path to docker/singularity container
-      extra: 
+      extra:
         type: string
         description: extra parameters to be forwarded
       gtf:
         type: string
-        description: path to gtf file 
+        description: path to gtf file
     required:
       - assembly
       - blacklist
@@ -137,10 +141,10 @@ properties:
         description: name or path to docker/singularity container
       cytobands:
         type: string
-        description: path to cytobands tsv file 
+        description: path to cytobands tsv file
       gtf:
         type: string
-        description: path to gtf file 
+        description: path to gtf file
       protein_domains:
         type: string
         description: path to protein domains gff file
@@ -148,7 +152,7 @@ properties:
       - container
       - cytobands
       - gtf
-      - protein_domains 
+      - protein_domains
 
   cnvkit_batch:
     type: object
@@ -220,13 +224,13 @@ properties:
     properties:
       bedfile:
         type: string
-        description: path to bed file 
+        description: path to bed file
       container:
         type: string
         description: name or path to docker/singularity python container
       cyto_coordinates:
         type: string
-        description: path to a cyto coordinate txt file 
+        description: path to a cyto coordinate txt file
     required:
       - bedfile
       - container
@@ -401,7 +405,7 @@ properties:
             description: information to compile report correctly
             properties:
               config:
-                type: string 
+                type: string
                 description: MultiQC report config
               included_unit_types:
                 type: array
@@ -417,7 +421,7 @@ properties:
             type: object
             description: information to compile report correctly
             properties:
-              config: 
+              config:
                 type: string
                 description: MultiQC report config
               included_unit_types:
@@ -427,6 +431,7 @@ properties:
                 type: array
                 description: file names which should be included in report
             required:
+              - config
               - included_unit_types
               - qc_files
         required:
@@ -562,7 +567,7 @@ properties:
   sample_order_multiqc:
     type: object
     properties:
-      sample_sheet: 
+      sample_sheet:
         type: string
         description: Path to SampleSheet.csv
     required:
