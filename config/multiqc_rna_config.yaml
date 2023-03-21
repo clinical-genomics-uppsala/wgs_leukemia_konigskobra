@@ -1,0 +1,18 @@
+decimalPoint_format: ','
+extra_fn_clean_exts: ##from this until end
+    - '.duplication_metrics'
+    - type: regex
+      pattern: '_fastq[12]'
+extra_fn_clean_trim:
+  - 'Sample_WA-3560_'
+
+sample_names_ignore_re:
+  - '_[TN]_fastp'
+
+custom content:
+  order:
+    - fastqc
+    - mosdepth
+    - rseqc
+    - sortmerna
+    - fastp
