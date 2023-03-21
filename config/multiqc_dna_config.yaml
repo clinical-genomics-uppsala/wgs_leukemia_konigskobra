@@ -15,6 +15,20 @@ custom content:
     - samtools
     - picard
 
+
+custom_data:
+  dna_number_table:
+    file_format: "tsv"
+    section_name: "DNA number"
+    description: "File for connecting Pedegree ID with DNA number in general stats"
+    plot_type: "generalstats"
+    pconfig:
+      - dna_number
+
+sp:
+  dna_number_table:
+    fn: "*.dna_number.table.tsv"
+
 table_columns_visible:
   FastQC:
     percent_duplicates: False
@@ -105,6 +119,8 @@ multiqc_cgs:
 
 # Galler alla kolumner oberoende pa module!
 table_columns_placement:
+  dna_number_table:
+    dna_number: 300
   mosdepth:
     median_coverage: 601
     1_x_pc: 666

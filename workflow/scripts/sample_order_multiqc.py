@@ -40,7 +40,9 @@ if len(samples) == 0:
 with open(snakemake.output.replacement_dna, "w+") as replacement_tsv_dna, \
      open(snakemake.output.replacement_rna, "w+") as replacement_tsv_rna, \
      open(snakemake.output.order_dna, "w+") as order_tsv_dna, \
-     open(snakemake.output.order_rna, "w+") as order_tsv_rna:
+     open(snakemake.output.order_rna, "w+") as order_tsv_rna,
+     open(snakemake.output.dnanumber, "w+") as dna_table,
+     open(snakemake.output.rnanumber, "w+") as rna_table:
     order_tsv_dna.write("\t".join(["Sample Order", "Pedegree ID", "DNA number"])+"\n")
     order_tsv_rna.write("\t".join(["Sample Order", "Pedegree ID", "RNA number"])+"\n")
     i = 1
@@ -52,8 +54,15 @@ with open(snakemake.output.replacement_dna, "w+") as replacement_tsv_dna, \
         if sample["Type"] == "T" or sample["Type"] == "N":
             replacement_tsv_dna.write("\t".join(replacement_line + ["sample_"+str(f"{i:03}")]) + "\n")
             order_tsv_dna.write("\t".join(["sample_"+str(f"{i:03}")] + order_line) + "\n")
+            dna_table.write("\t".join(order_line)+"\n")
             i += 1
         elif sample["Type"] == "R":
             replacement_tsv_rna.write("\t".join(replacement_line + ["sample_"+str(f"{j:03}")]) + "\n")
             order_tsv_rna.write("\t".join(["sample_"+str(f"{j:03}")] + order_line) + "\n")
+            rna_table.write("\t".join(order_line) + "\n")
             j += 1
+
+with
+    for sample in samples.values():
+        sample["Type"] = "R" if sample["Type"] == "Heltranskriptom" else sample["Type"]
+        dna_table.write(sample["Pedegree_id"] + "_" + sample["Type"],)
