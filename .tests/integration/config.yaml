@@ -12,7 +12,7 @@ modules:
   fusions: "12f8354"
   parabricks: "v0.2.0"
   prealignment: "v0.5.0"
-  qc: "178be68"
+  qc: "v0.3.0"
   misc: "v0.1.0"
 
 default_container: "docker://hydragenetics/common:0.1.9"
@@ -21,6 +21,7 @@ reference:
   design_bed: "/reference/homo_sapiens.wgs.bed"
   fai: "reference/reference.fasta.fai"
   fasta: "reference/reference.fasta"
+  fasta_rna: "reference/reference.fasta"
   genome_dir: "reference"
   sites: "reference/sites.vcf.gz"
   wgs_intervals: "reference/wgs.interval_list"
@@ -146,7 +147,9 @@ multiqc:
         - "qc/picard_collect_multiple_metrics/{sample}_{type}.quality_distribution.pdf"
         - "qc/picard_collect_wgs_metrics/{sample}_{type}.txt"
         - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
+        - "qc/multiqc/DNA_number.table.tsv"
     RNA:
+      config: "../../config/multiqc_rna_config.yaml"
       included_unit_types: ["R"]
       qc_files:
         - "qc/fastqc/{sample}_{type}_{flowcell}_{lane}_{barcode}_{read}_fastqc.zip"
@@ -160,6 +163,8 @@ multiqc:
         - "qc/rseqc_inner_distance/{sample}_{type}.inner_distance_freq.txt"
         - "prealignment/fastp_pe/{sample}_{flowcell}_{lane}_{barcode}_{type}_fastp.json"
         - "prealignment/sortmerna/{sample}_{type}.rrna.log"
+        - "qc/picard_collect_alignment_summary_metrics/{sample}_{type}.alignment_summary_metrics.txt"
+        - "qc/multiqc/RNA_number.table.tsv"
 
 picard_collect_alignment_summary_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
