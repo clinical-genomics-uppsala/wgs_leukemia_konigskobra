@@ -45,7 +45,7 @@ with open(snakemake.output.replacement_dna, "w+") as replacement_tsv_dna, \
      open(snakemake.output.rnanumber, "w+") as rna_table:
     order_tsv_dna.write("\t".join(["Sample Order", "Pedegree ID", "DNA number"])+"\n")
     order_tsv_rna.write("\t".join(["Sample Order", "Pedegree ID", "RNA number"])+"\n")
-    dna_table.write("\t".join(["Sample", "ped_id" ,"dna_number"])+"\n")
+    dna_table.write("\t".join(["Sample", "ped_id", "dna_number"])+"\n")
     rna_table.write("\t".join(["Sample", "ped_id", "rna_number"])+"\n")
     i = 1
     j = 1

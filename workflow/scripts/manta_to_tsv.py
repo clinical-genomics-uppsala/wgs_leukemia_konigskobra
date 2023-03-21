@@ -12,7 +12,7 @@ vcf = vcf.Reader(open(input_file, "r"))
 
 with open(output_file, "wt") as tsv:
     tsv_writer = csv.writer(tsv, delimiter='\t')
-    tsv_writer.writerow(["#POSITION1", "MANTAID","BREAKEND", "GENES", "DEPTH", "ANNOTATIONINFO"])
+    tsv_writer.writerow(["#POSITION1", "MANTAID", "BREAKEND", "GENES", "DEPTH", "ANNOTATIONINFO"])
     for row in vcf:
         if "MantaBND" in row.ID and not any(x in ["MinQUAL", "MinGQ", "MinSomaticScore",
                                                   "Ploidy", "MaxDepth", "MaxMQ0Frac", "NoPairSupport",
