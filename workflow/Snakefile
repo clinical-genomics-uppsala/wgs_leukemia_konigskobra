@@ -39,7 +39,6 @@ ruleorder: _results_vcf_all > misc_bgzip
 ruleorder: _results_tbi_all > misc_tabix
 ruleorder: parabricks_pbrun_fq2bam > alignment_samtools_index
 ruleorder: _results_star_crai > alignment_samtools_index
-ruleorder: qc_multiqc_dna > qc_multiqc
 ruleorder: annotation_simple_sv_annotation_tn > misc_bgzip
 
 
@@ -404,6 +403,10 @@ module parabricks:
 use rule * from parabricks as parabricks_*
 
 
+use rule pbrun_fq2bam from parabricks as parabricks_pbrun_fq2bam with:
+    priority: 5
+
+
 module prealignment:
     snakefile:
         github(
@@ -430,11 +433,17 @@ use rule * from qc as qc_*
 
 use rule mosdepth from qc as qc_mosdepth with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type,T|N}.bam",
-        bai="parabricks/pbrun_fq2bam/{sample}_{type,T|N}.bam.bai",
+        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bai="parabricks/pbrun_fq2bam/{sample}_{type}.bam.bai",
+    output:
+        bed=temp("qc/mosdepth/{sample}_{type,T|N}.regions.bed.gz"),
+        csi=temp("qc/mosdepth/{sample}_{type,T|N}.regions.bed.gz.csi"),
+        glob=temp("qc/mosdepth/{sample}_{type,T|N}.mosdepth.global.dist.txt"),
+        region=temp("qc/mosdepth/{sample}_{type,T|N}.mosdepth.region.dist.txt"),
+        summary=temp("qc/mosdepth/{sample}_{type,T|N}.mosdepth.summary.txt"),
 
 
-use rule multiqc from qc as qc_multiqc_dna with:
+use rule multiqc from qc as qc_multiqc with:
     input:
         files=lambda wildcards: set(
             [
@@ -448,8 +457,8 @@ use rule multiqc from qc as qc_multiqc_dna with:
             ]
         ),
         config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
-        sample_replacement="qc/multiqc/sample_replacement.tsv",
-        sample_order="qc/multiqc/sample_order.tsv",
+        sample_replacement="qc/multiqc/sample_replacement_{report}.tsv",
+        sample_order="qc/multiqc/sample_order_{report}.tsv",
     params:
         extra=lambda wildcards, input: "--replace-names "
         + input.sample_replacement
@@ -457,12 +466,23 @@ use rule multiqc from qc as qc_multiqc_dna with:
         + input.sample_order
         + " -c "
         + input.config,
+        use_input_files_only=config.get("multiqc", {}).get("use_input_files_only", True),
 
 
 use rule picard_collect_alignment_summary_metrics from qc as qc_picard_alignment_summary_metrics with:
     input:
         bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
         ref=config["reference"]["fasta"],
+    wildcard_constraints:
+        type="T|N",
+
+
+use rule picard_collect_alignment_summary_metrics from qc as qc_picard_alignment_summary_metrics_rna with:
+    input:
+        bam="alignment/star/{sample}_{type}.bam",
+        ref=config["reference"]["fasta_rna"],
+    wildcard_constraints:
+        type="R",
 
 
 use rule picard_collect_duplication_metrics from qc as qc_picard_duplication_metrics with:
@@ -500,6 +520,8 @@ use rule picard_collect_wgs_metrics from qc as qc_picard_collect_wgs_metrics wit
 use rule samtools_stats from qc as qc_samtools_stats with:
     input:
         bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+    wildcard_constraints:
+        type="T|N",
 
 
 use rule mosdepth_bed from qc as qc_mosdepth_bed_rna with:
@@ -509,21 +531,7 @@ use rule mosdepth_bed from qc as qc_mosdepth_bed_rna with:
         bed=config.get("mosdepth_bed", {}).get("design_bed", ""),
 
 
-# use rule multiqc from qc as qc_multiqc_rna with:
-#     input:
-#         files=lambda wildcards: set(
-#             [
-#                 file.format(sample=sample, type=u.type, lane=u.lane, flowcell=u.flowcell, barcode=u.barcode, read=read)
-#                 for file in config["multiqc"]["reports"][wildcards.report]["qc_files"]
-#                 for sample in get_samples(samples)
-#                 for u in units.loc[sample].dropna().itertuples()
-#                 if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
-#                 for read in ["fastq1", "fastq2"]
-#             ]
-#         ),
-
-
-use rule rseqc_gene_body_converage from qc as qc_rseqc_gene_body_converage with:
+use rule rseqc_gene_body_coverage from qc as qc_rseqc_gene_body_coverage with:
     output:
         pdf="qc/rseqc_gene_body_coverage/{sample}_{type}.geneBodyCoverage.curves.pdf",
         rscrpt=temp("qc/rseqc_gene_body_coverage/{sample}_{type}.geneBodyCoverage.r"),
