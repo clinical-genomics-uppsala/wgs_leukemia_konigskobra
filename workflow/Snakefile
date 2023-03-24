@@ -404,8 +404,8 @@ use rule * from parabricks as parabricks_*
 
 
 use rule pbrun_fq2bam from parabricks as parabricks_pbrun_fq2bam with:
-    priority:
-        5
+    priority: 5
+
 
 module prealignment:
     snakefile:
@@ -466,7 +466,7 @@ use rule multiqc from qc as qc_multiqc with:
         + input.sample_order
         + " -c "
         + input.config,
-         use_input_files_only=config.get("multiqc", {}).get("use_input_files_only", True),
+        use_input_files_only=config.get("multiqc", {}).get("use_input_files_only", True),
 
 
 use rule picard_collect_alignment_summary_metrics from qc as qc_picard_alignment_summary_metrics with:
