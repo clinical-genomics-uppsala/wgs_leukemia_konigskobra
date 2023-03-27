@@ -16,7 +16,6 @@ ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_bgzip
 ruleorder: cnv_sv_manta_run_workflow_t > misc_tabix
 ruleorder: cnv_sv_manta_run_workflow_t > misc_bgzip
-ruleorder: _results_pindel_tbi > misc_tabix
 ruleorder: _results_manta_tn_tbi > misc_tabix
 ruleorder: _results_manta_tn_tbi_all > misc_tabix
 ruleorder: _results_manta_tn_tbi_aml > misc_tabix

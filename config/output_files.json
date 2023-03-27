@@ -25,8 +25,7 @@
 
   "Results/{project}/{sample}/SNV_indels/{sample}_mutectcaller_TN.all.tsv": {"name": "_results_tsv_all", "file": "tsv_files/{sample}_mutectcaller_tn.all.tsv", "types": ["TN"]},
   "Results/{project}/{sample}/SNV_indels/{sample}_mutectcaller_TN.aml.tsv": {"name": "_results_tsv_aml", "file": "tsv_files/{sample}_mutectcaller_tn.aml.tsv", "types": ["TN"]},
-  "Results/{project}/{sample}/SNV_indels/{sample}.pindel.vcf.gz": {"name": "_results_pindel_vcf", "file": "cnv_sv/pindel/{sample}.vcf.gz", "types": ["TN"]},
-  "Results/{project}/{sample}/SNV_indels/{sample}.pindel.vcf.gz.tbi": {"name": "_results_pindel_tbi", "file": "cnv_sv/pindel/{sample}.vcf.gz.tbi", "types": ["TN"]},
+  "Results/{project}/{sample}/SNV_indels/{sample}.pindel.vcf": {"name": "_results_pindel_vcf", "file": "cnv_sv/pindel/{sample}.vcf", "types": ["TN"]},
   "Results/{project}/{sample}/CNV/{sample}_T.vcf.gz": {"name": "_results_cnvkit_vcf", "file": "cnv_sv/cnvkit_vcf/{sample}_T.vcf.gz", "types": ["T"]},
   "Results/{project}/{sample}/CNV/{sample}_T.vcf.gz.tbi": {"name": "_results_cnvkit_tbi", "file": "cnv_sv/cnvkit_vcf/{sample}_T.vcf.gz.tbi", "types": ["T"]},
   "Results/{project}/{sample}/CNV/{sample}_T.CNV.xlsx": {"name": "_results_cnvkit_table", "file": "cnv_sv/cnvkit_table/{sample}_T.CNV.xlsx", "types": ["T"]},
