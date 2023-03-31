@@ -41,6 +41,6 @@ rule cnvkit_table:
     conda:
         "../envs/cnvkit_table.yaml"
     message:
-        "{rule}: Create output table from {input.cns} and {input.gene_interest}.{params.cnvkit_scatter_folder}"
+        "{rule}: Create output table from {input.cns} and {input.gene_interest}."
     script:
         "../scripts/cnvkit_to_table.py"
