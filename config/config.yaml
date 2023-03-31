@@ -64,6 +64,8 @@ cnvkit_diagram:
 cnvkit_scatter:
   container: "docker://hydragenetics/cnvkit:0.9.9"
   extra: "-c {locus} --y-min -5 --y-max 5"
+  cna: 
+    "chr4": "DUX4"
 
 cnvkit_scatter_whole:
   container: "docker://hydragenetics/cnvkit:0.9.9"
