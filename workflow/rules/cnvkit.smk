@@ -63,12 +63,6 @@ rule cnvkit_scatter:
     message:
         "{rule}: Plot cnvs into cnv_sv/cnvkit_scatter/{wildcards.sample}_{wildcards.type}_{wildcards.locus}.png"
     shell:
-        "(cnvkit.py scatter "
-        "-s {input.segments} "
-        "-v {input.vcf} "
-        "-o {output.plot} "
-        "{params.extra}) &> {log}"
-
         """
         if [ -z {params.gene} ]
         then
