@@ -203,6 +203,7 @@ pindel_call:
 
 pindel2vcf:
   container: "docker://hydragenetics/pindel:0.2.5b9"
+  extra: "-is 5 -he 0.01 -e 3"
 
 rseqc_gene_body_coverage:
   bed: "reference/gene_model.bed"
