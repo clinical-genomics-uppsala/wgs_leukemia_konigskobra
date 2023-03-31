@@ -40,6 +40,7 @@ ruleorder: _results_tbi_all > misc_tabix
 ruleorder: parabricks_pbrun_fq2bam > alignment_samtools_index
 ruleorder: _results_star_crai > alignment_samtools_index
 ruleorder: annotation_simple_sv_annotation_tn > misc_bgzip
+ruleorder: _results_pindel_vcf > misc_bgzip
 
 
 rule all:
@@ -163,7 +164,7 @@ module cnv_sv:
         config
 
 
-use rule * from cnv_sv exclude cnvkit_call as cnv_sv_*
+use rule * from cnv_sv exclude cnvkit_call, cnvkit_scatter as cnv_sv_*
 
 
 use rule cnvkit_batch from cnv_sv as cnv_sv_cnvkit_batch with:
@@ -171,24 +172,6 @@ use rule cnvkit_batch from cnv_sv as cnv_sv_cnvkit_batch with:
         bam="parabricks/pbrun_fq2bam/{sample}_T.bam",
         bai="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
         cnv_reference=config["cnvkit_batch"]["normal_reference"],
-
-
-use rule cnvkit_scatter from cnv_sv as cnv_sv_cnvkit_scatter with:
-    input:
-        segments="cnv_sv/cnvkit_call/{sample}_{type}.loh.cns",
-        segment_regions="cnv_sv/cnvkit_batch/{sample}/{sample}_{type}.cnr",
-        vcf="parabricks/pbrun_mutectcaller_t/{sample}_{type}.vep.filter.germline.vcf",
-    output:
-        plot=temp("cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.png"),
-    log:
-        "cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.log",
-    benchmark:
-        repeat(
-            "cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.benchmark.tsv",
-            config.get("cnvkit_scatter", {}).get("benchmark_repeats", 1),
-        )
-    message:
-        "{rule}: Plot cnvs into cnv_sv/cnvkit_scatter/{wildcards.sample}_{wildcards.type}_{wildcards.locus}.png"
 
 
 use rule cnvkit_scatter from cnv_sv as cnv_sv_cnvkit_scatter_whole with:

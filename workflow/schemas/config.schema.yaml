@@ -202,6 +202,9 @@ properties:
       extra:
         type: string
         description: extra parameters to be forwarded
+      cna:
+        type: string
+        description: list of genes to highlight per chromosome in form of "chr": "GeneSymbol" 
     required:
       - container
 
