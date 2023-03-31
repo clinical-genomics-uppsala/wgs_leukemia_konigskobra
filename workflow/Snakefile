@@ -359,7 +359,7 @@ use rule arriba from fusions as fusions_arriba with:
 
 
 use rule fusioncatcher from fusions as fusions_fusioncatcher with:
-    priority: 4 
+    priority: 4
     output:
         fusions="fusions/fusioncatcher/{sample}_{type}/final-list_candidate-fusion-genes.hg19.txt",
         fusions_summary="fusions/fusioncatcher/{sample}_{type}/summary_candidate_fusions.txt",
