@@ -26,7 +26,7 @@ with open(output_file_dels, "wt") as tsv:
             manta_id = ":".join(row.ID.split(":")[0:2])
             if dellength[0] <= -100:
                 tsv_writer.writerow([row.CHROM + ":" + str(row.POS), row.CHROM + ":" + str(pos2),
-                                str(dellength)[1:-1], manta_id, genes[3] + "(" + genes[4] + ")", row.FILTER])
+                                    str(dellength)[1:-1], manta_id, genes[3] + "(" + genes[4] + ")", row.FILTER])
 
 
 datei = vcf.Reader(open(input_file, "r"))
@@ -50,7 +50,7 @@ with open(output_file_dup, "wt") as tsv:
                 homseq = "NA"
             if dellength[0] >= 100:
                 tsv_writer.writerow([row.CHROM + ":" + str(row.POS), row.CHROM + ":" + str(pos2), str(dellength)[1:-1],
-                                manta_id, genes[3] + "(" + genes[4] + ")", str(homlen)[1:-1], str(homseq)[1:-1], row.FILTER])
+                                    manta_id, genes[3] + "(" + genes[4] + ")", str(homlen)[1:-1], str(homseq)[1:-1], row.FILTER])
 
 
 datei = vcf.Reader(open(input_file, "r"))
@@ -80,4 +80,4 @@ with open(output_file_ins, "wt") as tsv:
             manta_id = ":".join(row.ID.split(":")[0:2])
             if dellength == "NA" or dellength[0] >= 100:
                 tsv_writer.writerow([row.CHROM + ":" + str(row.POS), row.REF, str(row.ALT)[1:-1], str(dellength)[1:-1],
-                                 manta_id, genes[3] + "(" + genes[4] + ")", str(homlen)[1:-1], str(homseq)[1:-1], row.FILTER])
+                                     manta_id, genes[3] + "(" + genes[4] + ")", str(homlen)[1:-1], str(homseq)[1:-1], row.FILTER])
