@@ -4,13 +4,13 @@ __email__ = "nina.hollfelder@scilifelab.uu.se"
 __license__ = "GPL-3"
 
 
-rule peddy_create_ped: 
-    input: 
-         config["samples"]
+rule peddy_create_ped:
+    input:
+        config["samples"],
     output:
-         ["qc/peddy/" + sample + ".peddy.fam" for sample in get_samples(samples)]
+        ["qc/peddy/" + sample + ".peddy.fam" for sample in get_samples(samples)],
     log:
-        "qc/peddy/peddy_create_ped.fam.log"
+        "qc/peddy/peddy_create_ped.fam.log",
     benchmark:
         repeat(
             "qc/peddy/peddy_create_ped.fam.benchmark.tsv",

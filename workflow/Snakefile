@@ -455,7 +455,7 @@ use rule multiqc from qc as qc_multiqc with:
 
 use rule peddy from qc as qc_peddy with:
     input:
-        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.vcf.gz", 
+        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.vcf.gz",
         ped="qc/peddy/{sample}.peddy.fam",
         tbi="parabricks/pbrun_mutectcaller_t/{sample}_T.vcf.gz.tbi",
     output:
