@@ -8,7 +8,7 @@ rule peddy_create_ped:
     input:
         config["samples"],
     output:
-        ["qc/peddy/" + sample + ".peddy.fam" for sample in get_samples(samples)],
+        [f"qc/peddy/{sample}.peddy.fam" for sample in get_samples(samples)],
     log:
         "qc/peddy/peddy_create_ped.fam.log",
     benchmark:
