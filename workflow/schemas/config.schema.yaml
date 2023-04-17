@@ -444,6 +444,20 @@ properties:
       - container
       - reports
 
+  peddy:
+    type: object
+    description: parameters for peddy
+    properties:
+      containter:
+        type: string
+        description: name or path to docker/singularity container
+      extra:
+        type: string
+        description: additional parameters for peddy
+    required:
+      - container
+      - extra
+
   picard_collect_alignment_summary_metrics:
     type: object
     description: parameters for picard_collect_alignment_summary_metrics

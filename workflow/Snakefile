@@ -10,6 +10,7 @@ include: "rules/manta_to_tsv.smk"
 include: "rules/mutectcaller_to_tsv.smk"
 include: "rules/sample_order_multiqc.smk"
 include: "rules/cnvkit.smk"
+include: "rules/peddy_create_ped.smk"
 
 
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
@@ -450,6 +451,31 @@ use rule multiqc from qc as qc_multiqc with:
         + " -c "
         + input.config,
         use_input_files_only=config.get("multiqc", {}).get("use_input_files_only", True),
+
+
+use rule peddy from qc as qc_peddy with:
+    input:
+        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.vcf.gz",
+        ped="qc/peddy/{sample}.peddy.fam",
+        tbi="parabricks/pbrun_mutectcaller_t/{sample}_T.vcf.gz.tbi",
+    output:
+        ped=temp("qc/peddy/{sample}/peddy.peddy.ped"),
+        ped_check=temp("qc/peddy/{sample}/peddy.ped_check.csv"),
+        sex_check="qc/peddy/{sample}/peddy.sex_check.csv",
+        het_check=temp("qc/peddy/{sample}/peddy.het_check.csv"),
+        ped_html=temp("qc/peddy/{sample}/peddy.html"),
+        ped_vs_html=temp("qc/peddy/{sample}/peddy.vs.html"),
+        pca=temp("qc/peddy/{sample}/peddy.background_pca.json"),
+    log:
+        "qc/peddy/{sample}.output.log",
+    benchmark:
+        repeat(
+            "qc/peddy/{sample}.peddy.benchmark.tsv",
+            config.get("peddy", {}).get("benchmark_repeats", 1),
+        )
+    params:
+        prefix="qc/peddy/{sample}/",
+        extra=config.get("peddy", {}).get("extra", ""),
 
 
 use rule picard_collect_alignment_summary_metrics from qc as qc_picard_alignment_summary_metrics with:
