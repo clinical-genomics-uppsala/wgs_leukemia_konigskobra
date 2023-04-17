@@ -1,4 +1,4 @@
-# :crown: WGS Leukemia Königskobra :snake:
+# :dog: :dog: :dog: :notes: WGS Leukemia Fluffy :snake:
 
 Snakemake workflow to analyse hematological malignancies in whole genome data
 
