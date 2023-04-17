@@ -166,6 +166,10 @@ multiqc:
         - "qc/picard_collect_alignment_summary_metrics/{sample}_{type}.alignment_summary_metrics.txt"
         - "qc/multiqc/RNA_number.table.tsv"
 
+peddy:
+  container: "docker://hydragenetics/peddy:0.4.8"
+  extra: "--sites hg38 "
+
 picard_collect_alignment_summary_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
 
