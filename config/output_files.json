@@ -32,6 +32,7 @@
   "Results/{project}/{sample}/CNV/{sample}_T.CNV.xlsx": {"name": "_results_cnvkit_table", "file": "cnv_sv/cnvkit_table/{sample}_T.CNV.xlsx", "types": ["T"]},
   "Results/{project}/{sample}/CNV/{sample}_T.png": {"name": "_results_cnvkit_scatter_whole", "file": "cnv_sv/cnvkit_scatter/{sample}_T.png", "types": ["T"]},
   "Results/{project}/{sample}/CNV/{sample}_T_chr{chr}.png": {"name": "_results_cnvkit_scatter", "file": "cnv_sv/cnvkit_scatter/{sample}_T_chr{chr}.png", "types": ["T"]},
+  "Results/{project}/{sample}/CNV/GATK/{sample}_T.vcf": {"name": "_results_gatk_vcf", "file": "cnv_sv/gatk_cnv_vcf/{sample}_T.vcf", "types": ["T"]},
 
   "Results/{project}/{sample}/SV/{sample}_manta_T.ssa.vcf.gz": {"name": "_results_manta_t_vcf", "file": "cnv_sv/manta_run_workflow_t/{sample}.ssa.vcf.gz", "types": ["T"]},
   "Results/{project}/{sample}/SV/{sample}_manta_T.ssa.vcf.gz.tbi": {"name": "_results_manta_t_tbi", "file": "cnv_sv/manta_run_workflow_t/{sample}.ssa.vcf.gz.tbi", "types": ["T"]},

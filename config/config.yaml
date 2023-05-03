@@ -26,6 +26,7 @@ reference:
   sites: ""
   wgs_intervals: ""
   design_intervals: "" #hsmetrics
+  design_intervals_gatk_cnv: ""
 
 trimmer_software: "fastp_pe"
 
@@ -101,6 +102,25 @@ filter_vcf:
 fusioncatcher:
   container: "docker://blcdsdockerregistry/fusioncatcher:1.33"
   genome_path: ""
+
+gatk_cnv_call_copy_ratio_segments:
+  container: "docker://hydragenetics/gatk4:4.2.2.0"
+
+gatk_cnv_collect_allelic_counts:
+  container: "docker://hydragenetics/gatk4:4.2.2.0"
+  SNP_interval: ""
+
+gatk_cnv_collect_read_counts:
+  container: "docker://hydragenetics/gatk4:4.2.2.0"
+
+gatk_cnv_model_segments:
+  container: "docker://hydragenetics/gatk4:4.2.2.0"
+
+gatk_cnv_denoise_read_counts:
+  container: "docker://hydragenetics/gatk4:4.2.2.0"
+  pon_female: ""
+  pon_male: ""
+
 
 manta_run_workflow_t:
   container: "docker://hydragenetics/manta:1.6.0"

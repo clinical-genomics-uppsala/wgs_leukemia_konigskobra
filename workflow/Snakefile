@@ -6,6 +6,7 @@ __license__ = "GPL-3"
 
 include: "rules/common.smk"
 include: "rules/cnvkit_table.smk"
+include: "rules/gatk_cnv_denoise_read_counts_by_sex.smk"
 include: "rules/manta_to_tsv.smk"
 include: "rules/mutectcaller_to_tsv.smk"
 include: "rules/sample_order_multiqc.smk"
@@ -41,6 +42,7 @@ ruleorder: parabricks_pbrun_fq2bam > alignment_samtools_index
 ruleorder: _results_star_crai > alignment_samtools_index
 ruleorder: annotation_simple_sv_annotation_tn > misc_bgzip
 ruleorder: _results_pindel_vcf > misc_bgzip
+ruleorder: gatk_cnv_model_segments > cnv_sv_gatk_cnv_model_segments 
 
 
 rule all:
@@ -164,7 +166,7 @@ module cnv_sv:
         config
 
 
-use rule * from cnv_sv exclude cnvkit_call, cnvkit_scatter as cnv_sv_*
+use rule * from cnv_sv exclude cnvkit_call, cnvkit_scatter, gatk_cnv_denoise_read_counts, gatk_cnv_collect_allelic_counts as cnv_sv_*
 
 
 use rule cnvkit_batch from cnv_sv as cnv_sv_cnvkit_batch with:
@@ -206,6 +208,13 @@ use rule config_manta_t from cnv_sv as cnv_sv_config_manta_t with:
         bam_t="parabricks/pbrun_fq2bam/{sample}_T.bam",
         bai_t="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
         ref=config["reference"]["fasta"],
+
+
+use rule gatk_cnv_collect_read_counts from cnv_sv as cnv_sv_gatk_cnv_collect_read_counts with: 
+    input:
+        bam="parabricks/pbrun_fq2bam/{sample}_T.bam",
+        bai="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
+        interval=config.get("reference", {}).get("design_intervals_gatk_cnv", ""),
 
 
 use rule generate_pindel_config from cnv_sv as cnv_sv_generate_pindel_config with:

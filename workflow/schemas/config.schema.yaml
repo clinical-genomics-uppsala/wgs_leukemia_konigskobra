@@ -304,7 +304,7 @@ properties:
 
   filter_vcf:
     type: object
-    description: parapmeter for filtering vcfs
+    description: parameter for filtering vcfs
     properties:
       container:
         type: string
