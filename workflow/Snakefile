@@ -169,8 +169,8 @@ use rule * from cnv_sv exclude cnvkit_call, cnvkit_scatter as cnv_sv_*
 
 use rule cnvkit_batch from cnv_sv as cnv_sv_cnvkit_batch with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_T.bam",
-        bai="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
+        bam="sentieon/realign/{sample}_T_REALIGNED.bam",
+        bai="sentieon/realign/{sample}_T_REALIGNED.bam.bai",
         cnv_reference=config["cnvkit_batch"]["normal_reference"],
 
 
@@ -194,32 +194,32 @@ use rule cnvkit_scatter from cnv_sv as cnv_sv_cnvkit_scatter_whole with:
 
 use rule config_manta_tn from cnv_sv as cnv_sv_config_manta_tn with:
     input:
-        bam_t="parabricks/pbrun_fq2bam/{sample}_T.bam",
-        bai_t="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
-        bam_n="parabricks/pbrun_fq2bam/{sample}_N.bam",
-        bai_n="parabricks/pbrun_fq2bam/{sample}_N.bam.bai",
+        bam_t="sentieon/realign/{sample}_T_REALIGNED.bam",
+        bai_t="sentieon/realign/{sample}_T_REALIGNED.bam.bai",
+        bam_n="sentieon/realign/{sample}_N_REALIGNED.bam",
+        bai_n="sentieon/realign/{sample}_N_REALIGNED.bam.bai",
         ref=config["reference"]["fasta"],
 
 
 use rule config_manta_t from cnv_sv as cnv_sv_config_manta_t with:
     input:
-        bam_t="parabricks/pbrun_fq2bam/{sample}_T.bam",
-        bai_t="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
+        bam_t="sentieon/realign/{sample}_T_REALIGNED.bam",
+        bai_t="sentieon/realign/{sample}_T_REALIGNED.bam.bai",
         ref=config["reference"]["fasta"],
 
 
 use rule generate_pindel_config from cnv_sv as cnv_sv_generate_pindel_config with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_T.bam",
+        bam="sentieon/realign/{sample}_T_REALIGNED.bam",
         metrics="qc/picard_collect_multiple_metrics/{sample}_T.insert_size_metrics",
 
 
 use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
     input:
-        bam_t="parabricks/pbrun_fq2bam/{sample}_T.bam",
-        bai_t="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
-        bam_n="parabricks/pbrun_fq2bam/{sample}_N.bam",
-        bai_n="parabricks/pbrun_fq2bam/{sample}_N.bam.bai",
+        bam_t="sentieon/realign/{sample}_T_REALIGNED.bam",
+        bai_t="sentieon/realign/{sample}_T_REALIGNED.bam.bai",
+        bam_n="sentieon/realign/{sample}_N_REALIGNED.bam",
+        bai_n="sentieon/realign/{sample}_N_REALIGNED.bam.bai",
         ref=config["reference"]["fasta"],
         scrpt="cnv_sv/manta_run_workflow_tn/{sample}/runWorkflow.py",
     output:
@@ -229,16 +229,16 @@ use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
 
 use rule manta_run_workflow_t from cnv_sv as cnv_sv_manta_run_workflow_t with:
     input:
-        bam_t="parabricks/pbrun_fq2bam/{sample}_T.bam",
-        bai_t="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
+        bam_t="sentieon/realign/{sample}_T_REALIGNED.bam",
+        bai_t="sentieon/realign/{sample}_T_REALIGNED.bam.bai",
         ref=config["reference"]["fasta"],
         scrpt="cnv_sv/manta_run_workflow_t/{sample}/runWorkflow.py",
 
 
 use rule pindel_call from cnv_sv as cnv_sv_pindel_call with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_T.bam",
-        bai="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
+        bam="sentieon/realign/{sample}_T_REALIGNED.bam",
+        bai="sentieon/realign/{sample}_T_REALIGNED.bam.bai",
         config="cnv_sv/pindel/{sample}.cfg",
         ref=config["reference"]["fasta"],
 
@@ -259,8 +259,8 @@ use rule * from compression as compression_*
 
 use rule samtools_view from compression as compression_samtools_view with:
     input:
-        bam="parabricks/pbrun_fq2bam/{file}.bam",
-        bai="parabricks/pbrun_fq2bam/{file}.bam.bai",
+        bam="sentieon/realign/{file}_REALIGNED.bam",
+        bai="sentieon/realign/{file}_REALIGNED.bam.bai",
         ref=config.get("reference", {}).get("fasta", ""),
 
 
@@ -390,6 +390,17 @@ use rule * from parabricks as parabricks_*
 use rule pbrun_fq2bam from parabricks as parabricks_pbrun_fq2bam with:
     priority: 5
 
+module sentieon:
+    snakefile:
+        github(
+            "hydra-genetics/sentieon",
+            path="workflow/Snakefile",
+            tag=config["modules"]["sentieon"],
+        )
+    config:
+        config
+
+use rule * from sentieon as sentieon_*
 
 module prealignment:
     snakefile:
@@ -417,8 +428,8 @@ use rule * from qc as qc_*
 
 use rule mosdepth from qc as qc_mosdepth with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
-        bai="parabricks/pbrun_fq2bam/{sample}_{type}.bam.bai",
+        bam="sentieon/realign/{sample}_{type}_REALIGNED.bam",
+        bai="sentieon/realign/{sample}_{type}_REALIGNED.bam.bai",
     output:
         bed=temp("qc/mosdepth/{sample}_{type,T|N}.regions.bed.gz"),
         csi=temp("qc/mosdepth/{sample}_{type,T|N}.regions.bed.gz.csi"),
@@ -480,7 +491,7 @@ use rule peddy from qc as qc_peddy with:
 
 use rule picard_collect_alignment_summary_metrics from qc as qc_picard_alignment_summary_metrics with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam="sentieon/realign/{sample}_{type}_REALIGNED.bam",
         ref=config["reference"]["fasta"],
     wildcard_constraints:
         type="T|N",
@@ -496,18 +507,18 @@ use rule picard_collect_alignment_summary_metrics from qc as qc_picard_alignment
 
 use rule picard_collect_duplication_metrics from qc as qc_picard_duplication_metrics with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam="sentieon/realign/{sample}_{type}_REALIGNED.bam",
 
 
 use rule picard_collect_gc_bias_metrics from qc as qc_picard_collect_gc_bias_metrics with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam="sentieon/realign/{sample}_{type}_REALIGNED.bam",
         ref=config["reference"]["fasta"],
 
 
 use rule picard_collect_hs_metrics from qc as qc_picard_collect_hs_metrics with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam="sentieon/realign/{sample}_{type}_REALIGNED.bam",
         bait_intervals=config["reference"]["design_intervals"],
         reference=config["reference"]["fasta"],
         target_intervals=config["reference"]["design_intervals"],
@@ -515,20 +526,20 @@ use rule picard_collect_hs_metrics from qc as qc_picard_collect_hs_metrics with:
 
 use rule picard_collect_multiple_metrics from qc as qc_picard_collect_multiple_metrics with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam="sentieon/realign/{sample}_{type}_REALIGNED.bam",
         ref=config["reference"]["fasta"],
 
 
 use rule picard_collect_wgs_metrics from qc as qc_picard_collect_wgs_metrics with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam="sentieon/realign/{sample}_{type}_REALIGNED.bam",
         ref=config["reference"]["fasta"],
         interval=config["reference"]["wgs_intervals"],
 
 
 use rule samtools_stats from qc as qc_samtools_stats with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam="sentieon/realign/{sample}_{type}_REALIGNED.bam",
     wildcard_constraints:
         type="T|N",
 
