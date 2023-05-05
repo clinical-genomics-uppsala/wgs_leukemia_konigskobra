@@ -122,7 +122,6 @@ module alignment:
 use rule star from alignment as alignment_star
 
 
-use rule samtools_index from alignment as alignment_samtools_index
 
 
 module cnv_sv:
