@@ -10,6 +10,7 @@
   "Results/{project}/{sample}/Cram/{sample}_R.bam.bai": {"name": "_results_star_crai", "file": "alignment/star/{sample}_R.bam.bai", "types": ["R"]},
 
 
+  "Results/{project}/{sample}/SNV_indels/{sample}_TNscope_tn_ML.vcf": {"name": "_results_vcf_tn", "file": "sentieon/tnscope/{sample}_TNscope_tn_ML.vcf", "types": ["TN"]},
   "Results/{project}/{sample}/Cram/{sample}_{type}.crumble.cram": {"name": "_results_cram", "file": "compression/crumble/{sample}_{type}.crumble.cram", "types": ["T", "N"]},
   "Results/{project}/{sample}/Cram/{sample}_{type}.crumble.cram.crai": {"name": "_results_crai", "file": "compression/crumble/{sample}_{type}.crumble.cram.crai", "types": ["T", "N"]},
   "Results/{project}/{sample}/SNV_indels/{sample}_T.vep.vcf.gz": {"name": "_results_vcf_t", "file": "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf.gz", "types": ["T"]},
