@@ -6,13 +6,10 @@
   "Results/{project}/{sample}/RNA_fusions/{sample}_R.arriba.plot.pdf": {"name": "_results_arriba_draw_fusion", "file": "fusions/arriba_draw_fusion/{sample}_R.pdf", "types": ["R"]},
   "Results/{project}/{sample}/RNA_fusions/{sample}_R.star_fusion.tsv": {"name": "_results_star_fusion", "file": "fusions/star_fusion/{sample}_R/star-fusion.fusion_predictions.tsv", "types": ["R"]},
   "Results/{project}/{sample}/RNA_fusions/{sample}_R.fusioncatcher.tsv": {"name": "_results_fusioncatcher", "file": "fusions/fusioncatcher/{sample}_R/final-list_candidate-fusion-genes.hg19.txt", "types": ["R"]},
-  "Results/{project}/{sample}/Cram/{sample}_R.bam": {"name": "_results_star_cram", "file": "alignment/star/{sample}_R.bam", "types": ["R"]},
   "Results/{project}/{sample}/Cram/{sample}_R.bam.bai": {"name": "_results_star_crai", "file": "alignment/star/{sample}_R.bam.bai", "types": ["R"]},
 
 
   "Results/{project}/{sample}/SNV_indels/{sample}_TNscope_tn_ML.vcf": {"name": "_results_vcf_tn", "file": "sentieon/tnscope/{sample}_TNscope_tn_ML.vcf", "types": ["TN"]},
-  "Results/{project}/{sample}/Cram/{sample}_{type}.crumble.cram": {"name": "_results_cram", "file": "compression/crumble/{sample}_{type}.crumble.cram", "types": ["T", "N"]},
-  "Results/{project}/{sample}/Cram/{sample}_{type}.crumble.cram.crai": {"name": "_results_crai", "file": "compression/crumble/{sample}_{type}.crumble.cram.crai", "types": ["T", "N"]},
 
   "Results/{project}/{sample}/SNV_indels/{sample}.pindel.vcf": {"name": "_results_pindel_vcf", "file": "cnv_sv/pindel/{sample}.vcf", "types": ["TN"]},
   "Results/{project}/{sample}/CNV/{sample}_T.vcf.gz": {"name": "_results_cnvkit_vcf", "file": "cnv_sv/cnvkit_vcf/{sample}_T.vcf.gz", "types": ["T"]},
