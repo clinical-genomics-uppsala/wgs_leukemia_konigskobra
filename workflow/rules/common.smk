@@ -55,6 +55,28 @@ def type_generator(types):
     else:
         return types
 
+def get_bam_input(wildcards, tumor_sample=True, use_sample_wildcard=True):
+    if tumor_sample is True and use_sample_wildcard is True:
+        sample_str = "{}_{}".format(wildcards.sample, "T")
+    elif tumor_sample is False and use_sample_wildcard is True:
+        sample_str = "{}_{}".format(wildcards.sample, "N")
+    else:
+        sample_str = wildcards.file
+
+    aligner = config.get("aligner", None)
+    if aligner is None:
+        sys.exit("aligner missing from config, valid options: bwa_gpu or bwa_sentieon")
+    elif aligner == "bwa_gpu":
+        bam_input = "parabricks/pbrun_fq2bam/{}.bam".format(sample_str)
+    elif aligner == "bwa_sentieon":
+        bam_input = "sentieon/realign/{}_REALIGNED.bam".format(sample_str)
+    else:
+        sys.exit("valid options for aligner are: bwa_gpu or bwa_sentieon")
+
+    bai_input = "{}.bai".format(bam_input)
+
+    return (bam_input, bai_input)
+
 
 def compile_output_list(wildcards):
     output_files = []
