@@ -55,11 +55,11 @@ def type_generator(types):
     else:
         return types
 
-def get_bam_input(wildcards, tumor_sample=True, use_sample_wildcard=True):
-    if tumor_sample is True and use_sample_wildcard is True:
-        sample_str = "{}_{}".format(wildcards.sample, "T")
-    elif tumor_sample is False and use_sample_wildcard is True:
-        sample_str = "{}_{}".format(wildcards.sample, "N")
+def get_bam_input(wildcards, use_sample_wildcard=True, t_n=None):
+    if use_sample_wildcard is True and t_n is None:
+        sample_str = "{}_{}".format(wildcards.sample, wildcards.type)
+    elif use_sample_wildcard is True and t_n:
+        sample_str = "{}_{}".format(wildcards.sample, t_n)
     else:
         sample_str = wildcards.file
 
