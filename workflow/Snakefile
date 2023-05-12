@@ -48,21 +48,40 @@ use rule * from annotation as annotation_*
 
 use rule vep from annotation as annotation_vep with:
     input:
-        vcf="sentieon/tnscope/{sample}_TNscope_tn_ML.vcf",
-        tabix="sentieon/tnscope/{sample}_TNscope_tn_ML.vcf.idx",
+        vcf="parabricks/pbrun_mutectcaller_tn/{sample}.vcf.gz",
+        tabix="parabricks/pbrun_mutectcaller_tn/{sample}.vcf.gz.tbi",
         cache=config["vep"]["vep_cache"],
         fasta=config["reference"]["fasta"],
     output:
-        vcf=temp("sentieon/tnscope/{sample}.vep.vcf"),
+        vcf=temp("parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf"),
     log:
-        "sentieon/tnscope/{sample}.vep.vcf.log",
+        "parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.log",
     benchmark:
         repeat(
-            "sentieon/tnscope/{sample}.vep.vcf.benchmark.tsv",
+            "parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.benchmark.tsv",
             config.get("vep", {}).get("benchmark_repeats", 1),
         )
     message:
         "{rule}: Annotate {wildcards.sample}.vcf"
+
+
+use rule vep from annotation as annotation_vep_t with:
+    input:
+        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.vcf.gz",
+        tabix="parabricks/pbrun_mutectcaller_t/{sample}_T.vcf.gz.tbi",
+        cache=config["vep"]["vep_cache"],
+        fasta=config["reference"]["fasta"],
+    output:
+        vcf=temp("parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf"),
+    log:
+        "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf.log",
+    benchmark:
+        repeat(
+            "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf.benchmark.tsv",
+            config.get("vep", {}).get("benchmark_repeats", 1),
+        )
+    message:
+        "{rule}: Annotate {wildcards.sample}_T.vcf"
 
 
 use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation_tn with:
@@ -243,24 +262,25 @@ module filtering:
 use rule filter_vcf from filtering as filtering_filter_vcf
 
 
-use rule bcftools_filter_include_region from filtering as filtering_bcftools_filter_include_region_snv_tn with:
+use rule bcftools_filter_include_region from filtering as filtering_bcftools_filter_include_region_snv_t with:
     input:
-        vcf="sentieon/tnscope/{sample}.vep.vcf.gz",
-        tabix="sentieon/tnscope/{sample}.vep.vcf.gz.tbi",
+        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf.gz",
+        tabix="parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf.gz.tbi",
     output:
-        vcf=temp("sentieon/tnscope/{sample}.vep.include.{bed}.vcf"),
+        vcf=temp("parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.{bed}.vcf"),
     params:
         filter=lambda wildcards: "-R %s" % config["bcftools_SNV"][wildcards.bed],
         extra=config.get("bcftools_SNV", {}).get("extra", ""),
     log:
-        "sentieon/tnscope/{sample}.vep.include.{bed}.vcf.log",
+        "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.{bed}.vcf.log",
     benchmark:
         repeat(
-            "sentieon/tnscope/{sample}.vep.include.{bed}.vcf.benchmark.tsv",
+            "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.{bed}.vcf.benchmark.tsv",
             config.get("bcftools_SNV", {}).get("benchmark_repeats", 1),
         )
     message:
         "{rule}: Use bcftools to include variants in vcf overlapping bed: {output.vcf}"
+
 
 use rule bcftools_filter_include_region from filtering as filtering_bcftools_filter_include_region_sv with:
     input:
