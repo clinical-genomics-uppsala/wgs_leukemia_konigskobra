@@ -13,7 +13,7 @@
   "Results/{project}/{sample}/SNV_indels/{sample}_TNscope_tn_ML.vcf": {"name": "_results_vcf_tn", "file": "sentieon/tnscope/{sample}_TNscope_tn_ML.vcf", "types": ["TN"]},
 
   "Results/{project}/{sample}/SNV_indels/{sample}.pindel.vcf": {"name": "_results_pindel_vcf", "file": "cnv_sv/pindel/{sample}.vcf", "types": ["TN"]},
-    "Results/{project}/{sample}/CNV/{sample}_T.vcf.gz": {"name": "_results_cnvkit_vcf", "file": "cnv_sv/cnvkit_vcf/{sample}_T.vcf.gz", "types": ["T"]},
+  "Results/{project}/{sample}/CNV/{sample}_T.vcf.gz": {"name": "_results_cnvkit_vcf", "file": "cnv_sv/cnvkit_vcf/{sample}_T.vcf.gz", "types": ["T"]},
   "Results/{project}/{sample}/CNV/{sample}_T.vcf.gz.tbi": {"name": "_results_cnvkit_tbi", "file": "cnv_sv/cnvkit_vcf/{sample}_T.vcf.gz.tbi", "types": ["T"]},
   "Results/{project}/{sample}/CNV/{sample}_T.CNV.xlsx": {"name": "_results_cnvkit_table", "file": "cnv_sv/cnvkit_table/{sample}_T.CNV.xlsx", "types": ["T"]},
   "Results/{project}/{sample}/CNV/{sample}_T.png": {"name": "_results_cnvkit_scatter_whole", "file": "cnv_sv/cnvkit_scatter/{sample}_T.png", "types": ["T"]},
