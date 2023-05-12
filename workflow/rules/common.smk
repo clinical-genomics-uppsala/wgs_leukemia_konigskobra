@@ -55,7 +55,7 @@ def type_generator(types):
     else:
         return types
 
-def get_bam_input(wildcards, use_sample_wildcard=True, t_n=None):
+def get_bam_input(wildcards, t_n=None, use_sample_wildcard=True):
     if use_sample_wildcard is True and t_n is None:
         sample_str = "{}_{}".format(wildcards.sample, wildcards.type)
     elif use_sample_wildcard is True and t_n:

@@ -131,10 +131,8 @@ use rule * from cnv_sv exclude cnvkit_call, cnvkit_scatter as cnv_sv_*
 
 use rule cnvkit_batch from cnv_sv as cnv_sv_cnvkit_batch with:
     input:
-        bam=lambda wildcards: get_bam_input(wildcards, t_n=="T")[0],
-        bai=lambda wildcards: get_bam_input(wildcards, t_n=="T")[1],
-        #bam="sentieon/realign/{sample}_T_REALIGNED.bam",
-        #bai="sentieon/realign/{sample}_T_REALIGNED.bam.bai",
+        bam=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
+        bai=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
         cnv_reference=config["cnvkit_batch"]["normal_reference"],
 
 
@@ -142,44 +140,32 @@ use rule cnvkit_batch from cnv_sv as cnv_sv_cnvkit_batch with:
 
 use rule config_manta_tn from cnv_sv as cnv_sv_config_manta_tn with:
     input:
-        bam_t=lambda wildcards: get_bam_input(wildcards, t_n=="T")[0],
-        bai_t=lambda wildcards: get_bam_input(wildcards, t_n=="T")[1],
-        bam_n=lambda wildcards: get_bam_input(wildcards, t_n=="N")[0],
-        bai_n=lambda wildcards: get_bam_input(wildcards, t_n=="N")[1],
-        #bam_t="sentieon/realign/{sample}_T_REALIGNED.bam",
-        #bai_t="sentieon/realign/{sample}_T_REALIGNED.bam.bai",
-        #bam_n="sentieon/realign/{sample}_N_REALIGNED.bam",
-        #bai_n="sentieon/realign/{sample}_N_REALIGNED.bam.bai",
+        bam_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
+        bai_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
+        bam_n=lambda wildcards: get_bam_input(wildcards, t_n="N")[0],
+        bai_n=lambda wildcards: get_bam_input(wildcards, t_n="N")[1],
         ref=config["reference"]["fasta"],
 
 
 use rule config_manta_t from cnv_sv as cnv_sv_config_manta_t with:
     input:
-        bam_t=lambda wildcards: get_bam_input(wildcards, t_n=="T")[0],
-        bai_t=lambda wildcards: get_bam_input(wildcards, t_n=="T")[1],
-        #bam_t="sentieon/realign/{sample}_T_REALIGNED.bam",
-        #bai_t="sentieon/realign/{sample}_T_REALIGNED.bam.bai",
+        bam_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
+        bai_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
         ref=config["reference"]["fasta"],
 
 
 use rule generate_pindel_config from cnv_sv as cnv_sv_generate_pindel_config with:
     input:
-        bam=lambda wildcards: get_bam_input(wildcards, t_n=="T")[0],
-        #bam=get_bam_input(wildcards.type=="T")[0],
-        #bam="sentieon/realign/{sample}_T_REALIGNED.bam",
+        bam=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
         metrics="qc/picard_collect_multiple_metrics/{sample}_T.insert_size_metrics",
 
 
 use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
     input:
-        bam_t=lambda wildcards: get_bam_input(wildcards, t_n=="T")[0],
-        bai_t=lambda wildcards: get_bam_input(wildcards, t_n=="T")[1],
-        bam_n=lambda wildcards: get_bam_input(wildcards, t_n=="N")[0],
-        bai_n=lambda wildcards: get_bam_input(wildcards, t_n=="N")[1],
-        #bam_t="sentieon/realign/{sample}_T_REALIGNED.bam",
-        #bai_t="sentieon/realign/{sample}_T_REALIGNED.bam.bai",
-        #bam_n="sentieon/realign/{sample}_N_REALIGNED.bam",
-        #bai_n="sentieon/realign/{sample}_N_REALIGNED.bam.bai",
+        bam_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
+        bai_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
+        bam_n=lambda wildcards: get_bam_input(wildcards, t_n="N")[0],
+        bai_n=lambda wildcards: get_bam_input(wildcards, t_n="N")[1],
         ref=config["reference"]["fasta"],
         scrpt="cnv_sv/manta_run_workflow_tn/{sample}/runWorkflow.py",
     output:
@@ -189,20 +175,16 @@ use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
 
 use rule manta_run_workflow_t from cnv_sv as cnv_sv_manta_run_workflow_t with:
     input:
-        bam_t=lambda wildcards: get_bam_input(wildcards, t_n=="T")[0],
-        bai_t=lambda wildcards: get_bam_input(wildcards, t_n=="T")[1],
-        #bam_t="sentieon/realign/{sample}_T_REALIGNED.bam",
-        #bai_t="sentieon/realign/{sample}_T_REALIGNED.bam.bai",
+        bam_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
+        bai_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
         ref=config["reference"]["fasta"],
         scrpt="cnv_sv/manta_run_workflow_t/{sample}/runWorkflow.py",
 
 
 use rule pindel_call from cnv_sv as cnv_sv_pindel_call with:
     input:
-        bam=lambda wildcards: get_bam_input(wildcards, t_n=="T")[0],
-        bai=lambda wildcards: get_bam_input(wildcards, t_n=="T")[1],
-        #bam="sentieon/realign/{sample}_T_REALIGNED.bam",
-        #bai="sentieon/realign/{sample}_T_REALIGNED.bam.bai",
+        bam=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
+        bai=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
         config="cnv_sv/pindel/{sample}.cfg",
         ref=config["reference"]["fasta"],
 
@@ -223,11 +205,8 @@ use rule * from compression as compression_*
 
 use rule samtools_view from compression as compression_samtools_view with:
     input:
-        bam=lambda wildcards: get_bam_input(wildcards, use_sample_wildcard=False)[0],
-        bai=lambda wildcards: get_bam_input(wildcards, use_sample_wildcard=False)[1],
-        #bam,bai=get_bam_input,
-        #bam="sentieon/realign/{file}_REALIGNED.bam",
-        #bai="sentieon/realign/{file}_REALIGNED.bam.bai",
+        bam=lambda wildcards: get_bam_input(wildcards, t_n=None, use_sample_wildcard=False)[0],
+        bai=lambda wildcards: get_bam_input(wildcards, t_n=None, use_sample_wildcard=False)[1],
         ref=config.get("reference", {}).get("fasta", ""),
 
 
@@ -368,9 +347,6 @@ use rule mosdepth from qc as qc_mosdepth with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
         bai=lambda wildcards: get_bam_input(wildcards)[1],
-        #bam,bai=get_bam_input,
-        #bam="sentieon/realign/{sample}_{type}_REALIGNED.bam",
-        #bai="sentieon/realign/{sample}_{type}_REALIGNED.bam.bai",
     output:
         bed=temp("qc/mosdepth/{sample}_{type,T|N}.regions.bed.gz"),
         csi=temp("qc/mosdepth/{sample}_{type,T|N}.regions.bed.gz.csi"),
@@ -409,8 +385,6 @@ use rule multiqc from qc as qc_multiqc with:
 use rule picard_collect_alignment_summary_metrics from qc as qc_picard_alignment_summary_metrics with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
-        #bam=get_bam_input[0],
-        #bam="sentieon/realign/{sample}_{type}_REALIGNED.bam",
         ref=config["reference"]["fasta"],
     wildcard_constraints:
         type="T|N",
@@ -427,23 +401,17 @@ use rule picard_collect_alignment_summary_metrics from qc as qc_picard_alignment
 use rule picard_collect_duplication_metrics from qc as qc_picard_duplication_metrics with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
-        #bam=get_bam_input[0],
-        #bam="sentieon/realign/{sample}_{type}_REALIGNED.bam",
 
 
 use rule picard_collect_gc_bias_metrics from qc as qc_picard_collect_gc_bias_metrics with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
-        #bam=get_bam_input[0],
-        #bam="sentieon/realign/{sample}_{type}_REALIGNED.bam",
         ref=config["reference"]["fasta"],
 
 
 use rule picard_collect_hs_metrics from qc as qc_picard_collect_hs_metrics with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
-        #bam=get_bam_input[0],
-        #bam="sentieon/realign/{sample}_{type}_REALIGNED.bam",
         bait_intervals=config["reference"]["design_intervals"],
         reference=config["reference"]["fasta"],
         target_intervals=config["reference"]["design_intervals"],
@@ -452,16 +420,12 @@ use rule picard_collect_hs_metrics from qc as qc_picard_collect_hs_metrics with:
 use rule picard_collect_multiple_metrics from qc as qc_picard_collect_multiple_metrics with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
-        #bam=get_bam_input[0],
-        #bam="sentieon/realign/{sample}_{type}_REALIGNED.bam",
         ref=config["reference"]["fasta"],
 
 
 use rule picard_collect_wgs_metrics from qc as qc_picard_collect_wgs_metrics with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
-        #bam=get_bam_input[0],
-        #bam="sentieon/realign/{sample}_{type}_REALIGNED.bam",
         ref=config["reference"]["fasta"],
         interval=config["reference"]["wgs_intervals"],
 
@@ -469,8 +433,6 @@ use rule picard_collect_wgs_metrics from qc as qc_picard_collect_wgs_metrics wit
 use rule samtools_stats from qc as qc_samtools_stats with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
-        #bam=get_bam_input[0],
-        #bam="sentieon/realign/{sample}_{type}_REALIGNED.bam",
     wildcard_constraints:
         type="T|N",
 
