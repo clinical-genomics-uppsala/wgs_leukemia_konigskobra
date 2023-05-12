@@ -239,6 +239,9 @@ module filtering:
         config
 
 
+use rule filter_vcf from filtering as filtering_filter_vcf
+
+
 use rule bcftools_filter_include_region from filtering as filtering_bcftools_filter_include_region_snv_tn with:
     input:
         vcf="sentieon/tnscope/{sample}.vep.vcf.gz",
