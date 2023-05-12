@@ -282,6 +282,26 @@ use rule bcftools_filter_include_region from filtering as filtering_bcftools_fil
         "{rule}: Use bcftools to include variants in vcf overlapping bed: {output.vcf}"
 
 
+use rule bcftools_filter_include_region from filtering as filtering_bcftools_filter_include_region_snv_tn with:
+    input:
+        vcf="parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.gz",
+        tabix="parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.gz.tbi",
+    output:
+        vcf=temp("parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.{bed}.vcf"),
+    params:
+        filter=lambda wildcards: "-R %s" % config["bcftools_SNV"][wildcards.bed],
+        extra=config.get("bcftools_SNV", {}).get("extra", ""),
+    log:
+        "parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.{bed}.vcf.log",
+    benchmark:
+        repeat(
+            "parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.{bed}.vcf.benchmark.tsv",
+            config.get("bcftools_SNV", {}).get("benchmark_repeats", 1),
+        )
+    message:
+        "{rule}: Use bcftools to include variants in vcf overlapping bed: {output.vcf}"
+
+
 use rule bcftools_filter_include_region from filtering as filtering_bcftools_filter_include_region_sv with:
     input:
         vcf="cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.vcf.gz",
