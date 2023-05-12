@@ -7,7 +7,7 @@ __license__ = "GPL-3"
 rule cnvkit_call_no_custom_purity:
     input:
         segment="cnv_sv/cnvkit_batch/{sample}/{sample}_{type}.cns",
-        vcf="parabricks/pbrun_mutectcaller_t/{sample}_{type}.vep.filter.germline.vcf",
+        vcf="sentieon/tnscope/{sample}_TNscope_tn_ML.vcf",
     output:
         segment=temp("cnv_sv/cnvkit_call/{sample}_{type}.loh.cns"),
     log:
@@ -38,7 +38,7 @@ rule cnvkit_scatter:
     input:
         segments="cnv_sv/cnvkit_call/{sample}_{type}.loh.cns",
         segment_regions="cnv_sv/cnvkit_batch/{sample}/{sample}_{type}.cnr",
-        vcf="parabricks/pbrun_mutectcaller_t/{sample}_{type}.vep.filter.germline.vcf",
+        vcf="sentieon/tnscope/{sample}_TNscope_tn_ML.vcf",
     output:
         plot=temp("cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.png"),
     params:
