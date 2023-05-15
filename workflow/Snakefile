@@ -440,12 +440,12 @@ use rule multiqc from qc as qc_multiqc with:
         #sample_replacement="qc/multiqc/sample_replacement_{report}.tsv",
         #sample_order="qc/multiqc/sample_order_{report}.tsv",
     params:
-        #extra=lambda wildcards, input: "--replace-names "
+        extra=lambda wildcards, input: "--replace-names "
         #+ input.sample_replacement
-        #+ " --sample-names "
+        + " --sample-names "
         #+ input.sample_order
-        #+ " -c "
-        #+ input.config,
+        + " -c "
+        + input.config,
         use_input_files_only=config.get("multiqc", {}).get("use_input_files_only", True),
 
 
