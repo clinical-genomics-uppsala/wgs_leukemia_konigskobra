@@ -77,6 +77,18 @@ def get_bam_input(wildcards, t_n=None, use_sample_wildcard=True):
 
     return (bam_input, bai_input)
 
+def get_vcf_input(wildcards):
+    aligner = config.get("aligner", None)
+    if aligner is None:
+        sys.exit("aligner missing from config, valid options: bwa_gpu or bwa_sentieon")
+    elif aligner == "bwa_gpu":
+        vcf_input = "parabricks/pbrun_mutectcaller_t/{}_{}.vep.filter.germline.vcf".format(wildcards.sample, wildcards.type)
+    elif aligner == "bwa_sentieon":
+        vcf_input = "sentieon/tnscope/{}_TNscope_tn_ML.vcf".format(wildcards.sample)
+    else:
+        sys.exit("valid options for aligner are: bwa_gpu or bwa_sentieon")
+
+    return vcf_input
 
 def compile_output_list(wildcards):
     output_files = []

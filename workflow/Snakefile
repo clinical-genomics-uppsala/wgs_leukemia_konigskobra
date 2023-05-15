@@ -162,7 +162,7 @@ use rule cnvkit_scatter from cnv_sv as cnv_sv_cnvkit_scatter_whole with:
     input:
         segments="cnv_sv/cnvkit_call/{sample}_{type}.loh.cns",
         segment_regions="cnv_sv/cnvkit_batch/{sample}/{sample}_{type}.cnr",
-        vcf="sentieon/tnscope/{sample}_TNscope_tn_ML.vcf",
+        vcf=lambda wildcards: get_vcf_input(wildcards),
     output:
         plot=temp("cnv_sv/cnvkit_scatter/{sample}_{type}.png"),
     params:
