@@ -1,25 +1,31 @@
 default_resources:
-  threads: 1
-  time: "4:00:00"
-  mem_mb: 6144
-  mem_per_cpu: 6144
-  partition: "core"
+  gres: ""
+  mem_mb: 0
+  mem_per_cpu: 0
+  partition: ""
+  threads: 0
+  time: ""
 
-sentieon:
-  threads: 20
-  time: "24:00:00"
+pbrun_fq2bam:
+  gres: "--gres=gpu:"
+  mem_mb: 0
+  mem_per_cpu: 0
+  partition: ""
+  threads: 0
+  time: ""
 
-tnscope:
-  threads: 40
+pbrun_mutectcaller_t:
+  gres: "--gres=gpu:"
+  mem_mb: 0
+  mem_per_cpu: 0
+  partition: ""
+  threads: 0
+  time: ""
 
-pindel_call:
-  threads: 4
-
-pindel2vcf:
-  threads: 4
-
-manta_run_workflow_tn:
-  threads: 4
-  time: "8:00:00"
-  mem_mb: 24576
-  mem_per_cpu: 6144
+pbrun_mutectcaller_tn:
+  gres: "--gres=gpu:"
+  mem_mb: 0
+  mem_per_cpu: 0
+  partition: ""
+  threads: 0
+  time: ""
