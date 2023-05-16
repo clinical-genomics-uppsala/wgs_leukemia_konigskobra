@@ -7,11 +7,8 @@ __license__ = "GPL-3"
 include: "rules/common.smk"
 include: "rules/cnvkit_table.smk"
 include: "rules/manta_to_tsv.smk"
-#include: "rules/mutectcaller_to_tsv.smk"
-#include: "rules/sample_order_multiqc.smk"
 include: "rules/cnvkit.smk"
 include: "rules/peddy_create_ped.smk"
-
 
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_bgzip
@@ -23,9 +20,41 @@ ruleorder: _results_cnvkit_tbi > misc_tabix
 ruleorder: _results_vcf_tn > misc_bgzip
 ruleorder: annotation_simple_sv_annotation_tn > misc_bgzip
 ruleorder: _results_pindel_vcf > misc_bgzip
-ruleorder: sentieon_dedup > alignment_samtools_index
-ruleorder: sentieon_realigner > alignment_samtools_index
 
+aligner = config.get("aligner", None)
+
+if aligner is None:
+    sys.exit("aligner missing from config, valid options: bwa_gpu or bwa_sentieon")
+
+elif aligner == "bwa_gpu":
+    include: "rules/mutectcaller_to_tsv.smk"
+    include: "rules/sample_order_multiqc.smk"
+
+    ruleorder: _results_manta_tn_tbi_all > misc_tabix
+    ruleorder: _results_manta_tn_tbi_aml > misc_tabix
+    ruleorder: _results_manta_t_tbi_all > misc_tabix
+    ruleorder: _results_manta_t_tbi_aml > misc_tabix
+    ruleorder: _results_tbi_tn > misc_tabix
+    ruleorder: _results_tbi_all > misc_tabix
+    ruleorder: _results_tbi_aml > misc_tabix
+    ruleorder: _results_tbi_t > misc_tabix
+    ruleorder: _results_crai > misc_samtools_index
+    ruleorder: _results_vcf_t > misc_bgzip
+    ruleorder: _results_tbi_t > misc_tabix
+    ruleorder: _results_tbi_tn > misc_tabix
+    ruleorder: _results_vcf_aml > misc_bgzip
+    ruleorder: _results_tbi_aml > misc_tabix
+    ruleorder: _results_vcf_all > misc_bgzip
+    ruleorder: _results_tbi_all > misc_tabix
+    ruleorder: parabricks_pbrun_fq2bam > alignment_samtools_index
+    ruleorder: _results_star_crai > alignment_samtools_index
+
+elif aligner == "bwa_sentieon":
+    ruleorder: sentieon_dedup > alignment_samtools_index
+    ruleorder: sentieon_realigner > alignment_samtools_index
+
+else:
+    sys.exit("valid options for aligner are: bwa_gpu or bwa_sentieon")
 
 rule all:
     input:
