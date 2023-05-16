@@ -452,31 +452,53 @@ use rule mosdepth from qc as qc_mosdepth with:
         summary=temp("qc/mosdepth/{sample}_{type,T|N}.mosdepth.summary.txt"),
 
 
-use rule multiqc from qc as qc_multiqc with:
-    input:
-        files=lambda wildcards: set(
-            [
-                file.format(sample=sample, type=u.type, lane=u.lane, flowcell=u.flowcell, barcode=u.barcode, read=read, ext=ext)
-                for file in config["multiqc"]["reports"][wildcards.report]["qc_files"]
-                for sample in get_samples(samples)
-                for u in units.loc[sample].dropna().itertuples()
-                if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
-                for read in ["fastq1", "fastq2"]
-                for ext in config.get("picard_collect_multiple_metrics", {}).get("output_ext", [""])
-            ]
-        ),
-        config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
-        #sample_replacement="qc/multiqc/sample_replacement_{report}.tsv",
-        #sample_order="qc/multiqc/sample_order_{report}.tsv",
-    params:
-        extra=lambda wildcards, input: "--replace-names "
-        #+ input.sample_replacement
-        + " --sample-names "
-        #+ input.sample_order
-        + " -c "
-        + input.config,
-        use_input_files_only=config.get("multiqc", {}).get("use_input_files_only", True),
+if aligner == "bwa_gpu":
+    use rule multiqc from qc as qc_multiqc with:
+        input:
+            files=lambda wildcards: set(
+                [
+                    file.format(sample=sample, type=u.type, lane=u.lane, flowcell=u.flowcell, barcode=u.barcode, read=read, ext=ext)
+                    for file in config["multiqc"]["reports"][wildcards.report]["qc_files"]
+                    for sample in get_samples(samples)
+                    for u in units.loc[sample].dropna().itertuples()
+                    if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
+                    for read in ["fastq1", "fastq2"]
+                    for ext in config.get("picard_collect_multiple_metrics", {}).get("output_ext", [""])
+                ]
+            ),
+            config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
+            sample_replacement="qc/multiqc/sample_replacement_{report}.tsv",
+            sample_order="qc/multiqc/sample_order_{report}.tsv",
+        params:
+            extra=lambda wildcards, input: "--replace-names "
+            + input.sample_replacement
+            + " --sample-names "
+            + input.sample_order
+            + " -c "
+            + input.config,
+            use_input_files_only=config.get("multiqc", {}).get("use_input_files_only", True),
 
+if aligner == "bwa_sentieon":
+    use rule multiqc from qc as qc_multiqc with:
+        input:
+            files=lambda wildcards: set(
+                [
+                    file.format(sample=sample, type=u.type, lane=u.lane, flowcell=u.flowcell, barcode=u.barcode, read=read, ext=ext)
+                    for file in config["multiqc"]["reports"][wildcards.report]["qc_files"]
+                    for sample in get_samples(samples)
+                    for u in units.loc[sample].dropna().itertuples()
+                    if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
+                    for read in ["fastq1", "fastq2"]
+                    for ext in config.get("picard_collect_multiple_metrics", {}).get("output_ext", [""])
+                ]
+            ),
+            config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
+        params:
+            extra=lambda wildcards, input: "--replace-names "
+            + " --sample-names "
+            + " -c "
+            + input.config,
+            use_input_files_only=config.get("multiqc", {}).get("use_input_files_only", True),
 
 use rule peddy from qc as qc_peddy with:
     input:
