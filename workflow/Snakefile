@@ -478,6 +478,7 @@ if aligner == "bwa_gpu":
             + input.config,
             use_input_files_only=config.get("multiqc", {}).get("use_input_files_only", True),
 
+
 if aligner == "bwa_sentieon":
     use rule multiqc from qc as qc_multiqc with:
         input:
