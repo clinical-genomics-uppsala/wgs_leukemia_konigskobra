@@ -78,6 +78,7 @@ def get_bam_input(wildcards, t_n=None, use_sample_wildcard=True):
 
     return (bam_input, bai_input)
 
+
 def get_vcf_input(wildcards):
     aligner = config.get("aligner", None)
     if aligner is None:
