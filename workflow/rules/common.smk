@@ -63,6 +63,7 @@ def get_bam_input(wildcards, t_n=None, use_sample_wildcard=True):
     else:
         sample_str = wildcards.file
 
+
     aligner = config.get("aligner", None)
     if aligner is None:
         sys.exit("aligner missing from config, valid options: bwa_gpu or bwa_sentieon")
