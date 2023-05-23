@@ -92,6 +92,7 @@ def get_vcf_input(wildcards):
 
     return vcf_input
 
+
 def compile_output_list(wildcards):
     output_files = []
     types = type_generator(set([unit.type for unit in units.itertuples()]))
