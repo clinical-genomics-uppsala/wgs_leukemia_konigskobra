@@ -8,6 +8,7 @@ aligner: "bwa_gpu" # bwa_gpu or bwa_sentieon
 modules:
   alignment: "906d25d0d4791eb5a54cba9954fddf29e27b85dd"
   annotation: "e58432c3467db31621ab51a16034a026cf2a2c84"
+  sentieon: "develop"
   cnv_sv: "c81d30d"
   compression: "v1.1.0"
   filtering: "b7f4dc3"
