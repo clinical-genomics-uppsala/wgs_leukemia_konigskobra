@@ -459,6 +459,7 @@ use rule mosdepth from qc as qc_mosdepth with:
 
 
 if aligner == "bwa_gpu":
+
     use rule multiqc from qc as qc_multiqc with:
         input:
             files=lambda wildcards: set(
