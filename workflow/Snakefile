@@ -487,6 +487,7 @@ if aligner == "bwa_gpu":
 
 
 if aligner == "bwa_sentieon":
+
     use rule multiqc from qc as qc_multiqc with:
         input:
             files=lambda wildcards: set(
