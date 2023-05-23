@@ -52,6 +52,7 @@ elif aligner == "bwa_gpu":
     ruleorder: _results_star_crai > alignment_samtools_index
 
 elif aligner == "bwa_sentieon":
+
     ruleorder: sentieon_dedup > alignment_samtools_index
     ruleorder: sentieon_realigner > alignment_samtools_index
 
