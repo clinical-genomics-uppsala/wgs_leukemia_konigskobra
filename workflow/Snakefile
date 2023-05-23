@@ -28,6 +28,7 @@ if aligner is None:
     sys.exit("aligner missing from config, valid options: bwa_gpu or bwa_sentieon")
 
 elif aligner == "bwa_gpu":
+
     include: "rules/mutectcaller_to_tsv.smk"
     include: "rules/sample_order_multiqc.smk"
 
