@@ -54,6 +54,7 @@ cnvkit_batch:
   container: "docker://hydragenetics/cnvkit:0.9.9"
   method: "wgs"
   normal_reference: ""
+  extra: "--drop-low-coverage "
 
 cnvkit_call:
   container: "docker://hydragenetics/cnvkit:0.9.9"
@@ -101,6 +102,24 @@ filter_vcf:
 fusioncatcher:
   container: "docker://blcdsdockerregistry/fusioncatcher:1.33"
   genome_path: ""
+
+gatk_cnv_call_copy_ratio_segments:
+  container: "docker://hydragenetics/gatk4:4.2.2.0"
+
+gatk_cnv_collect_allelic_counts:
+  container: "docker://hydragenetics/gatk4:4.2.2.0"
+  SNP_interval: ""
+
+gatk_cnv_collect_read_counts:
+  container: "docker://hydragenetics/gatk4:4.2.2.0"
+
+gatk_cnv_model_segments:
+  container: "docker://hydragenetics/gatk4:4.2.2.0"
+
+gatk_cnv_denoise_read_counts_by_sex:
+  container: "docker://hydragenetics/gatk4:4.2.2.0"
+  pon_female: ""
+  pon_male: "" 
 
 manta_run_workflow_t:
   container: "docker://hydragenetics/manta:1.6.0"
@@ -163,8 +182,12 @@ multiqc:
         - "qc/rseqc_inner_distance/{sample}_{type}.inner_distance_freq.txt"
         - "prealignment/fastp_pe/{sample}_{flowcell}_{lane}_{barcode}_{type}_fastp.json"
         - "prealignment/sortmerna/{sample}_{type}.rrna.log"
-        - "qc/picard_collect_alignment_summary_metrics/{sample}_{type}.alignment_summary_metrics.txt"
         - "qc/multiqc/RNA_number.table.tsv"
+        - "qc/picard_collect_alignment_summary_metrics/{sample}_{type}.alignment_summary_metrics.txt"
+
+peddy:
+  container: "docker://hydragenetics/peddy:0.4.8"
+  extra: "--sites hg38 "
 
 picard_collect_alignment_summary_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
@@ -242,7 +265,7 @@ spring:
 star:
   container: "docker://hydragenetics/star:2.7.10a"
   genome_index: ""
-  extra: "--quantMode GeneCounts --sjdbGTFfile "
+  extra: "--quantMode GeneCounts --sjdbGTFfile /path/to/arriba_ref.gtf --outSAMtype BAM SortedByCoordinate --chimSegmentMin 10 --chimOutType WithinBAM SoftClip --chimJunctionOverhangMin 10 --chimScoreMin 1 --chimScoreDropMax 30 --chimScoreJunctionNonGTAG 0 --chimScoreSeparation 1 --alignSJstitchMismatchNmax 5 -1 5 5 --chimSegmentReadGapMax 3"
 
 star_fusion:
   container: "docker://trinityctat/starfusion:1.10.1"
