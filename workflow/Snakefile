@@ -7,8 +7,6 @@ __license__ = "GPL-3"
 include: "rules/common.smk"
 include: "rules/cnvkit_table.smk"
 include: "rules/manta_to_tsv.smk"
-include: "rules/mutectcaller_to_tsv.smk"
-include: "rules/sample_order_multiqc.smk"
 include: "rules/cnvkit.smk"
 include: "rules/peddy_create_ped.smk"
 
@@ -18,29 +16,49 @@ ruleorder: cnv_sv_manta_run_workflow_tn > misc_bgzip
 ruleorder: cnv_sv_manta_run_workflow_t > misc_tabix
 ruleorder: cnv_sv_manta_run_workflow_t > misc_bgzip
 ruleorder: _results_manta_tn_tbi > misc_tabix
-ruleorder: _results_manta_tn_tbi_all > misc_tabix
-ruleorder: _results_manta_tn_tbi_aml > misc_tabix
 ruleorder: _results_manta_t_tbi > misc_tabix
-ruleorder: _results_manta_t_tbi_all > misc_tabix
-ruleorder: _results_manta_t_tbi_aml > misc_tabix
-ruleorder: _results_tbi_tn > misc_tabix
-ruleorder: _results_tbi_all > misc_tabix
-ruleorder: _results_tbi_aml > misc_tabix
-ruleorder: _results_tbi_t > misc_tabix
 ruleorder: _results_cnvkit_tbi > misc_tabix
-ruleorder: _results_crai > misc_samtools_index
-ruleorder: _results_vcf_t > misc_bgzip
-ruleorder: _results_tbi_t > misc_tabix
 ruleorder: _results_vcf_tn > misc_bgzip
-ruleorder: _results_tbi_tn > misc_tabix
-ruleorder: _results_vcf_aml > misc_bgzip
-ruleorder: _results_tbi_aml > misc_tabix
-ruleorder: _results_vcf_all > misc_bgzip
-ruleorder: _results_tbi_all > misc_tabix
-ruleorder: parabricks_pbrun_fq2bam > alignment_samtools_index
-ruleorder: _results_star_crai > alignment_samtools_index
 ruleorder: annotation_simple_sv_annotation_tn > misc_bgzip
 ruleorder: _results_pindel_vcf > misc_bgzip
+
+
+aligner = config.get("aligner", None)
+
+if aligner is None:
+    sys.exit("aligner missing from config, valid options: bwa_gpu or bwa_sentieon")
+
+elif aligner == "bwa_gpu":
+
+    include: "rules/mutectcaller_to_tsv.smk"
+    include: "rules/sample_order_multiqc.smk"
+
+    ruleorder: _results_manta_tn_tbi_all > misc_tabix
+    ruleorder: _results_manta_tn_tbi_aml > misc_tabix
+    ruleorder: _results_manta_t_tbi_all > misc_tabix
+    ruleorder: _results_manta_t_tbi_aml > misc_tabix
+    ruleorder: _results_tbi_tn > misc_tabix
+    ruleorder: _results_tbi_all > misc_tabix
+    ruleorder: _results_tbi_aml > misc_tabix
+    ruleorder: _results_tbi_t > misc_tabix
+    ruleorder: _results_crai > misc_samtools_index
+    ruleorder: _results_vcf_t > misc_bgzip
+    ruleorder: _results_tbi_t > misc_tabix
+    ruleorder: _results_tbi_tn > misc_tabix
+    ruleorder: _results_vcf_aml > misc_bgzip
+    ruleorder: _results_tbi_aml > misc_tabix
+    ruleorder: _results_vcf_all > misc_bgzip
+    ruleorder: _results_tbi_all > misc_tabix
+    ruleorder: parabricks_pbrun_fq2bam > alignment_samtools_index
+    ruleorder: _results_star_crai > alignment_samtools_index
+
+elif aligner == "bwa_sentieon":
+
+    ruleorder: sentieon_dedup > alignment_samtools_index
+    ruleorder: sentieon_realigner > alignment_samtools_index
+
+else:
+    sys.exit("valid options for aligner are: bwa_gpu or bwa_sentieon")
 
 
 rule all:
@@ -169,8 +187,8 @@ use rule * from cnv_sv exclude cnvkit_call, cnvkit_scatter as cnv_sv_*
 
 use rule cnvkit_batch from cnv_sv as cnv_sv_cnvkit_batch with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_T.bam",
-        bai="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
+        bam=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
+        bai=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
         cnv_reference=config["cnvkit_batch"]["normal_reference"],
 
 
@@ -178,7 +196,7 @@ use rule cnvkit_scatter from cnv_sv as cnv_sv_cnvkit_scatter_whole with:
     input:
         segments="cnv_sv/cnvkit_call/{sample}_{type}.loh.cns",
         segment_regions="cnv_sv/cnvkit_batch/{sample}/{sample}_{type}.cnr",
-        vcf="parabricks/pbrun_mutectcaller_t/{sample}_{type}.vep.filter.germline.vcf",
+        vcf=lambda wildcards: get_vcf_input(wildcards),
     output:
         plot=temp("cnv_sv/cnvkit_scatter/{sample}_{type}.png"),
     params:
@@ -194,32 +212,32 @@ use rule cnvkit_scatter from cnv_sv as cnv_sv_cnvkit_scatter_whole with:
 
 use rule config_manta_tn from cnv_sv as cnv_sv_config_manta_tn with:
     input:
-        bam_t="parabricks/pbrun_fq2bam/{sample}_T.bam",
-        bai_t="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
-        bam_n="parabricks/pbrun_fq2bam/{sample}_N.bam",
-        bai_n="parabricks/pbrun_fq2bam/{sample}_N.bam.bai",
+        bam_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
+        bai_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
+        bam_n=lambda wildcards: get_bam_input(wildcards, t_n="N")[0],
+        bai_n=lambda wildcards: get_bam_input(wildcards, t_n="N")[1],
         ref=config["reference"]["fasta"],
 
 
 use rule config_manta_t from cnv_sv as cnv_sv_config_manta_t with:
     input:
-        bam_t="parabricks/pbrun_fq2bam/{sample}_T.bam",
-        bai_t="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
+        bam_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
+        bai_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
         ref=config["reference"]["fasta"],
 
 
 use rule generate_pindel_config from cnv_sv as cnv_sv_generate_pindel_config with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_T.bam",
+        bam=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
         metrics="qc/picard_collect_multiple_metrics/{sample}_T.insert_size_metrics",
 
 
 use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
     input:
-        bam_t="parabricks/pbrun_fq2bam/{sample}_T.bam",
-        bai_t="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
-        bam_n="parabricks/pbrun_fq2bam/{sample}_N.bam",
-        bai_n="parabricks/pbrun_fq2bam/{sample}_N.bam.bai",
+        bam_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
+        bai_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
+        bam_n=lambda wildcards: get_bam_input(wildcards, t_n="N")[0],
+        bai_n=lambda wildcards: get_bam_input(wildcards, t_n="N")[1],
         ref=config["reference"]["fasta"],
         scrpt="cnv_sv/manta_run_workflow_tn/{sample}/runWorkflow.py",
     output:
@@ -229,16 +247,16 @@ use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
 
 use rule manta_run_workflow_t from cnv_sv as cnv_sv_manta_run_workflow_t with:
     input:
-        bam_t="parabricks/pbrun_fq2bam/{sample}_T.bam",
-        bai_t="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
+        bam_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
+        bai_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
         ref=config["reference"]["fasta"],
         scrpt="cnv_sv/manta_run_workflow_t/{sample}/runWorkflow.py",
 
 
 use rule pindel_call from cnv_sv as cnv_sv_pindel_call with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_T.bam",
-        bai="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
+        bam=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
+        bai=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
         config="cnv_sv/pindel/{sample}.cfg",
         ref=config["reference"]["fasta"],
 
@@ -259,8 +277,8 @@ use rule * from compression as compression_*
 
 use rule samtools_view from compression as compression_samtools_view with:
     input:
-        bam="parabricks/pbrun_fq2bam/{file}.bam",
-        bai="parabricks/pbrun_fq2bam/{file}.bam.bai",
+        bam=lambda wildcards: get_bam_input(wildcards, t_n=None, use_sample_wildcard=False)[0],
+        bai=lambda wildcards: get_bam_input(wildcards, t_n=None, use_sample_wildcard=False)[1],
         ref=config.get("reference", {}).get("fasta", ""),
 
 
@@ -391,6 +409,20 @@ use rule pbrun_fq2bam from parabricks as parabricks_pbrun_fq2bam with:
     priority: 5
 
 
+module sentieon:
+    snakefile:
+        github(
+            "hydra-genetics/sentieon",
+            path="workflow/Snakefile",
+            tag=config["modules"]["sentieon"],
+        )
+    config:
+        config
+
+
+use rule * from sentieon as sentieon_*
+
+
 module prealignment:
     snakefile:
         github(
@@ -417,8 +449,8 @@ use rule * from qc as qc_*
 
 use rule mosdepth from qc as qc_mosdepth with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
-        bai="parabricks/pbrun_fq2bam/{sample}_{type}.bam.bai",
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
     output:
         bed=temp("qc/mosdepth/{sample}_{type,T|N}.regions.bed.gz"),
         csi=temp("qc/mosdepth/{sample}_{type,T|N}.regions.bed.gz.csi"),
@@ -427,30 +459,57 @@ use rule mosdepth from qc as qc_mosdepth with:
         summary=temp("qc/mosdepth/{sample}_{type,T|N}.mosdepth.summary.txt"),
 
 
-use rule multiqc from qc as qc_multiqc with:
-    input:
-        files=lambda wildcards: set(
-            [
-                file.format(sample=sample, type=u.type, lane=u.lane, flowcell=u.flowcell, barcode=u.barcode, read=read, ext=ext)
-                for file in config["multiqc"]["reports"][wildcards.report]["qc_files"]
-                for sample in get_samples(samples)
-                for u in units.loc[sample].dropna().itertuples()
-                if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
-                for read in ["fastq1", "fastq2"]
-                for ext in config.get("picard_collect_multiple_metrics", {}).get("output_ext", [""])
-            ]
-        ),
-        config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
-        sample_replacement="qc/multiqc/sample_replacement_{report}.tsv",
-        sample_order="qc/multiqc/sample_order_{report}.tsv",
-    params:
-        extra=lambda wildcards, input: "--replace-names "
-        + input.sample_replacement
-        + " --sample-names "
-        + input.sample_order
-        + " -c "
-        + input.config,
-        use_input_files_only=config.get("multiqc", {}).get("use_input_files_only", True),
+if aligner == "bwa_gpu":
+
+    use rule multiqc from qc as qc_multiqc with:
+        input:
+            files=lambda wildcards: set(
+                [
+                    file.format(
+                        sample=sample, type=u.type, lane=u.lane, flowcell=u.flowcell, barcode=u.barcode, read=read, ext=ext
+                    )
+                    for file in config["multiqc"]["reports"][wildcards.report]["qc_files"]
+                    for sample in get_samples(samples)
+                    for u in units.loc[sample].dropna().itertuples()
+                    if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
+                    for read in ["fastq1", "fastq2"]
+                    for ext in config.get("picard_collect_multiple_metrics", {}).get("output_ext", [""])
+                ]
+            ),
+            config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
+            sample_replacement="qc/multiqc/sample_replacement_{report}.tsv",
+            sample_order="qc/multiqc/sample_order_{report}.tsv",
+        params:
+            extra=lambda wildcards, input: "--replace-names "
+            + input.sample_replacement
+            + " --sample-names "
+            + input.sample_order
+            + " -c "
+            + input.config,
+            use_input_files_only=config.get("multiqc", {}).get("use_input_files_only", True),
+
+
+if aligner == "bwa_sentieon":
+
+    use rule multiqc from qc as qc_multiqc with:
+        input:
+            files=lambda wildcards: set(
+                [
+                    file.format(
+                        sample=sample, type=u.type, lane=u.lane, flowcell=u.flowcell, barcode=u.barcode, read=read, ext=ext
+                    )
+                    for file in config["multiqc"]["reports"][wildcards.report]["qc_files"]
+                    for sample in get_samples(samples)
+                    for u in units.loc[sample].dropna().itertuples()
+                    if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
+                    for read in ["fastq1", "fastq2"]
+                    for ext in config.get("picard_collect_multiple_metrics", {}).get("output_ext", [""])
+                ]
+            ),
+            config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
+        params:
+            extra=lambda wildcards, input: "--replace-names " + " --sample-names " + " -c " + input.config,
+            use_input_files_only=config.get("multiqc", {}).get("use_input_files_only", True),
 
 
 use rule peddy from qc as qc_peddy with:
@@ -480,7 +539,7 @@ use rule peddy from qc as qc_peddy with:
 
 use rule picard_collect_alignment_summary_metrics from qc as qc_picard_alignment_summary_metrics with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
         ref=config["reference"]["fasta"],
     wildcard_constraints:
         type="T|N",
@@ -496,18 +555,18 @@ use rule picard_collect_alignment_summary_metrics from qc as qc_picard_alignment
 
 use rule picard_collect_duplication_metrics from qc as qc_picard_duplication_metrics with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
 
 
 use rule picard_collect_gc_bias_metrics from qc as qc_picard_collect_gc_bias_metrics with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
         ref=config["reference"]["fasta"],
 
 
 use rule picard_collect_hs_metrics from qc as qc_picard_collect_hs_metrics with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
         bait_intervals=config["reference"]["design_intervals"],
         reference=config["reference"]["fasta"],
         target_intervals=config["reference"]["design_intervals"],
@@ -515,20 +574,20 @@ use rule picard_collect_hs_metrics from qc as qc_picard_collect_hs_metrics with:
 
 use rule picard_collect_multiple_metrics from qc as qc_picard_collect_multiple_metrics with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
         ref=config["reference"]["fasta"],
 
 
 use rule picard_collect_wgs_metrics from qc as qc_picard_collect_wgs_metrics with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
         ref=config["reference"]["fasta"],
         interval=config["reference"]["wgs_intervals"],
 
 
 use rule samtools_stats from qc as qc_samtools_stats with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
     wildcard_constraints:
         type="T|N",
 
