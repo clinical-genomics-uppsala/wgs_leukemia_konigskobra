@@ -10,6 +10,7 @@ include: "rules/manta_to_tsv.smk"
 include: "rules/cnvkit.smk"
 include: "rules/peddy_create_ped.smk"
 
+
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_bgzip
 ruleorder: cnv_sv_manta_run_workflow_t > misc_tabix
