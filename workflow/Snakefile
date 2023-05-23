@@ -21,6 +21,7 @@ ruleorder: _results_vcf_tn > misc_bgzip
 ruleorder: annotation_simple_sv_annotation_tn > misc_bgzip
 ruleorder: _results_pindel_vcf > misc_bgzip
 
+
 aligner = config.get("aligner", None)
 
 if aligner is None:
