@@ -3,6 +3,8 @@ samples: "samples.tsv"
 units: "units.tsv"
 output: "config/output_files.json"
 
+aligner: "bwa_gpu" # bwa_gpu or bwa_sentieon
+
 modules:
   alignment: "906d25d0d4791eb5a54cba9954fddf29e27b85dd"
   annotation: "e58432c3467db31621ab51a16034a026cf2a2c84"
@@ -14,6 +16,7 @@ modules:
   prealignment: "v0.5.0"
   qc: "v0.3.0"
   misc: "v0.1.0"
+  sentieon: "develop"
 
 default_container: "docker://hydragenetics/common:0.1.9"
 
@@ -215,6 +218,18 @@ rseqc_inner_distance:
 
 sample_order_multiqc:
   sample_sheet: "SampleSheet.csv"
+
+sentieon:
+  container: "" 
+  reference: ""
+  sentieon: ""
+  mills: ""
+  dbsnp: ""
+  tnscope_settings: "--min_init_normal_lod 0.5 --min_normal_lod 3.0 --min_init_tumor_lod 1.0 --min_tumor_lod 3 --trim_soft_clip"
+  dnascope_settings: "--pcr_indel_model NONE"
+  dbsnp: ""
+  dnascope_model: ""
+  tnscope_model: ""
 
 simple_sv_annotation:
   container: "docker://hydragenetics/simple_sv_annotation:2019.02.18"
