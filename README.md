@@ -12,7 +12,7 @@ Snakemake workflow to analyse hematological malignancies in whole genome data
 This snakemake workflow uses modules from hydragenetics to process `.fastq` files and obtain different kind
 of variants (SNV, indels, CNV, SV). Alongside diagnosis-filtered `.vcf` files, the workflow produces a
 multiqc report `.html` file and some CNV plots and `.tsv` files with relevant information from mutect and Manta. One of the modules contains the **commercial**
-[parabricks toolkit](https://docs.nvidia.com/clara/parabricks/3.7.0/index.html) which can be replaced by
+[parabricks toolkit](https://docs.nvidia.com/clara/parabricks/3.7.0/index.html) which can be replaced by sentieon or 
 opensource GATK tools if required. The following modules are currently part of this pipeline:
 
 - annotation

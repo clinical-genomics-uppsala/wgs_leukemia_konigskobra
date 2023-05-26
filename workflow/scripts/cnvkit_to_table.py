@@ -42,9 +42,9 @@ with open(snakemake.input.cns, 'r+') as cnsfile:
     cns_header = next(cnsfile).rstrip().split("\t")
     for cnv_line in cnsfile:
         cnv = cnv_line.strip().split("\t")
-        if not (((int(snakemake.params.ploidy) % 2) == 0 and int(snakemake.params.ploidy) == cnv[cns_header.index('cn')]
+        if not (((int(snakemake.params.ploidy) % 2) == 0 and int(snakemake.params.ploidy) == int(cnv[cns_header.index('cn')])
                  and cnv[cns_header.index('cn1')] == cnv[cns_header.index('cn2')])
-                or ((int(snakemake.params.ploidy) % 2) != 0 and int(snakemake.params.ploidy) == cnv[cns_header.index('cn')]
+                or ((int(snakemake.params.ploidy) % 2) != 0 and int(snakemake.params.ploidy) == int(cnv[cns_header.index('cn')])
                     and cnv[cns_header.index('cn1')]+1 == cnv[cns_header.index('cn2')])):
             cnv_chr = cnv[cns_header.index('chromosome')]
             cnv_start = int(cnv[cns_header.index('start')])
