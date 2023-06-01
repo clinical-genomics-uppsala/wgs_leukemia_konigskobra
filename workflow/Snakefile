@@ -44,7 +44,9 @@ ruleorder: parabricks_pbrun_fq2bam > alignment_samtools_index
 ruleorder: _results_star_crai > alignment_samtools_index
 ruleorder: annotation_simple_sv_annotation_tn > misc_bgzip
 ruleorder: _results_pindel_vcf > misc_bgzip
-ruleorder: gatk_cnv_model_segments > cnv_sv_gatk_model_segments 
+ruleorder: gatk_model_segments > cnv_sv_gatk_model_segments 
+ruleorder: _results_svdb_vcf > misc_bgzip
+ruleorder: _results_svdb_tbi > misc_tabix
 
 
 rule all:

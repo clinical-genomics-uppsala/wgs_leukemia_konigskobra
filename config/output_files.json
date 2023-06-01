@@ -61,5 +61,8 @@
   "Results/{project}/{sample}/SV/{sample}_manta_TN.bnd.tsv": {"name": "_results_manta_tsv_bnd", "file": "tsv_files/{sample}_manta_tn.tsv", "types": ["TN"]},
   "Results/{project}/{sample}/SV/{sample}_manta_TN.bnd.all.tsv": {"name": "_results_manta_tsv_bnd_all", "file": "tsv_files/{sample}_manta_tn.all.tsv", "types": ["TN"]},
   "Results/{project}/{sample}/SV/{sample}_manta_TN.bnd.aml.tsv": {"name": "_results_manta_tsv_bnd_aml", "file": "tsv_files/{sample}_manta_tn.aml.tsv", "types": ["TN"]},
-  "Archive/{project}/{sample}_{flowcell}_{lane}_{barcode}_{type}.spring": {"name": "_archives_spring", "file": "compression/spring/{sample}_{flowcell}_{lane}_{barcode}_{type}.spring", "types": ["T", "N", "R"]}
+  "Archive/{project}/{sample}_{flowcell}_{lane}_{barcode}_{type}.spring": {"name": "_archives_spring", "file": "compression/spring/{sample}_{flowcell}_{lane}_{barcode}_{type}.spring", "types": ["T", "N", "R"]},
+
+  "Results/{project}/{sample}/CNV/SVDB/{sample}_T.pathology.svdb_query.vcf.gz": {"name": "_results_svdb_vcf", "file": "cnv_sv/svdb_query/{sample}_T.pathology.svdb_query.vcf.gz", "types": ["T"]},
+  "Results/{project}/{sample}/CNV/SVDB/{sample}_T.pathology.svdb_query.vcf.gz.tbi": {"name": "_results_svdb_tbi", "file": "cnv_sv/svdb_query/{sample}_T.pathology.svdb_query.vcf.gz.tbi", "types": ["T"]}
 }

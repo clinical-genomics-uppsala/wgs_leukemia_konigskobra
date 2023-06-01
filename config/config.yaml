@@ -103,24 +103,23 @@ fusioncatcher:
   container: "docker://blcdsdockerregistry/fusioncatcher:1.33"
   genome_path: ""
 
-gatk_cnv_call_copy_ratio_segments:
+gatk_call_copy_ratio_segments:
   container: "docker://hydragenetics/gatk4:4.2.2.0"
 
 gatk_cnv_collect_allelic_counts:
   container: "docker://hydragenetics/gatk4:4.2.2.0"
   SNP_interval: ""
 
-gatk_cnv_collect_read_counts:
+gatk_collect_read_counts:
   container: "docker://hydragenetics/gatk4:4.2.2.0"
 
-gatk_cnv_model_segments:
+gatk_model_segments:
   container: "docker://hydragenetics/gatk4:4.2.2.0"
 
-gatk_cnv_denoise_read_counts:
+gatk_cnv_denoise_read_counts_by_sex:
   container: "docker://hydragenetics/gatk4:4.2.2.0"
   pon_female: ""
   pon_male: ""
-
 
 manta_run_workflow_t:
   container: "docker://hydragenetics/manta:1.6.0"
@@ -272,6 +271,19 @@ star_fusion:
   container: "docker://trinityctat/starfusion:1.10.1"
   extra: "--examine_coding_effect"
   genome_path: ""
+
+
+svdb_merge:
+  tc_method:
+    - name: pathology
+      cnv_caller:
+        - cnvkit
+        - gatk
+  container: "docker://hydragenetics/svdb:2.6.0"
+
+svdb_query:
+  container: "docker://hydragenetics/svdb:2.6.0"
+  db_string: "--db path_to_svdb_cnv.vcf --out_frq Normal_AF --out_occ Normal_OCC"
 
 vep:
   container: "docker://hydragenetics/vep:105"

@@ -111,7 +111,7 @@ rule gatk_cnv_denoise_read_counts_by_sex:
         """
 
 
-rule gatk_cnv_model_segments:
+rule gatk_model_segments:
     input:
         denoisedCopyRatio="cnv_sv/gatk_cnv_denoise_read_counts/{sample}_{type}.clean.denoisedCR.tsv",
         allelicCounts="cnv_sv/gatk_cnv_collect_allelic_counts/{sample}_{type}.clean.allelicCounts.tsv",
@@ -129,25 +129,25 @@ rule gatk_cnv_model_segments:
     params:
         outdir=lambda wildcards, output: os.path.dirname(output[0]),
         outprefix="{sample}_{type}.clean",
-        extra=config.get("gatk_cnv_model_segments", {}).get("extra", ""),
+        extra=config.get("gatk_model_segments", {}).get("extra", ""),
     log:
-        "cnv_sv/gatk_cnv_model_segments/{sample}_{type}.clean.modelFinal.seg.log",
+        "cnv_sv/gatk_model_segments/{sample}_{type}.clean.modelFinal.seg.log",
     benchmark:
         repeat(
-            "cnv_sv/gatk_cnv_model_segments/{sample}_{type}.clean.modelFinal.seg.benchmark.tsv",
-            config.get("gatk_cnv_model_segments", {}).get("benchmark_repeats", 1),
+            "cnv_sv/gatk_model_segments/{sample}_{type}.clean.modelFinal.seg.benchmark.tsv",
+            config.get("gatk_model_segments", {}).get("benchmark_repeats", 1),
         )
-    threads: config.get("gatk_cnv_model_segments", {}).get("threads", config["default_resources"]["threads"])
+    threads: config.get("gatk_model_segments", {}).get("threads", config["default_resources"]["threads"])
     resources:
-        threads=config.get("gatk_cnv_model_segments", {}).get("threads", config["default_resources"]["threads"]),
-        time=config.get("gatk_cnv_model_segments", {}).get("time", config["default_resources"]["time"]),
-        mem_mb=config.get("gatk_cnv_model_segments", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
-        mem_per_cpu=config.get("gatk_cnv_model_segments", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
-        partition=config.get("gatk_cnv_model_segments", {}).get("partition", config["default_resources"]["partition"]),
+        threads=config.get("gatk_model_segments", {}).get("threads", config["default_resources"]["threads"]),
+        time=config.get("gatk_model_segments", {}).get("time", config["default_resources"]["time"]),
+        mem_mb=config.get("gatk_model_segments", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
+        mem_per_cpu=config.get("gatk_model_segments", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
+        partition=config.get("gatk_model_segments", {}).get("partition", config["default_resources"]["partition"]),
     container:
-        config.get("gatk_cnv_model_segments", {}).get("container", config["default_container"])
+        config.get("gatk_model_segments", {}).get("container", config["default_container"])
     message:
-        "{rule}: Use gatk_cnv to obtain cnv_sv/gatk_cnv_model_segments/{wildcards.sample}_{wildcards.type}.clean.modelFinal.seg"
+        "{rule}: Use gatk_cnv to obtain cnv_sv/gatk_model_segments/{wildcards.sample}_{wildcards.type}.clean.modelFinal.seg"
     shell:
         "(gatk --java-options '-Xmx16g' ModelSegments "
         "--denoised-copy-ratios {input.denoisedCopyRatio} "
