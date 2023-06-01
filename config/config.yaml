@@ -6,7 +6,7 @@ output: "config/output_files.json"
 modules:
   alignment: "906d25d0d4791eb5a54cba9954fddf29e27b85dd"
   annotation: "e58432c3467db31621ab51a16034a026cf2a2c84"
-  cnv_sv: "c81d30d"
+  cnv_sv: "v0.4.1"
   compression: "v1.1.0"
   filtering: "b7f4dc3"
   fusions: "12f8354"
@@ -80,10 +80,10 @@ cnvkit_table:
 cnvkit_vcf:
   container: "docker://python:3.9.9-slim-buster"
 
-config_manta_t:
+manta_config_t:
   container: "docker://hydragenetics/manta:1.6.0"
 
-config_manta_tn:
+manta_config_tn:
   container: "docker://hydragenetics/manta:1.6.0"
 
 crumble:
@@ -218,11 +218,11 @@ picard_collect_multiple_metrics:
 picard_collect_wgs_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
 
-picard_update_vcf_sequence_dictionary:
+pindel_update_vcf_sequence_dictionary:
   container: "docker://hydragenetics/picard:2.25.0"
 
 pindel_call:
-  bedfile: ""
+  input_bed: ""
   container: "docker://hydragenetics/pindel:0.2.5b9"
 
 pindel2vcf:

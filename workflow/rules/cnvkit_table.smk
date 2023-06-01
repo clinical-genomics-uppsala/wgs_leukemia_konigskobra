@@ -6,7 +6,7 @@ __license__ = "GPL-3"
 
 rule cnvkit_table:
     input:
-        cns="cnv_sv/cnvkit_call/{sample}_{type}.loh.cns",
+        cns="cnv_sv/cnvkit_call/{sample}_{type}.pathology.loh.cns",
         gene_interest=config["cnvkit_table"]["bedfile"],
         cnv_scatter=expand(
             "cnv_sv/cnvkit_scatter/{{sample}}_{{type}}_{locus}.png",

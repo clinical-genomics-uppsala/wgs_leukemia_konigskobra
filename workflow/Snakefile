@@ -38,11 +38,13 @@ ruleorder: _results_vcf_aml > misc_bgzip
 ruleorder: _results_tbi_aml > misc_tabix
 ruleorder: _results_vcf_all > misc_bgzip
 ruleorder: _results_tbi_all > misc_tabix
+ruleorder: _results_gatk_vcf > misc_bgzip
+ruleorder: _results_gatk_vcf_tbi > misc_tabix
 ruleorder: parabricks_pbrun_fq2bam > alignment_samtools_index
 ruleorder: _results_star_crai > alignment_samtools_index
 ruleorder: annotation_simple_sv_annotation_tn > misc_bgzip
 ruleorder: _results_pindel_vcf > misc_bgzip
-ruleorder: gatk_cnv_model_segments > cnv_sv_gatk_cnv_model_segments 
+ruleorder: gatk_cnv_model_segments > cnv_sv_gatk_model_segments 
 
 
 rule all:
@@ -178,7 +180,7 @@ use rule cnvkit_batch from cnv_sv as cnv_sv_cnvkit_batch with:
 
 use rule cnvkit_scatter from cnv_sv as cnv_sv_cnvkit_scatter_whole with:
     input:
-        segments="cnv_sv/cnvkit_call/{sample}_{type}.loh.cns",
+        segments="cnv_sv/cnvkit_call/{sample}_{type}.pathology.loh.cns",
         segment_regions="cnv_sv/cnvkit_batch/{sample}/{sample}_{type}.cnr",
         vcf="parabricks/pbrun_mutectcaller_t/{sample}_{type}.vep.filter.germline.vcf",
     output:
@@ -194,7 +196,7 @@ use rule cnvkit_scatter from cnv_sv as cnv_sv_cnvkit_scatter_whole with:
         )
 
 
-use rule config_manta_tn from cnv_sv as cnv_sv_config_manta_tn with:
+use rule manta_config_tn from cnv_sv as cnv_sv_manta_config_tn with:
     input:
         bam_t="parabricks/pbrun_fq2bam/{sample}_T.bam",
         bai_t="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
@@ -203,21 +205,21 @@ use rule config_manta_tn from cnv_sv as cnv_sv_config_manta_tn with:
         ref=config["reference"]["fasta"],
 
 
-use rule config_manta_t from cnv_sv as cnv_sv_config_manta_t with:
+use rule manta_config_t from cnv_sv as cnv_sv_manta_config_t with:
     input:
         bam_t="parabricks/pbrun_fq2bam/{sample}_T.bam",
         bai_t="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
         ref=config["reference"]["fasta"],
 
 
-use rule gatk_cnv_collect_read_counts from cnv_sv as cnv_sv_gatk_cnv_collect_read_counts with: 
+use rule gatk_collect_read_counts from cnv_sv as cnv_sv_gatk_collect_read_counts with: 
     input:
         bam="parabricks/pbrun_fq2bam/{sample}_T.bam",
         bai="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
         interval=config.get("reference", {}).get("design_intervals_gatk_cnv", ""),
 
 
-use rule generate_pindel_config from cnv_sv as cnv_sv_generate_pindel_config with:
+use rule pindel_generate_config from cnv_sv as cnv_sv_pindel_generate_config with:
     input:
         bam="parabricks/pbrun_fq2bam/{sample}_T.bam",
         metrics="qc/picard_collect_multiple_metrics/{sample}_T.insert_size_metrics",
@@ -234,6 +236,7 @@ use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
     output:
         som_sv_vcf=temp("cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.vcf.gz"),
         som_sv_tbi=temp("cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.vcf.gz.tbi"),
+    priority: 4
 
 
 use rule manta_run_workflow_t from cnv_sv as cnv_sv_manta_run_workflow_t with:
@@ -242,14 +245,16 @@ use rule manta_run_workflow_t from cnv_sv as cnv_sv_manta_run_workflow_t with:
         bai_t="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
         ref=config["reference"]["fasta"],
         scrpt="cnv_sv/manta_run_workflow_t/{sample}/runWorkflow.py",
+    priority: 4
 
 
 use rule pindel_call from cnv_sv as cnv_sv_pindel_call with:
     input:
         bam="parabricks/pbrun_fq2bam/{sample}_T.bam",
         bai="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
-        config="cnv_sv/pindel/{sample}.cfg",
+        config="cnv_sv/pindel/{sample}_T.cfg",
         ref=config["reference"]["fasta"],
+        include_bed=config.get("pindel_call", {}).get("include_bed", []),
 
 
 module compression:

@@ -47,7 +47,7 @@ rule gatk_cnv_denoise_read_counts_by_sex:
     input:
         hdf5PoN_f=config.get("gatk_cnv_denoise_read_counts_by_sex", {}).get("pon_female", ""),
         hdf5PoN_m=config.get("gatk_cnv_denoise_read_counts_by_sex", {}).get("pon_male", ""),
-        hdf5Tumor="cnv_sv/gatk_cnv_collect_read_counts/{sample}_{type}.counts.hdf5",
+        hdf5Tumor="cnv_sv/gatk_collect_read_counts/{sample}_{type}.counts.hdf5",
         sex="qc/peddy/{sample}/peddy.sex_check.csv"
     output:
         denoisedCopyRatio=temp("cnv_sv/gatk_cnv_denoise_read_counts/{sample}_{type}.clean.denoisedCR.tsv"),
@@ -116,16 +116,16 @@ rule gatk_cnv_model_segments:
         denoisedCopyRatio="cnv_sv/gatk_cnv_denoise_read_counts/{sample}_{type}.clean.denoisedCR.tsv",
         allelicCounts="cnv_sv/gatk_cnv_collect_allelic_counts/{sample}_{type}.clean.allelicCounts.tsv",
     output:
-        temp("cnv_sv/gatk_cnv_model_segments/{sample}_{type}.clean.modelFinal.seg"),
-        temp("cnv_sv/gatk_cnv_model_segments/{sample}_{type}.clean.cr.seg"),
-        temp("cnv_sv/gatk_cnv_model_segments/{sample}_{type}.clean.af.igv.seg"),
-        temp("cnv_sv/gatk_cnv_model_segments/{sample}_{type}.clean.cr.igv.seg"),
-        temp("cnv_sv/gatk_cnv_model_segments/{sample}_{type}.clean.hets.tsv"),
-        temp("cnv_sv/gatk_cnv_model_segments/{sample}_{type}.clean.modelBegin.cr.param"),
-        temp("cnv_sv/gatk_cnv_model_segments/{sample}_{type}.clean.modelBegin.af.param"),
-        temp("cnv_sv/gatk_cnv_model_segments/{sample}_{type}.clean.modelBegin.seg"),
-        temp("cnv_sv/gatk_cnv_model_segments/{sample}_{type}.clean.modelFinal.af.param"),
-        temp("cnv_sv/gatk_cnv_model_segments/{sample}_{type}.clean.modelFinal.cr.param"),
+        temp("cnv_sv/gatk_model_segments/{sample}_{type}.clean.modelFinal.seg"),
+        temp("cnv_sv/gatk_model_segments/{sample}_{type}.clean.cr.seg"),
+        temp("cnv_sv/gatk_model_segments/{sample}_{type}.clean.af.igv.seg"),
+        temp("cnv_sv/gatk_model_segments/{sample}_{type}.clean.cr.igv.seg"),
+        temp("cnv_sv/gatk_model_segments/{sample}_{type}.clean.hets.tsv"),
+        temp("cnv_sv/gatk_model_segments/{sample}_{type}.clean.modelBegin.cr.param"),
+        temp("cnv_sv/gatk_model_segments/{sample}_{type}.clean.modelBegin.af.param"),
+        temp("cnv_sv/gatk_model_segments/{sample}_{type}.clean.modelBegin.seg"),
+        temp("cnv_sv/gatk_model_segments/{sample}_{type}.clean.modelFinal.af.param"),
+        temp("cnv_sv/gatk_model_segments/{sample}_{type}.clean.modelFinal.cr.param"),
     params:
         outdir=lambda wildcards, output: os.path.dirname(output[0]),
         outprefix="{sample}_{type}.clean",

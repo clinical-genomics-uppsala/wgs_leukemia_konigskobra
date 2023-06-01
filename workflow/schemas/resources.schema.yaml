@@ -148,7 +148,7 @@ properties:
         type: string
         description: max execution time
  
-  config_manta_tn:
+  manta_config_tn:
     type: object
     description: resource definitions for config_manta_tn
     properties:

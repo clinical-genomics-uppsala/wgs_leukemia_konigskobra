@@ -249,7 +249,7 @@ properties:
     required:
       - container
 
-  config_manta_t:
+  manta_config_t:
     type: object
     description: parameters for config_manta_t
     properties:
@@ -259,7 +259,7 @@ properties:
     required:
       - container
 
-  config_manta_tn:
+  mantia_config_tn:
     type: object
     description: parameters for config_manta_tn
     properties:
@@ -521,9 +521,9 @@ properties:
     required:
       - container
 
-  picard_update_vcf_sequence_dictionary:
+  pindel_update_vcf_sequence_dictionary:
     type: object
-    description: parameters for picard_update_vcf_sequence_dictionary
+    description: parameters for pindel_update_vcf_sequence_dictionary
     properties:
       container:
         type: string
@@ -535,14 +535,14 @@ properties:
     type: object
     description: parameters for pindel_call
     properties:
-      bedfile:
+      include_bed:
         type: string
         description: path to bed file containing region of interest
       container:
         type: string
         description: name or path to docker/singularity container
     required:
-      - bedfile
+      - include_bed
       - container
 
   pindel2vcf:
@@ -716,8 +716,8 @@ required:
   - cnvkit_scatter_whole
   - cnvkit_table
   - cnvkit_vcf
-  - config_manta_t
-  - config_manta_tn
+  - manta_config_t
+  - manta_config_tn
   - crumble
   - fastp_pe
   - fastqc
@@ -733,7 +733,7 @@ required:
   - picard_collect_hs_metrics
   - picard_collect_multiple_metrics
   - picard_collect_wgs_metrics
-  - picard_update_vcf_sequence_dictionary
+  - pindel_update_vcf_sequence_dictionary
   - pindel_call
   - pindel2vcf
   - rseqc_gene_body_coverage
