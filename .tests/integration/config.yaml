@@ -1,5 +1,7 @@
 output: "../../config/output_files.json"
 
+aligner: "bwa_gpu"
+
 modules:
   alignment: "906d25d0d4791eb5a54cba9954fddf29e27b85dd"
   annotation: "e58432c3467db31621ab51a16034a026cf2a2c84"
@@ -11,6 +13,7 @@ modules:
   prealignment: "v0.5.0"
   qc: "v0.3.0"
   misc: "v0.1.0"
+  sentieon: "develop"
 
 default_container: "docker://hydragenetics/common:0.1.9"
 
@@ -24,6 +27,8 @@ reference:
   wgs_intervals: "reference/wgs.interval_list"
   design_intervals: "reference/wgs.interval_list" #HSMetrics
   design_intervals_gatk_cnv: "reference/wgs.interval_list"
+
+trimmer_software: "fastp_pe"
 
 arriba:
   assembly: "reference/assembly.fasta"
@@ -73,6 +78,15 @@ filter_vcf:
 fusioncatcher:
   genome_path: "reference/"
 
+gatk_cnv_collect_allelic_counts:
+  container: "docker://hydragenetics/gatk4:4.2.2.0"
+  SNP_interval: "reference/wgs.interval_list"
+
+gatk_cnv_denoise_read_counts_by_sex:
+  container: "docker://hydragenetics/gatk4:4.2.2.0"
+  pon_female: "reference/female.hdf5"
+  pon_male: "reference/male.hdf5"
+
 manta_config_tn:
   container: "docker://hydragenetics/manta:v1.6.0"
 
@@ -116,6 +130,9 @@ rseqc_gene_body_coverage:
 rseqc_inner_distance:
   bed: "reference/gene_model.bed"
 
+sample_order_multiqc:
+  sample_sheet: "SampleSheet.csv"
+
 simple_sv_annotation:
   panel: "reference/panel.txt"
   fusion_pairs: "reference/fusion_pairs.txt"
@@ -133,6 +150,13 @@ star:
 
 star_fusion:
   genome_path: "reference/"
+
+svdb_merge:
+  tc_method:
+    - name: pathology
+      cnv_caller:
+        - cnvkit
+        - gatk
 
 vep:
   vep_cache: "reference/vep"

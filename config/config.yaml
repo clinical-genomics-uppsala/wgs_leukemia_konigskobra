@@ -16,7 +16,7 @@ modules:
   prealignment: "v0.5.0"
   qc: "v0.3.0"
   misc: "v0.1.0"
-  sentieon: "b002d39"
+  sentieon: "develop"
 
 default_container: "docker://hydragenetics/common:0.1.9"
 
@@ -193,10 +193,6 @@ peddy:
   container: "docker://hydragenetics/peddy:0.4.8"
   extra: "--sites hg38 "
 
-peddy:
-  container: "docker://hydragenetics/peddy:0.4.8"
-  extra: "--sites hg38 "
-
 picard_collect_alignment_summary_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
 
@@ -229,7 +225,7 @@ pindel_update_vcf_sequence_dictionary:
   container: "docker://hydragenetics/picard:2.25.0"
 
 pindel_call:
-  input_bed: ""
+  include_bed: ""
   container: "docker://hydragenetics/pindel:0.2.5b9"
 
 pindel2vcf:
