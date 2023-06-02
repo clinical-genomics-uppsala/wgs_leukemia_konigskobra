@@ -9,12 +9,12 @@ rule cnvkit_call_no_custom_purity:
         segment="cnv_sv/cnvkit_batch/{sample}/{sample}_{type}.cns",
         vcf=lambda wildcards: get_vcf_input(wildcards),
     output:
-        segment=temp("cnv_sv/cnvkit_call/{sample}_{type}.loh.cns"),
+        segment=temp("cnv_sv/cnvkit_call/{sample}_{type}.{tc_method}.loh.cns"),
     log:
-        "cnv_sv/cnvkit_call/{sample}_{type}.loh.cns.log",
+        "cnv_sv/cnvkit_call/{sample}_{type}.{tc_method}.loh.cns.log",
     benchmark:
         repeat(
-            "cnv_sv/cnvkit_call/{sample}_{type}.loh.cns.benchmark.tsv",
+            "cnv_sv/cnvkit_call/{sample}_{type}.{tc_method}.loh.cns.benchmark.tsv",
             config.get("cnvkit_call", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("cnvkit_call", {}).get("threads", config["default_resources"]["threads"])
@@ -36,7 +36,7 @@ rule cnvkit_call_no_custom_purity:
 
 rule cnvkit_scatter:
     input:
-        segments="cnv_sv/cnvkit_call/{sample}_{type}.loh.cns",
+        segments="cnv_sv/cnvkit_call/{sample}_{type}.pathology.loh.cns",
         segment_regions="cnv_sv/cnvkit_batch/{sample}/{sample}_{type}.cnr",
         vcf=lambda wildcards: get_vcf_input(wildcards),
     output:

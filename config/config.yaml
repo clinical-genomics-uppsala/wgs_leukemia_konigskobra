@@ -8,7 +8,7 @@ aligner: "bwa_gpu" # bwa_gpu or bwa_sentieon
 modules:
   alignment: "906d25d0d4791eb5a54cba9954fddf29e27b85dd"
   annotation: "e58432c3467db31621ab51a16034a026cf2a2c84"
-  cnv_sv: "c81d30d"
+  cnv_sv: "v0.4.1"
   compression: "v1.1.0"
   filtering: "b7f4dc3"
   fusions: "12f8354"
@@ -29,6 +29,7 @@ reference:
   sites: ""
   wgs_intervals: ""
   design_intervals: "" #hsmetrics
+  design_intervals_gatk_cnv: ""
 
 trimmer_software: "fastp_pe"
 
@@ -83,10 +84,10 @@ cnvkit_table:
 cnvkit_vcf:
   container: "docker://python:3.9.9-slim-buster"
 
-config_manta_t:
+manta_config_t:
   container: "docker://hydragenetics/manta:1.6.0"
 
-config_manta_tn:
+manta_config_tn:
   container: "docker://hydragenetics/manta:1.6.0"
 
 crumble:
@@ -106,23 +107,23 @@ fusioncatcher:
   container: "docker://blcdsdockerregistry/fusioncatcher:1.33"
   genome_path: ""
 
-gatk_cnv_call_copy_ratio_segments:
+gatk_call_copy_ratio_segments:
   container: "docker://hydragenetics/gatk4:4.2.2.0"
 
 gatk_cnv_collect_allelic_counts:
   container: "docker://hydragenetics/gatk4:4.2.2.0"
   SNP_interval: ""
 
-gatk_cnv_collect_read_counts:
+gatk_collect_read_counts:
   container: "docker://hydragenetics/gatk4:4.2.2.0"
-
-gatk_cnv_model_segments:
+  
+gatk_model_segments:
   container: "docker://hydragenetics/gatk4:4.2.2.0"
 
 gatk_cnv_denoise_read_counts_by_sex:
   container: "docker://hydragenetics/gatk4:4.2.2.0"
   pon_female: ""
-  pon_male: "" 
+  pon_male: ""
 
 manta_run_workflow_t:
   container: "docker://hydragenetics/manta:1.6.0"
@@ -220,11 +221,11 @@ picard_collect_multiple_metrics:
 picard_collect_wgs_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
 
-picard_update_vcf_sequence_dictionary:
+pindel_update_vcf_sequence_dictionary:
   container: "docker://hydragenetics/picard:2.25.0"
 
 pindel_call:
-  bedfile: ""
+  include_bed: ""
   container: "docker://hydragenetics/pindel:0.2.5b9"
 
 pindel2vcf:
@@ -286,6 +287,19 @@ star_fusion:
   container: "docker://trinityctat/starfusion:1.10.1"
   extra: "--examine_coding_effect"
   genome_path: ""
+
+
+svdb_merge:
+  tc_method:
+    - name: pathology
+      cnv_caller:
+        - cnvkit
+        - gatk
+  container: "docker://hydragenetics/svdb:2.6.0"
+
+svdb_query:
+  container: "docker://hydragenetics/svdb:2.6.0"
+  db_string: "--db path_to_svdb_cnv.vcf --out_frq Normal_AF --out_occ Normal_OCC"
 
 vep:
   container: "docker://hydragenetics/vep:105"
