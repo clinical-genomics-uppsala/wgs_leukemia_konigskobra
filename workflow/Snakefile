@@ -272,7 +272,7 @@ use rule pindel_call from cnv_sv as cnv_sv_pindel_call with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
         bai=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
-        config="cnv_sv/pindel/{sample}.cfg",
+        config="cnv_sv/pindel/{sample}_T.cfg",
         ref=config["reference"]["fasta"],
         include_bed=config.get("pindel_call", {}).get("include_bed", []),
 
