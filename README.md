@@ -1,9 +1,9 @@
-# :crown: WGS Leukemia Königskobra :snake:
+# :dog: :dog: :dog: :notes: WGS Leukemia Fluffy :snake:
 
 Snakemake workflow to analyse hematological malignancies in whole genome data
 
-![snakefmt](https://github.com/clinical-genomics-uppsala/wgs_leukemia_konigskobra/actions/workflows/snakefmt.yaml/badge.svg?branch=develop)
-![snakemake dry run](https://github.com/clinical-genomics-uppsala/wgs_leukemia_konigskobra/actions/workflows/snakemake-dry-run.yaml/badge.svg?branch=develop)
+![snakefmt](https://github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/actions/workflows/snakefmt.yaml/badge.svg?branch=develop)
+![snakemake dry run](https://github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/actions/workflows/snakemake-dry-run.yaml/badge.svg?branch=develop)
 
 [![License: GPL-3](https://img.shields.io/badge/License-GPL3-yellow.svg)](https://opensource.org/licenses/gpl-3.0.html)
 
@@ -12,7 +12,7 @@ Snakemake workflow to analyse hematological malignancies in whole genome data
 This snakemake workflow uses modules from hydragenetics to process `.fastq` files and obtain different kind
 of variants (SNV, indels, CNV, SV). Alongside diagnosis-filtered `.vcf` files, the workflow produces a
 multiqc report `.html` file and some CNV plots and `.tsv` files with relevant information from mutect and Manta. One of the modules contains the **commercial**
-[parabricks toolkit](https://docs.nvidia.com/clara/parabricks/3.7.0/index.html) which can be replaced by
+[parabricks toolkit](https://docs.nvidia.com/clara/parabricks/3.7.0/index.html) which can be replaced by sentieon or 
 opensource GATK tools if required. The following modules are currently part of this pipeline:
 
 - annotation
@@ -39,9 +39,9 @@ In order to use this module, the following dependencies are required:
 ### Sample and unit data
 
 Input data should be added to
-[`samples.tsv`](https://github.com/clinical-genomics-uppsala/wgs_leukemia_konigskobra/blob/develop/config/samples.tsv)
+[`samples.tsv`](https://github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/blob/develop/config/samples.tsv)
 and
-[`units.tsv`](https://github.com/clinical-genomics-uppsala/wgs_leukemia_konigskobra/blob/develop/config/units.tsv).
+[`units.tsv`](https://github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/blob/develop/config/units.tsv).
 The following information need to be added to these files:
 
 | Column Id | Description |
@@ -63,7 +63,7 @@ The following information need to be added to these files:
 ### Reference data
 
 Reference files should be specified in
-[`config.yaml`](https://github.com/clinical-genomics-uppsala/wgs_leukemia_konigskobra/blob/develop/config/config.yaml)
+[`config.yaml`](https://github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/blob/develop/config/config.yaml)
 
 1. A `.fasta` reference file of the human genome is required as well as an `.fai` file and an bwa index of this
 file.
@@ -87,14 +87,20 @@ to running the workflow.
 ## :rocket: Usage
 
 To run the workflow,
-[`resources.yaml`](https://github.com/clinical-genomics-uppsala/wgs_leukemia_konigskobra/blob/develop/config/resources.yaml)
+[`resources.yaml`](https://github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/blob/develop/config/resources.yaml)
 is needed which defines different resources as default and for different rules. For parabricks, the `gres`
-stanza is needed and should specify the number of GPUs available.
+stanza is needed and should specify the number of GPUs available. You also need a [`config.yaml`](https://github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/blob/develop/config/config.yaml) where all run-variables are defined. 
 
 ```bash
-snakemake --profile my-profile
+snakemake --profile my-profile --configfile config/config.yaml
 ```
 
+To run the integration test you only need to add lines in the `tests/integration/config.yaml` that differs from the original `config.yaml`. As of now it is only a dryrun test, no small dataset is available.
+
+```bash
+cd .tests/integration/
+snakemake --snakefile ../../workflow/Snakefile --configfiles ../../config/config.yaml config.yaml -n
+```
 ### Output files
 
 .fastq files are archived as compressed file pair as .spring: `Archive/{project}/{sample}_{flowcell}_{lane}_{barcode}_{type}.spring`

@@ -56,6 +56,43 @@ def type_generator(types):
         return types
 
 
+def get_bam_input(wildcards, t_n=None, use_sample_wildcard=True):
+    if use_sample_wildcard is True and t_n is None:
+        sample_str = "{}_{}".format(wildcards.sample, wildcards.type)
+    elif use_sample_wildcard is True and t_n:
+        sample_str = "{}_{}".format(wildcards.sample, t_n)
+    else:
+        sample_str = wildcards.file
+
+    aligner = config.get("aligner", None)
+    if aligner is None:
+        sys.exit("aligner missing from config, valid options: bwa_gpu or bwa_sentieon")
+    elif aligner == "bwa_gpu":
+        bam_input = "parabricks/pbrun_fq2bam/{}.bam".format(sample_str)
+    elif aligner == "bwa_sentieon":
+        bam_input = "sentieon/realign/{}_REALIGNED.bam".format(sample_str)
+    else:
+        sys.exit("valid options for aligner are: bwa_gpu or bwa_sentieon")
+
+    bai_input = "{}.bai".format(bam_input)
+
+    return (bam_input, bai_input)
+
+
+def get_vcf_input(wildcards):
+    aligner = config.get("aligner", None)
+    if aligner is None:
+        sys.exit("aligner missing from config, valid options: bwa_gpu or bwa_sentieon")
+    elif aligner == "bwa_gpu":
+        vcf_input = "parabricks/pbrun_mutectcaller_t/{}_{}.vep.filter.germline.vcf".format(wildcards.sample, wildcards.type)
+    elif aligner == "bwa_sentieon":
+        vcf_input = "sentieon/tnscope/{}_TNscope_tn_ML.vcf".format(wildcards.sample)
+    else:
+        sys.exit("valid options for aligner are: bwa_gpu or bwa_sentieon")
+
+    return vcf_input
+
+
 def compile_output_list(wildcards):
     output_files = []
     types = type_generator(set([unit.type for unit in units.itertuples()]))

@@ -57,7 +57,6 @@ properties:
       - annotation
       - cnv_sv
       - compression
-      - parabricks
       - prealignment
       - filtering
       - fusions
@@ -259,7 +258,7 @@ properties:
     required:
       - container
 
-  mantia_config_tn:
+  manta_config_tn:
     type: object
     description: parameters for config_manta_tn
     properties:
