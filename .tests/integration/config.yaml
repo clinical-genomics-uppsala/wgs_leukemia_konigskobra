@@ -108,7 +108,7 @@ pindel_update_vcf_sequence_dictionary:
   container: "docker://hydragenetics/picard:2.25.0"
 
 pindel_call:
-  bedfile: "reference/pindel.bed"
+  include_bed: "reference/pindel.bed"
 
 rseqc_gene_body_coverage:
   bed: "reference/gene_model.bed"
