@@ -3,6 +3,8 @@ samples: "samples.tsv"
 units: "units.tsv"
 output: "config/output_files.json"
 
+aligner: "bwa_gpu" # bwa_gpu or bwa_sentieon
+
 modules:
   alignment: "906d25d0d4791eb5a54cba9954fddf29e27b85dd"
   annotation: "e58432c3467db31621ab51a16034a026cf2a2c84"
@@ -14,6 +16,7 @@ modules:
   prealignment: "v0.5.0"
   qc: "v0.3.0"
   misc: "v0.1.0"
+  sentieon: "develop"
 
 default_container: "docker://hydragenetics/common:0.1.9"
 
@@ -55,6 +58,7 @@ cnvkit_batch:
   container: "docker://hydragenetics/cnvkit:0.9.9"
   method: "wgs"
   normal_reference: ""
+  extra: "--drop-low-coverage "
 
 cnvkit_call:
   container: "docker://hydragenetics/cnvkit:0.9.9"
@@ -109,9 +113,6 @@ gatk_call_copy_ratio_segments:
 gatk_cnv_collect_allelic_counts:
   container: "docker://hydragenetics/gatk4:4.2.2.0"
   SNP_interval: ""
-
-gatk_collect_read_counts:
-  container: "docker://hydragenetics/gatk4:4.2.2.0"
 
 gatk_model_segments:
   container: "docker://hydragenetics/gatk4:4.2.2.0"
@@ -182,8 +183,12 @@ multiqc:
         - "qc/rseqc_inner_distance/{sample}_{type}.inner_distance_freq.txt"
         - "prealignment/fastp_pe/{sample}_{flowcell}_{lane}_{barcode}_{type}_fastp.json"
         - "prealignment/sortmerna/{sample}_{type}.rrna.log"
-        - "qc/picard_collect_alignment_summary_metrics/{sample}_{type}.alignment_summary_metrics.txt"
         - "qc/multiqc/RNA_number.table.tsv"
+        - "qc/picard_collect_alignment_summary_metrics/{sample}_{type}.alignment_summary_metrics.txt"
+
+peddy:
+  container: "docker://hydragenetics/peddy:0.4.8"
+  extra: "--sites hg38 "
 
 peddy:
   container: "docker://hydragenetics/peddy:0.4.8"
@@ -239,6 +244,18 @@ rseqc_inner_distance:
 sample_order_multiqc:
   sample_sheet: "SampleSheet.csv"
 
+sentieon:
+  container: "" 
+  reference: ""
+  sentieon: ""
+  mills: ""
+  dbsnp: ""
+  tnscope_settings: "--min_init_normal_lod 0.5 --min_normal_lod 3.0 --min_init_tumor_lod 1.0 --min_tumor_lod 3 --trim_soft_clip"
+  dnascope_settings: "--pcr_indel_model NONE"
+  dbsnp: ""
+  dnascope_model: ""
+  tnscope_model: ""
+
 simple_sv_annotation:
   container: "docker://hydragenetics/simple_sv_annotation:2019.02.18"
   panel: ""
@@ -265,7 +282,7 @@ spring:
 star:
   container: "docker://hydragenetics/star:2.7.10a"
   genome_index: ""
-  extra: "--quantMode GeneCounts --sjdbGTFfile "
+  extra: "--quantMode GeneCounts --sjdbGTFfile /path/to/arriba_ref.gtf --outSAMtype BAM SortedByCoordinate --chimSegmentMin 10 --chimOutType WithinBAM SoftClip --chimJunctionOverhangMin 10 --chimScoreMin 1 --chimScoreDropMax 30 --chimScoreJunctionNonGTAG 0 --chimScoreSeparation 1 --alignSJstitchMismatchNmax 5 -1 5 5 --chimSegmentReadGapMax 3"
 
 star_fusion:
   container: "docker://trinityctat/starfusion:1.10.1"
