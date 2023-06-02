@@ -6,7 +6,7 @@ output: "../../config/output_files.json"
 modules:
   alignment: "906d25d0d4791eb5a54cba9954fddf29e27b85dd"
   annotation: "e58432c3467db31621ab51a16034a026cf2a2c84"
-  cnv_sv: "c81d30d"
+  cnv_sv: "v0.4.1"
   compression: "v1.1.0"
   filtering: "b7f4dc3"
   fusions: "12f8354"
@@ -26,6 +26,7 @@ reference:
   sites: "reference/sites.vcf.gz"
   wgs_intervals: "reference/wgs.interval_list"
   design_intervals: "reference/wgs.interval_list" #HSMetrics
+  design_intervals_gatk_cnv: "reference/wgs.interval_list"
 
 trimmer_software: "fastp_pe"
 
@@ -81,12 +82,6 @@ cnvkit_table:
 cnvkit_vcf:
   container: "docker://python:3.9.9-slim-buster"
 
-config_manta_tn:
-  container: "docker://hydragenetics/manta:v1.6.0"
-
-config_manta_t:
-  container: "docker://hydragenetics/manta:v1.6.0"
-
 crumble:
   container: "docker://hydragenetics/crumble:0.8.3"
   extra: "-O CRAM"
@@ -103,6 +98,12 @@ filter_vcf:
 fusioncatcher:
   container: "docker://hydragenetics/fusioncatcher:1.33"
   genome_path: "reference/"
+
+manta_config_tn:
+  container: "docker://hydragenetics/manta:v1.6.0"
+
+manta_config_t:
+  container: "docker://hydragenetics/manta:v1.6.0"
 
 manta_run_workflow_t:
   container: "docker://hydragenetics/manta:v1.6.0"
@@ -200,7 +201,7 @@ picard_collect_multiple_metrics:
 picard_collect_wgs_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
 
-picard_update_vcf_sequence_dictionary:
+pindel_update_vcf_sequence_dictionary:
   container: "docker://hydragenetics/picard:2.25.0"
 
 pindel_call:
