@@ -48,7 +48,7 @@ rule gatk_cnv_denoise_read_counts_by_sex:
         hdf5PoN_f=config.get("gatk_cnv_denoise_read_counts_by_sex", {}).get("pon_female", ""),
         hdf5PoN_m=config.get("gatk_cnv_denoise_read_counts_by_sex", {}).get("pon_male", ""),
         hdf5Tumor="cnv_sv/gatk_collect_read_counts/{sample}_{type}.counts.hdf5",
-        sex="qc/peddy/{sample}/peddy.sex_check.csv"
+        sex="qc/peddy/{sample}/peddy.sex_check.csv",
     output:
         denoisedCopyRatio=temp("cnv_sv/gatk_cnv_denoise_read_counts/{sample}_{type}.clean.denoisedCR.tsv"),
         stdCopyRatio=temp("cnv_sv/gatk_cnv_denoise_read_counts/{sample}_{type}.clean.standardizedCR.tsv"),
@@ -66,7 +66,9 @@ rule gatk_cnv_denoise_read_counts_by_sex:
         threads=config.get("gatk_cnv_denoise_read_counts_by_sex", {}).get("threads", config["default_resources"]["threads"]),
         time=config.get("gatk_cnv_denoise_read_counts_by_sex", {}).get("time", config["default_resources"]["time"]),
         mem_mb=config.get("gatk_cnv_denoise_read_counts_by_sex", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
-        mem_per_cpu=config.get("gatk_cnv_denoise_read_counts_by_sex", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
+        mem_per_cpu=config.get("gatk_cnv_denoise_read_counts_by_sex", {}).get(
+            "mem_per_cpu", config["default_resources"]["mem_per_cpu"]
+        ),
         partition=config.get("gatk_cnv_denoise_read_counts_by_sex", {}).get("partition", config["default_resources"]["partition"]),
     container:
         config.get("gatk_cnv_denoise_read_counts_by_sex", {}).get("container", config["default_container"])
