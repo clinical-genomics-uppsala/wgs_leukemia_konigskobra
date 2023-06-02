@@ -114,6 +114,9 @@ gatk_cnv_collect_allelic_counts:
   container: "docker://hydragenetics/gatk4:4.2.2.0"
   SNP_interval: ""
 
+gatk_collect_read_counts:
+  container: "docker://hydragenetics/gatk4:4.2.2.0"
+  
 gatk_model_segments:
   container: "docker://hydragenetics/gatk4:4.2.2.0"
 
