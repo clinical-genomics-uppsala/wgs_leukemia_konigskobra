@@ -55,7 +55,6 @@ multiqc:
     RNA:
       config: "../../config/multiqc_rna_config.yaml"
 
-
 pindel_call:
   bedfile: "reference/pindel.bed"
 
