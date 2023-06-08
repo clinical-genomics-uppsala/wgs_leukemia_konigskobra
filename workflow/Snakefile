@@ -480,7 +480,7 @@ use rule * from qc as qc_*
 
 
 if aligner == "bwa_gpu":
-  
+
     use rule fastqc from qc as qc_fastqc with:
         resources:
             mem_mb=config.get("fastqc", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
