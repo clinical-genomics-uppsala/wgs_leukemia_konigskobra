@@ -56,6 +56,25 @@ def type_generator(types):
         return types
 
 
+def get_in_fq(wildcards):
+    input_list = []
+    for unit in get_units(units, wildcards, wildcards.type):
+        prefix = "prealignment/fastp_pe/{}_{}_{}_{}_{}".format(unit.sample, unit.flowcell, unit.lane, unit.barcode, unit.type)
+        input_unit = "{}_fastq1.fastq.gz {}_fastq2.fastq.gz {}".format(
+            prefix,
+            prefix,
+            "'@RG\\tID:{}\\tSM:{}\\tPL:{}\\tPU:{}\\tLB:{}'".format(
+                "{}_{}.{}.{}".format(unit.sample, unit.type, unit.lane, unit.barcode),
+                "{}_{}".format(unit.sample, unit.type),
+                unit.platform,
+                "{}.{}.{}".format(unit.flowcell, unit.lane, unit.barcode),
+                "{}_{}".format(unit.sample, unit.type),
+            ),
+        )
+        input_list.append(input_unit)
+    return " --in-fq ".join(input_list)
+
+
 def get_bam_input(wildcards, t_n=None, use_sample_wildcard=True):
     if use_sample_wildcard is True and t_n is None:
         sample_str = "{}_{}".format(wildcards.sample, wildcards.type)
@@ -77,6 +96,15 @@ def get_bam_input(wildcards, t_n=None, use_sample_wildcard=True):
     bai_input = "{}.bai".format(bam_input)
 
     return (bam_input, bai_input)
+
+
+def get_num_gpus(rule, wildcards):
+    gres = config.get(rule, {"gres": "--gres=gres:gpu:1"}).get("gres", "--gres=gres:gpu:1")[len("--gres=") :]
+    gres_dict = dict()
+    for item in gres.split(","):
+        items = item.split(":")
+        gres_dict[items[1]] = items[2]
+    return gres_dict["gpu"]
 
 
 def get_vcf_input(wildcards):

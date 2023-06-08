@@ -423,6 +423,22 @@ use rule * from parabricks as parabricks_*
 
 use rule pbrun_fq2bam from parabricks as parabricks_pbrun_fq2bam with:
     priority: 5
+    params:
+        extra=config.get("pbrun_fq2bam", {}).get("extra", ""),
+        in_fq=get_in_fq,
+        num_gpus=lambda wildcards: get_num_gpus("pbrun_fq2bam", wildcards),
+
+
+use rule pbrun_mutectcaller_t from parabricks as parabricks_pbrun_mutectcaller_t with:
+    params:
+        extra=config.get("pbrun_mutectcaller_t", {}).get("extra", ""),
+        num_gpus=lambda wildcards: get_num_gpus("pbrun_mutectcaller_t", wildcards),
+
+
+use rule pbrun_mutectcaller_tn from parabricks as parabricks_pbrun_mutectcaller_tn with:
+    params:
+        extra=config.get("pbrun_mutectcaller_tn", {}).get("extra", ""),
+        num_gpus=lambda wildcards: get_num_gpus("pbrun_mutectcaller_tn", wildcards),
 
 
 module sentieon:
@@ -461,6 +477,18 @@ module qc:
 
 
 use rule * from qc as qc_*
+
+
+if aligner == "bwa_gpu":
+
+    use rule fastqc from qc as qc_fastqc with:
+        resources:
+            mem_mb=config.get("fastqc", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
+            mem_per_cpu=config.get("fastqc", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
+            partition=config.get("fastqc", {}).get("partition", config["default_resources"]["partition"]),
+            threads=config.get("fastqc", {}).get("threads", config["default_resources"]["threads"]),
+            time=config.get("fastqc", {}).get("time", config["default_resources"]["time"]),
+            load=25,
 
 
 use rule mosdepth from qc as qc_mosdepth with:
