@@ -170,6 +170,8 @@ default container: `docker://hydragenetics/common:0.1.9`
 | STAR-Fusion | 1.10.1 | `docker://trinityctat/starfusion:1.10.1` |
 | VEP | 105 | `docker://hydragenetics/vep:105` |
 
-## :judge: Rule Graph
+## :judge: Rule Graph Parabricks version
 
 ![rule_graph](images/rulegraph.svg)
+
+## :judge: Rule Graph Sentieon version
