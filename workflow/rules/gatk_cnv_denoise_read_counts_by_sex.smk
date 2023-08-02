@@ -50,12 +50,12 @@ rule gatk_cnv_denoise_read_counts_by_sex:
         hdf5Tumor="cnv_sv/gatk_collect_read_counts/{sample}_{type}.counts.hdf5",
         sex="qc/peddy/{sample}/peddy.sex_check.csv",
     output:
-        denoisedCopyRatio=temp("cnv_sv/gatk_cnv_denoise_read_counts/{sample}_{type}.clean.denoisedCR.tsv"),
-        stdCopyRatio=temp("cnv_sv/gatk_cnv_denoise_read_counts/{sample}_{type}.clean.standardizedCR.tsv"),
+        denoisedCopyRatio=temp("cnv_sv/gatk_denoise_read_counts/{sample}_{type}.clean.denoisedCR.tsv"),
+        stdCopyRatio=temp("cnv_sv/gatk_denoise_read_counts/{sample}_{type}.clean.standardizedCR.tsv"),
     params:
         extra=config.get("gatk_cnv_denoise_read_counts_by_sex", {}).get("extra", ""),
     log:
-        "cnv_sv/gatk_cnv_denoise_read_counts/{sample}_{type}.clean.denoisedCR.tsv.log",
+        "cnv_sv/gatk_denoise_read_counts/{sample}_{type}.clean.denoisedCR.tsv.log",
     benchmark:
         repeat(
             "cnv_sv/gatk_cnv_denoise_read_counts/{sample}_{type}.clean.denoisedCR.tsv.benchmark.tsv",
@@ -115,8 +115,8 @@ rule gatk_cnv_denoise_read_counts_by_sex:
 
 rule gatk_model_segments:
     input:
-        denoisedCopyRatio="cnv_sv/gatk_cnv_denoise_read_counts/{sample}_{type}.clean.denoisedCR.tsv",
-        allelicCounts="cnv_sv/gatk_cnv_collect_allelic_counts/{sample}_{type}.clean.allelicCounts.tsv",
+        denoisedCopyRatio="cnv_sv/gatk_denoise_read_counts/{sample}_{type}.clean.denoisedCR.tsv",
+        allelicCounts="cnv_sv/gatk_collect_allelic_counts/{sample}_{type}.clean.allelicCounts.tsv",
     output:
         temp("cnv_sv/gatk_model_segments/{sample}_{type}.clean.modelFinal.seg"),
         temp("cnv_sv/gatk_model_segments/{sample}_{type}.clean.cr.seg"),
