@@ -11,14 +11,14 @@ rule gatk_cnv_collect_allelic_counts:
         interval=config.get("gatk_cnv_collect_allelic_counts", {}).get("SNP_interval", ""),
         ref=config["reference"]["fasta"],
     output:
-        temp("cnv_sv/gatk_cnv_collect_allelic_counts/{sample}_{type}.clean.allelicCounts.tsv"),
+        temp("cnv_sv/gatk_collect_allelic_counts/{sample}_{type}.clean.allelicCounts.tsv"),
     params:
         extra=config.get("gatk_cnv_collect_allelic_counts", {}).get("extra", ""),
     log:
-        "cnv_sv/gatk_cnv_collect_allelic_counts/{sample}_{type}.clean.allelicCounts.tsv.log",
+        "cnv_sv/gatk_collect_allelic_counts/{sample}_{type}.clean.allelicCounts.tsv.log",
     benchmark:
         repeat(
-            "cnv_sv/gatk_cnv_collect_allelic_counts/{sample}_{type}.clean.allelicCounts.tsv.benchmark.tsv",
+            "cnv_sv/gatk_collect_allelic_counts/{sample}_{type}.clean.allelicCounts.tsv.benchmark.tsv",
             config.get("gatk_cnv_collect_allelic_counts", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("gatk_cnv_collect_allelic_counts", {}).get("threads", config["default_resources"]["threads"])
@@ -33,7 +33,7 @@ rule gatk_cnv_collect_allelic_counts:
     container:
         config.get("gatk_cnv_collect_allelic_counts", {}).get("container", config["default_container"])
     message:
-        "{rule}: Use gatk_cnv to obtain cnv_sv/gatk_cnv_collect_allelic_counts/{wildcards.sample}_{wildcards.type}.clean.allelicCounts.tsv"
+        "{rule}: Use gatk_cnv to obtain cnv_sv/gatk_collect_allelic_counts/{wildcards.sample}_{wildcards.type}.clean.allelicCounts.tsv"
     shell:
         "(gatk --java-options '-Xmx32g' CollectAllelicCounts "
         "-L {input.interval} "

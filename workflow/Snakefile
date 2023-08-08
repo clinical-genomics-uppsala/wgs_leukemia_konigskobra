@@ -27,7 +27,6 @@ ruleorder: _results_pindel_vcf > misc_bgzip
 ruleorder: gatk_model_segments > cnv_sv_gatk_model_segments
 ruleorder: _results_svdb_vcf > misc_bgzip
 ruleorder: _results_svdb_tbi > misc_tabix
-ruleorder: gatk_cnv_denoise_read_counts_by_sex > cnv_sv_gatk_denoise_read_counts
 
 
 aligner = config.get("aligner", None)
@@ -189,7 +188,7 @@ module cnv_sv:
         config
 
 
-use rule * from cnv_sv exclude cnvkit_call, cnvkit_scatter, gatk_cnv_denoise_read_counts, gatk_cnv_collect_allelic_counts as cnv_sv_*
+use rule * from cnv_sv exclude cnvkit_call, cnvkit_scatter, gatk_denoise_read_counts, gatk_collect_allelic_counts as cnv_sv_*
 
 
 use rule cnvkit_batch from cnv_sv as cnv_sv_cnvkit_batch with:
