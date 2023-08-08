@@ -33,7 +33,7 @@ reference:
 trimmer_software: "fastp_pe"
 
 annotate_cnv:
-  cna_exons: "/beegfs-storage/data/ref_genomes/GRCh38/gene_lists/hg38_CNA.bed" 
+  cna_exons: "reference/hg38_CNA.bed" 
 
 arriba:
   assembly: "reference/assembly.fasta"
