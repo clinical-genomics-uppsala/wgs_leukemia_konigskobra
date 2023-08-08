@@ -119,7 +119,7 @@ filter_vcf:
   cnv_hardfilter: "config/config_cnv_hardfilter.yaml"
 
 fusioncatcher:
-  container: "docker://blcdsdockerregistry/fusioncatcher:1.33"
+  container: "docker://hydragenetics/fusioncatcher:1.3"
   genome_path: ""
 
 gatk_call_copy_ratio_segments:
