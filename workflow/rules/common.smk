@@ -4,6 +4,8 @@ __email__ = "arielle.munters@scilifelab.uu.se, nina.hollfelder@scilifelab.uu.se"
 __license__ = "GPL-3"
 
 import pandas as pd
+from snakemake.io import Wildcards
+from typing import List, Union
 from snakemake.utils import validate
 from snakemake.utils import min_version
 
@@ -119,6 +121,62 @@ def get_vcf_input(wildcards):
         sys.exit("valid options for aligner are: bwa_gpu or bwa_sentieon")
 
     return vcf_input
+
+
+def get_cnv_callers(tc_method):
+    for tcm in config.get("svdb_merge", {}).get("tc_method", []):
+        if tcm["name"] == tc_method:
+            return tcm["cnv_caller"]
+    raise ValueError(f"no cnv caller config available for tc_method {tc_method}")
+
+
+def get_unfiltered_cnv_vcfs_for_merge_json(wildcards):
+    cnv_vcfs = []
+    tags = config.get("cnv_html_report", {}).get("cnv_vcf", [])
+    for t in tags:
+        cnv_vcfs.append(
+            f"cnv_sv/svdb_query/{wildcards.sample}_{wildcards.type}.{wildcards.tc_method}.svdb_query."
+            f"annotate_cnv.{t['annotation']}.vcf.gz"
+        )
+    return sorted(cnv_vcfs)
+
+
+def get_filtered_cnv_vcfs_for_merge_json(wildcards):
+    cnv_vcfs = []
+    tags = config.get("cnv_html_report", {}).get("cnv_vcf", [])
+    for t in tags:
+        cnv_vcfs.append(
+            f"cnv_sv/svdb_query/{wildcards.sample}_{wildcards.type}.{wildcards.tc_method}.svdb_query."
+            f"annotate_cnv.{t['annotation']}.filter.{t['filter']}.vcf.gz"
+        )
+    return sorted(cnv_vcfs)
+
+
+def get_unfiltered_cnv_vcfs_tbi_for_merge_json(wildcards):
+    cnv_vcfs = []
+    tags = config.get("cnv_html_report", {}).get("cnv_vcf", [])
+    for t in tags:
+        cnv_vcfs.append(
+            f"cnv_sv/svdb_query/{wildcards.sample}_{wildcards.type}.{wildcards.tc_method}.svdb_query."
+            f"annotate_cnv.{t['annotation']}.vcf.gz.tbi"
+        )
+    return sorted(cnv_vcfs)
+
+
+def get_filtered_cnv_vcfs_tbi_for_merge_json(wildcards):
+    cnv_vcfs = []
+    tags = config.get("cnv_html_report", {}).get("cnv_vcf", [])
+    for t in tags:
+        cnv_vcfs.append(
+            f"cnv_sv/svdb_query/{wildcards.sample}_{wildcards.type}.{wildcards.tc_method}.svdb_query."
+            f"annotate_cnv.{t['annotation']}.filter.{t['filter']}.vcf.gz.tbi"
+        )
+    return sorted(cnv_vcfs)
+
+
+def get_json_for_merge_cnv_json(wildcards):
+    callers = get_cnv_callers(wildcards.tc_method)
+    return ["reports/cnv_html_report/{sample}_{type}.{caller}.{tc_method}.json".format(caller=c, **wildcards) for c in callers]
 
 
 def compile_output_list(wildcards):

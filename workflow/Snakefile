@@ -188,7 +188,7 @@ module cnv_sv:
         config
 
 
-use rule * from cnv_sv exclude cnvkit_call, cnvkit_scatter, gatk_cnv_denoise_read_counts, gatk_cnv_collect_allelic_counts as cnv_sv_*
+use rule * from cnv_sv exclude cnvkit_call, cnvkit_scatter, gatk_denoise_read_counts, gatk_collect_allelic_counts as cnv_sv_*
 
 
 use rule cnvkit_batch from cnv_sv as cnv_sv_cnvkit_batch with:
@@ -656,6 +656,32 @@ use rule rseqc_inner_distance from qc as qc_rseqc_inner_distance with:
         plot="qc/rseqc_inner_distance/{sample}_{type}.inner_distance_plot.pdf",
         rscrpt=temp("qc/rseqc_inner_distance/{sample}_{type}.inner_distance_plot.r"),
         txt=temp("qc/rseqc_inner_distance/{sample}_{type}.inner_distance.txt"),
+
+
+module reports:
+    snakefile:
+        github(
+            "hydra-genetics/reports",
+            path="workflow/Snakefile",
+            tag=config["modules"]["reports"],
+        )
+    config:
+        config
+
+
+use rule * from reports as reports_*
+
+
+use rule merge_cnv_json from reports as reports_merge_cnv_json with:
+    input:
+        json=get_json_for_merge_cnv_json,
+        fai=config.get("reference", {}).get("fai", ""),
+        annotation_bed=list(config.get("annotate_cnv", {}).values()),
+        germline_vcf=lambda wildcards: get_vcf_input(wildcards),
+        filtered_cnv_vcfs=get_filtered_cnv_vcfs_for_merge_json,
+        cnv_vcfs=get_unfiltered_cnv_vcfs_for_merge_json,
+        filtered_cnv_vcfs_tbi=get_filtered_cnv_vcfs_tbi_for_merge_json,
+        cnv_vcfs_tbi=get_unfiltered_cnv_vcfs_tbi_for_merge_json,
 
 
 module misc:
