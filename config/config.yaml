@@ -7,7 +7,7 @@ aligner: "bwa_gpu" # bwa_gpu or bwa_sentieon
 
 modules:
   alignment: "906d25d0d4791eb5a54cba9954fddf29e27b85dd"
-  annotation: "e58432c3467db31621ab51a16034a026cf2a2c84"
+  annotation: "3a05574"
   cnv_sv: "v0.4.1"
   compression: "v1.1.0"
   filtering: "b7f4dc3"
@@ -15,6 +15,7 @@ modules:
   parabricks: "v0.2.0"
   prealignment: "v0.5.0"
   qc: "v0.3.0"
+  reports: "7c8b8c5"
   misc: "v0.1.0"
   sentieon: "develop"
 
@@ -30,7 +31,9 @@ reference:
   wgs_intervals: ""
   design_intervals: "" #hsmetrics
   design_intervals_gatk_cnv: ""
-
+  skip_chrs:
+    - chrM
+ 
 trimmer_software: "fastp_pe"
 
 arriba:
@@ -45,6 +48,9 @@ arriba_draw_fusion:
   cytobands: ""
   gtf: ""
   protein_domains: ""
+
+annotate_cnv:
+  cna_exons: "" 
 
 bcftools_SNV:
   all: ""
@@ -84,6 +90,14 @@ cnvkit_table:
 cnvkit_vcf:
   container: "docker://python:3.9.9-slim-buster"
 
+
+cnv_html_report:
+  show_table: true
+  template_dir: ""
+  cnv_vcf:
+    - annotation: cna_exons
+      filter: cnv_hardfilter
+
 manta_config_t:
   container: "docker://hydragenetics/manta:1.6.0"
 
@@ -102,6 +116,7 @@ fastqc:
 
 filter_vcf:
   germline: "config/config_germline_filter.yaml"
+  cnv_hardfilter: "config/config_cnv_hardfilter.yaml"
 
 fusioncatcher:
   container: "docker://blcdsdockerregistry/fusioncatcher:1.33"
