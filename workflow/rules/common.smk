@@ -175,8 +175,8 @@ def get_filtered_cnv_vcfs_tbi_for_merge_json(wildcards):
 
 
 def get_json_for_merge_cnv_json(wildcards):
-  callers = get_cnv_callers(wildcards.tc_method)
-  return ["reports/cnv_html_report/{sample}_{type}.{caller}.{tc_method}.json".format(caller=c, **wildcards) for c in callers]
+    callers = get_cnv_callers(wildcards.tc_method)
+    return ["reports/cnv_html_report/{sample}_{type}.{caller}.{tc_method}.json".format(caller=c, **wildcards) for c in callers]
 
 
 def compile_output_list(wildcards):

@@ -58,10 +58,12 @@ elif aligner == "bwa_gpu":
     ruleorder: parabricks_pbrun_fq2bam > alignment_samtools_index
     ruleorder: _results_star_crai > alignment_samtools_index
 
+
 elif aligner == "bwa_sentieon":
 
     ruleorder: sentieon_dedup > alignment_samtools_index
     ruleorder: sentieon_realigner > alignment_samtools_index
+
 
 else:
     sys.exit("valid options for aligner are: bwa_gpu or bwa_sentieon")
