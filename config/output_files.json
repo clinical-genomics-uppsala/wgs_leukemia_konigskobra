@@ -33,6 +33,7 @@
   "Results/{project}/{sample}/CNV/{sample}_T_chr{chr}.png": {"name": "_results_cnvkit_scatter", "file": "cnv_sv/cnvkit_scatter/{sample}_T_chr{chr}.png", "types": ["T"]},
   "Results/{project}/{sample}/CNV/GATK/{sample}_T.pathology.vcf.gz": {"name": "_results_gatk_vcf", "file": "cnv_sv/gatk_vcf/{sample}_T.pathology.vcf.gz", "types": ["T"]},
   "Results/{project}/{sample}/CNV/GATK/{sample}_T.pathology.vcf.gz.tbi": {"name": "_results_gatk_vcf_tbi", "file": "cnv_sv/gatk_vcf/{sample}_T.pathology.vcf.gz.tbi", "types": ["T"]},
+  "Results/{project}/{sample}/CNV/cnv_html_report/{sample}_T.pathology.cnv_report.html": {"name": "_results_cnv_html_report", "file": "reports/cnv_html_report/{sample}_T.pathology.cnv_report.html", "types": ["T"]},
 
   "Results/{project}/{sample}/SV/{sample}_manta_T.ssa.vcf.gz": {"name": "_results_manta_t_vcf", "file": "cnv_sv/manta_run_workflow_t/{sample}.ssa.vcf.gz", "types": ["T"]},
   "Results/{project}/{sample}/SV/{sample}_manta_T.ssa.vcf.gz.tbi": {"name": "_results_manta_t_tbi", "file": "cnv_sv/manta_run_workflow_t/{sample}.ssa.vcf.gz.tbi", "types": ["T"]},
