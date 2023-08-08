@@ -89,8 +89,8 @@ filter_vcf:
   germline: "../../config/config_germline_filter.yaml"
   cnv_hardfilter: "/../../config_cnv_hardfilter.yaml"
 
-  fusioncatcher:
-  genome_path: "reference/"
+fusioncatcher:
+  genome_path: "reference"
 
 gatk_cnv_collect_allelic_counts:
   container: "docker://hydragenetics/gatk4:4.2.2.0"
