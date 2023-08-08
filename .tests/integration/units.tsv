@@ -2,3 +2,4 @@ sample	type	platform	machine	flowcell	lane	barcode	fastq1	fastq2	adapter
 NA12878	T	illumina	NovaSeq	1FLOWCELL	L001	ACGGAACA	input/NA12878_T_R1.fq.gz	input/NA12878_T_R2.fq.gz	AAAA,TTTT
 NA12878	N	illumina	NovaSeq	1FLOWCELL	L001	ACGGAACA	input/NA12878_N_R1.fq.gz	input/NA12878_N_R2.fq.gz	CCCC,GGGG
 NA12878	R	illumina	NovaSeq	1FLOWCELL	L001	ACGGAACA	input/NA12878_R_R1.fq.gz	input/NA12878_R_R1.fq.gz	CCCC,GGGG
+NA12878	R	illumina	NovaSeq	1FLOWCELL	L001	ACGGAACA	input/NA12878_R_R2.fq.gz	input/NA12878_R_R2.fq.gz	CCCC,GGGG
