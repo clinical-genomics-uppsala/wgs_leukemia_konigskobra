@@ -15,7 +15,7 @@ datei = vcf.Reader(open(input_file, "r"))
 
 with open(output_file_dels, "wt") as tsv:
     tsv_writer = csv.writer(tsv, delimiter='\t')
-    tsv_writer.writerow(["#POSITION1", "POSITION2", "LENGTH", "MANTAID", "GENES", "ANNOTATIONINFO"])
+    tsv_writer.writerow(["#POSITION1", "POSITION2", "LENGTH", "MANTAID", "GENES", "ANNOTATIONINFO", "PR_ALT_FREQ", "SR_ALT_FREQ"])
     for row in datei:
         if "MantaDEL" in row.ID and not any(xxx in ["MinQUAL", "MinGQ", "MinSomaticScore",
                                                     "Ploidy", "MaxDepth", "MaxMQ0Frac", "NoPairSupport", "SampleFT", "HomRef"]
@@ -24,16 +24,38 @@ with open(output_file_dels, "wt") as tsv:
             dellength = row.INFO["SVLEN"]
             pos2 = row.INFO["END"]
             manta_id = ":".join(row.ID.split(":")[0:2])
+            # get frequency of paired and split alternate reads
+            last_sample_index = len(row.samples) - 1
+            last_sample = row.samples[last_sample_index]
+            pr_values = last_sample.data.PR if hasattr(last_sample.data, 'PR') else None
+            sr_values = last_sample.data.SR if hasattr(last_sample.data, 'SR') else None
+            if pr_values:
+                pr_denominator, pr_numerator = pr_values
+                pr_frequency = pr_numerator / (pr_denominator + pr_numerator) if pr_denominator + pr_numerator != 0 else None
+            else:
+                pr_frequency = None
+
+            if sr_values:
+                sr_denominator, sr_numerator = sr_values
+                sr_frequency = sr_numerator / (sr_denominator + sr_numerator) if sr_denominator + sr_numerator != 0 else None
+            else:
+                sr_frequency = None
+
+            # Format frequencies only if they are not None
+            pr_formatted = f"{pr_frequency:.4f}" if pr_frequency is not None else 'NA'
+            sr_formatted = f"{sr_frequency:.4f}" if sr_frequency is not None else 'NA'
             if dellength[0] <= -100:
                 tsv_writer.writerow([row.CHROM + ":" + str(row.POS), row.CHROM + ":" + str(pos2),
-                                    str(dellength)[1:-1], manta_id, genes[3] + "(" + genes[4] + ")", row.FILTER])
+                                    str(dellength)[1:-1], manta_id, genes[3] + "(" + genes[4] + ")",
+                                    row.FILTER, str(pr_formatted), str(sr_formatted)])
 
 
 datei = vcf.Reader(open(input_file, "r"))
 
 with open(output_file_dup, "wt") as tsv:
     tsv_writer = csv.writer(tsv, delimiter='\t')
-    tsv_writer.writerow(["#POSITION1", "POSITION2", "LENGTH", "MANTAID", "GENES", "HOMLENGTH", "HOMSEQ", "ANNOTATIONINFO"])
+    tsv_writer.writerow(["#POSITION1", "POSITION2", "LENGTH", "MANTAID", "GENES", "HOMLENGTH", "HOMSEQ", "ANNOTATIONINFO",
+                         "PR_ALT_FREQ", "SR_ALT_FREQ"])
     for row in datei:
         if "MantaDUP" in row.ID and not any(xxx in ["MinQUAL", "MinGQ", "MinSomaticScore", "Ploidy",
                                                     "MaxDepth", "MaxMQ0Frac", "NoPairSupport", "SampleFT",
@@ -48,9 +70,30 @@ with open(output_file_dup, "wt") as tsv:
             except KeyError:
                 homlen = "NA"
                 homseq = "NA"
+            # get frequency of paired and split alternate reads
+            last_sample_index = len(row.samples) - 1
+            last_sample = row.samples[last_sample_index]
+            pr_values = last_sample.data.PR if hasattr(last_sample.data, 'PR') else None
+            sr_values = last_sample.data.SR if hasattr(last_sample.data, 'SR') else None
+            if pr_values:
+                pr_denominator, pr_numerator = pr_values
+                pr_frequency = pr_numerator / (pr_denominator + pr_numerator) if pr_denominator + pr_numerator != 0 else None
+            else:
+                pr_frequency = None
+
+            if sr_values:
+                sr_denominator, sr_numerator = sr_values
+                sr_frequency = sr_numerator / (sr_denominator + sr_numerator) if sr_denominator + sr_numerator != 0 else None
+            else:
+                sr_frequency = None
+
+            # Format frequencies only if they are not None
+            pr_formatted = f"{pr_frequency:.4f}" if pr_frequency is not None else 'NA'
+            sr_formatted = f"{sr_frequency:.4f}" if sr_frequency is not None else 'NA'
             if dellength[0] >= 100:
                 tsv_writer.writerow([row.CHROM + ":" + str(row.POS), row.CHROM + ":" + str(pos2), str(dellength)[1:-1],
-                                    manta_id, genes[3] + "(" + genes[4] + ")", str(homlen)[1:-1], str(homseq)[1:-1], row.FILTER])
+                                    manta_id, genes[3] + "(" + genes[4] + ")", str(homlen)[1:-1], str(homseq)[1:-1],
+                                    row.FILTER, str(pr_formatted), str(sr_formatted)])
 
 
 datei = vcf.Reader(open(input_file, "r"))
@@ -58,7 +101,7 @@ datei = vcf.Reader(open(input_file, "r"))
 with open(output_file_ins, "wt") as tsv:
     tsv_writer = csv.writer(tsv, delimiter='\t')
     tsv_writer.writerow(["#POSITION", "REFERENCE", "ALTERNATIVE", "LENGTH", "MANTAID", "GENES",
-                         "HOMLENGTH", "HOMSEQ", "ANNOTATIONINFO"])
+                         "HOMLENGTH", "HOMSEQ", "ANNOTATIONINFO", "PR_ALT_FREQ", "SR_ALT_FREQ"])
     for row in datei:
         if "MantaINS" in row.ID and not any(xxx in ["MinQUAL", "MinGQ", "MinSomaticScore", "Ploidy",
                                                     "MaxDepth", "MaxMQ0Frac", "NoPairSupport", "SampleFT", "HomRef"]
@@ -78,6 +121,27 @@ with open(output_file_ins, "wt") as tsv:
                 homlen = "NA"
                 homseq = "NA"
             manta_id = ":".join(row.ID.split(":")[0:2])
+            # get frequency of paired and split alternate reads
+            last_sample_index = len(row.samples) - 1
+            last_sample = row.samples[last_sample_index]
+            pr_values = last_sample.data.PR if hasattr(last_sample.data, 'PR') else None
+            sr_values = last_sample.data.SR if hasattr(last_sample.data, 'SR') else None
+            if pr_values:
+                pr_denominator, pr_numerator = pr_values
+                pr_frequency = pr_numerator / (pr_denominator + pr_numerator) if pr_denominator + pr_numerator != 0 else None
+            else:
+                pr_frequency = None
+
+            if sr_values:
+                sr_denominator, sr_numerator = sr_values
+                sr_frequency = sr_numerator / (sr_denominator + sr_numerator) if sr_denominator + sr_numerator != 0 else None
+            else:
+                sr_frequency = None
+
+            # Format frequencies only if they are not None
+            pr_formatted = f"{pr_frequency:.4f}" if pr_frequency is not None else 'NA'
+            sr_formatted = f"{sr_frequency:.4f}" if sr_frequency is not None else 'NA'
             if dellength == "NA" or dellength[0] >= 100:
                 tsv_writer.writerow([row.CHROM + ":" + str(row.POS), row.REF, str(row.ALT)[1:-1], str(dellength)[1:-1],
-                                     manta_id, genes[3] + "(" + genes[4] + ")", str(homlen)[1:-1], str(homseq)[1:-1], row.FILTER])
+                                     manta_id, genes[3] + "(" + genes[4] + ")", str(homlen)[1:-1], str(homseq)[1:-1],
+                                     row.FILTER, str(pr_formatted), str(sr_formatted)])
