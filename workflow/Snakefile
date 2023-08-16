@@ -686,7 +686,7 @@ use rule merge_cnv_json from reports as reports_merge_cnv_json with:
         cnv_vcfs_tbi=get_unfiltered_cnv_vcfs_tbi_for_merge_json,
 
 
-use rule cnv_json from reports as reports_cnv_json_chr with: 
+use rule cnv_json from reports as reports_cnv_json_chr with:
     output:
         json=temp("reports/cnv_html_report/{sample}_{type}.{caller}.{tc_method}.{locus}.json"),
     params:
