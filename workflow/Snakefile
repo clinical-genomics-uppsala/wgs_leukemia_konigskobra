@@ -690,7 +690,11 @@ use rule cnv_json from reports as reports_cnv_json_chr with:
     output:
         json=temp("reports/cnv_html_report/{sample}_{type}.{caller}.{tc_method}.{locus}.json"),
     params:
-        skip_chromosomes=lambda wildcards: [chromosome for chromosome in ['chr' + str(i) for i in range(1, 23)] + ['chrX', 'chrY', 'chrM'] if chromosome != wildcards.locus],
+        skip_chromosomes=lambda wildcards: [
+            chromosome
+            for chromosome in ['chr' + str(i) for i in range(1, 23)] + ['chrX', 'chrY', 'chrM']
+            if chromosome != wildcards.locus
+        ],
     log:
         "reports/cnv_html_report/{sample}_{type}.{caller}.{tc_method}.{locus}.json.log",
     benchmark:
@@ -707,7 +711,7 @@ use rule cnv_html_report from reports as reports_cnv_html_report with:
     params:
         include_table=config.get("cnv_html_report", {}).get("show_table", True),
         tc=get_tc,
-        tc_method="pathology"
+        tc_method="pathology",
 
 
 module misc:
