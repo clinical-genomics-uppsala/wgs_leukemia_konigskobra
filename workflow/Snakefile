@@ -10,6 +10,8 @@ include: "rules/gatk_cnv_denoise_read_counts_by_sex.smk"
 include: "rules/manta_to_tsv.smk"
 include: "rules/cnvkit.smk"
 include: "rules/peddy_create_ped.smk"
+include: "rules/html_output.smk"
+include: "rules/fix_af.smk"
 
 
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
@@ -682,6 +684,34 @@ use rule merge_cnv_json from reports as reports_merge_cnv_json with:
         cnv_vcfs=get_unfiltered_cnv_vcfs_for_merge_json,
         filtered_cnv_vcfs_tbi=get_filtered_cnv_vcfs_tbi_for_merge_json,
         cnv_vcfs_tbi=get_unfiltered_cnv_vcfs_tbi_for_merge_json,
+
+
+use rule cnv_json from reports as reports_cnv_json_chr with:
+    output:
+        json=temp("reports/cnv_html_report/{sample}_{type}.{caller}.{tc_method}.{locus}.json"),
+    params:
+        skip_chromosomes=lambda wildcards: [
+            chromosome
+            for chromosome in ['chr' + str(i) for i in range(1, 23)] + ['chrX', 'chrY', 'chrM']
+            if chromosome != wildcards.locus
+        ],
+    log:
+        "reports/cnv_html_report/{sample}_{type}.{caller}.{tc_method}.{locus}.json.log",
+    benchmark:
+        repeat(
+            "reports/cnv_html_report/{sample}_{type}.{caller}.{tc_method}.{locus}.json.benchmark.tsv",
+            config.get("cnv_json", {}).get("benchmark_repeats", 1),
+        )
+    message:
+        "{rule}: Create JSON representation for CNV results per from {wildcards.caller} "
+        "for {wildcards.sample}_{wildcards.type} {wildcards.locus}"
+
+
+use rule cnv_html_report from reports as reports_cnv_html_report with:
+    params:
+        include_table=config.get("cnv_html_report", {}).get("show_table", True),
+        tc=get_tc,
+        tc_method="pathology",
 
 
 module misc:
