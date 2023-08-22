@@ -12,8 +12,8 @@ modules:
   compression: "v1.1.0"
   filtering: "b7f4dc3"
   fusions: "12f8354"
-  parabricks: "v0.2.0"
-  prealignment: "v0.5.0"
+  parabricks: "v1.1.0"
+  prealignment: "v1.1.0"
   qc: "v0.3.0"
   reports: "7c8b8c5"
   misc: "v0.1.0"
@@ -199,11 +199,20 @@ multiqc:
         - "qc/rseqc_gene_body_coverage/{sample}_{type}.geneBodyCoverage.txt"
         - "qc/rseqc_inner_distance/{sample}_{type}.inner_distance.txt"
         - "qc/rseqc_inner_distance/{sample}_{type}.inner_distance_freq.txt"
-        - "prealignment/fastp_pe/{sample}_{flowcell}_{lane}_{barcode}_{type}_fastp.json"
+        - "prealignment/fastp_pe/{sample}_{type}_{flowcell}_{lane}_{barcode}_fastp.json"
         - "prealignment/sortmerna/{sample}_{type}.rrna.log"
         - "qc/multiqc/RNA_number.table.tsv"
         - "qc/picard_collect_alignment_summary_metrics/{sample}_{type}.alignment_summary_metrics.txt"
 
+pbrun_fq2bam:
+  container: "docker://nvcr.io/nvidia/clara/clara-parabricks:4.0.0-1"
+
+pbrun_mutectcaller_t:
+  container: "docker://nvcr.io/nvidia/clara/clara-parabricks:4.0.0-1"
+
+pbrun_mutectcaller_tn:
+  container: "docker://nvcr.io/nvidia/clara/clara-parabricks:4.0.0-1"
+  
 peddy:
   container: "docker://hydragenetics/peddy:0.4.8"
   extra: "--sites hg38 "

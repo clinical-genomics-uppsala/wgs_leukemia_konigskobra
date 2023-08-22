@@ -9,8 +9,8 @@ modules:
   compression: "v1.1.0"
   filtering: "b7f4dc3"
   fusions: "12f8354"
-  parabricks: "v0.2.0"
-  prealignment: "v0.5.0"
+  parabricks: "v1.1.0"
+  prealignment: "v1.1.0"
   qc: "v0.3.0"
   misc: "v0.1.0"
   sentieon: "develop"
@@ -127,6 +127,15 @@ multiqc:
       config: "../../config/multiqc_dna_config.yaml"
     RNA:
       config: "../../config/multiqc_rna_config.yaml"
+
+pbrun_fq2bam:
+  container: "docker://nvcr.io/nvidia/clara/clara-parabricks:4.0.0-1"
+
+pbrun_mutectcaller_t:
+  container: "docker://nvcr.io/nvidia/clara/clara-parabricks:4.0.0-1"
+
+pbrun_mutectcaller_tn:
+  container: "docker://nvcr.io/nvidia/clara/clara-parabricks:4.0.0-1"
 
 peddy:
   container: "docker://hydragenetics/peddy:0.4.8"
