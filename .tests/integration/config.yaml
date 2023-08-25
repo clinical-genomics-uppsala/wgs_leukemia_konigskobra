@@ -140,6 +140,7 @@ pbrun_mutectcaller_tn:
 peddy:
   container: "docker://hydragenetics/peddy:0.4.8"
   extra: "--sites hg38 "
+  config: "peddy_mqc.tsv" 
 
 pindel_update_vcf_sequence_dictionary:
   container: "docker://hydragenetics/picard:2.25.0"

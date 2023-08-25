@@ -1,0 +1,41 @@
+peddy_sex_check:
+  parent_id: peddy_section
+  parent_name: "Peddy"
+  parent_description: "This parent section contains one or more sub-sections below it"
+  id: 'peddy_sex_check_table'
+  format: tsv
+  plot_type: 'table'
+  section_name: 'Sex check'
+  description: 'Check on the sex of a sample made with Peddy'
+  pconfig:
+       namespace: 'Cust Data2'
+  headers:
+    ped_sex:
+      title: ped_sex
+      description: sex from .ped file
+    hom_ref_count:
+      title: hom_ref_count
+      description: number of homozygous-reference calls
+      hidden: True
+    het_count:
+      title: het_count
+      description: number of heterozygote calls
+      hidden: True
+    hom_alt_count:
+      title: hom_alt_count
+      description:  number of homozygous-alternate calls
+      hidden: True
+    het_ratio:
+      title: het_ratio
+      description: ratio of het_count / hom_alt_count. Low for males, high for females
+      hidden: True
+    predicted_sex:
+      title: predicted_sex
+      description: sex predicted from rate of hets on chrX.
+    error:
+      title: sex error
+      description: Boolean indicating wether there is a mismatch between chrX genotypes and ped sex.
+      hidden: True
+    sex_check_test:
+      title: Sex check test
+      description: Pass when the sex from the pedigree information agrees with the sex predicted for the chrX genotypes
