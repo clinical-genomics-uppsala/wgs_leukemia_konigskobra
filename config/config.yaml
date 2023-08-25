@@ -219,6 +219,7 @@ pbrun_mutectcaller_tn:
 peddy:
   container: "docker://hydragenetics/peddy:0.4.8"
   extra: "--sites hg38 "
+  config: "config/peddy_mqc.yaml" 
 
 picard_collect_alignment_summary_metrics:
   container: "docker://hydragenetics/picard:2.25.0"
