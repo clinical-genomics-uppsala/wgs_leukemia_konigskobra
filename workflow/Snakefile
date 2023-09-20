@@ -14,6 +14,7 @@ include: "rules/html_output.smk"
 include: "rules/fix_af.smk"
 include: "rules/dux4_rearrangements.smk"
 
+
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_bgzip
 ruleorder: cnv_sv_manta_run_workflow_t > misc_tabix
