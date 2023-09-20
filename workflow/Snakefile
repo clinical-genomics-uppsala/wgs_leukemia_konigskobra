@@ -12,6 +12,7 @@ include: "rules/cnvkit.smk"
 include: "rules/peddy_create_ped.smk"
 include: "rules/html_output.smk"
 include: "rules/fix_af.smk"
+include: "rules/dux4_rearrangements.smk"
 
 
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
@@ -397,7 +398,7 @@ use rule arriba from fusions as fusions_arriba with:
 use rule fusioncatcher from fusions as fusions_fusioncatcher with:
     priority: 4
     output:
-        fusions="fusions/fusioncatcher/{sample}_{type}/final-list_candidate-fusion-genes.hg19.txt",
+        fusions="fusions/fusioncatcher/{sample}_{type}/final-list_candidate-fusion-genes.txt",
         fusions_summary="fusions/fusioncatcher/{sample}_{type}/summary_candidate_fusions.txt",
 
 

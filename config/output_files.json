@@ -2,10 +2,13 @@
   "Results/MultiQC_TN.html": {"name": "_results_multiqc_dna", "file": "qc/multiqc/multiqc_DNA.html",  "types": ["T", "N"]},
   "Results/MultiQC_R.html": {"name": "_results_multiqc_rna", "file": "qc/multiqc/multiqc_RNA.html",  "types": ["R"]},
 
+  "Results/{project}/{sample}/DNA_fusions/{sample}_T.dux4_igh_read_count.txt": {"name": "_results_dux4_igh", "file": "reports/dux_read_counts/{sample}_T.dux4_igh.txt", "types": ["T"]},
+  "Results/{project}/{sample}/DNA_fusions/{sample}_T.dux4_erg_read_count.txt": {"name": "_results_dux4_erg", "file": "reports/dux_read_counts/{sample}_T.dux4_erg.txt", "types": ["T"]},
+
   "Results/{project}/{sample}/RNA_fusions/{sample}_R.arriba.tsv": {"name": "_results_arriba", "file": "fusions/arriba/{sample}_R.fusions.tsv", "types": ["R"]},
   "Results/{project}/{sample}/RNA_fusions/{sample}_R.arriba.plot.pdf": {"name": "_results_arriba_draw_fusion", "file": "fusions/arriba_draw_fusion/{sample}_R.pdf", "types": ["R"]},
   "Results/{project}/{sample}/RNA_fusions/{sample}_R.star_fusion.tsv": {"name": "_results_star_fusion", "file": "fusions/star_fusion/{sample}_R/star-fusion.fusion_predictions.tsv", "types": ["R"]},
-  "Results/{project}/{sample}/RNA_fusions/{sample}_R.fusioncatcher.tsv": {"name": "_results_fusioncatcher", "file": "fusions/fusioncatcher/{sample}_R/final-list_candidate-fusion-genes.hg19.txt", "types": ["R"]},
+  "Results/{project}/{sample}/RNA_fusions/{sample}_R.fusioncatcher.tsv": {"name": "_results_fusioncatcher", "file": "fusions/fusioncatcher/{sample}_R/final-list_candidate-fusion-genes.txt", "types": ["R"]},
   "Results/{project}/{sample}/Cram/{sample}_R.bam": {"name": "_results_star_cram", "file": "alignment/star/{sample}_R.bam", "types": ["R"]},
   "Results/{project}/{sample}/Cram/{sample}_R.bam.bai": {"name": "_results_star_crai", "file": "alignment/star/{sample}_R.bam.bai", "types": ["R"]},
 
