@@ -144,6 +144,30 @@ All results (as described in table below) are located in: `Results/{project}/{sa
 | `SV/{sample}_manta_TN.bnd.aml.tsv` |  `.tsv` file for excel containing breakends found by Manta (filtered), filtered for AML genes|
 
 
+#### General Statistics - DNA
+The general statistics table are ordered based on the sample order in `SampleSheet.csv`, this is done by renaming the samples in two steps using the script `sample_order_multiqc.py`. To toggle between "Sample Order" and "Sample Name" use the buttons just above General Stats header.
+
+<br />
+
+| Column Name | Origin | Comment | 
+| --- | --- | --- |
+| M Reads | [Picard](https://broadinstitute.github.io/picard/) HSMetrics | Total number of reads in inputfile (`alignment/samtools_merge_bam/{sample}_{type}.bam`) |
+| % Mapped| [Samtools stats](http://www.htslib.org/doc/samtools-stats.html) | Only reads on target (`config[reference][design_bed]`) |
+| % Proper pairs| [Samtools stats](http://www.htslib.org/doc/samtools-stats.html) | Only reads on target (`config[reference][design_bed]`) |
+| Average Quality | [Samtools stats](http://www.htslib.org/doc/samtools-stats.html) | Ratio between sum of base quality over total length. Only reads on target (`config[reference][design_bed]`) |
+| Median | [Mosdepth](https://github.com/brentp/mosdepth) | Median Coverage over reference |
+| >= 10X | [Mosdepth](https://github.com/brentp/mosdepth) | Fraction of reference with coverage over 10x |
+| >= 30X | [Mosdepth](https://github.com/brentp/mosdepth) | Fraction of reference with coverage over 30x |
+| >=50X |[Mosdepth](https://github.com/brentp/mosdepth) | Fraction of reference with coverage over 50x |
+| Error sex check |[Peddy](https://github.com/brentp/peddy)| Result of sex check based on sex in samplesheet |
+| Predicted sex sex check |[Peddy](https://github.com/brentp/peddy)| |
+| Bases on Target | [Picard](https://broadinstitute.github.io/picard/) HSMetrics | Bases inside the capture design (`config[reference][design_intervals]`) |
+| Fold80 |[Picard](https://broadinstitute.github.io/picard/) HSMetrics | The fold over-coverage necessary to raise 80% of bases in "non-zero-cvg" targets to the mean coverage level in those targets (`config[reference][design_intervals]`) |
+| % Dups | [Picard](https://broadinstitute.github.io/picard/) DuplicationMetrics |  |
+| Mean Insert Size | [Picard](https://broadinstitute.github.io/picard/) InsertSizeMetrics |  |
+| Target Bases with zero coverage [%] | [Picard](https://broadinstitute.github.io/picard/) HSMetrics | Percent target (`config[reference][design_intervals]`) bases with 0 coverage |
+| % Adapter | [fastp](https://github.com/OpenGene/fastp) | |
+
 ### Program versions
 
 default container: `docker://hydragenetics/common:0.1.9`
@@ -156,9 +180,12 @@ default container: `docker://hydragenetics/common:0.1.9`
 | fastp | 0.20.1 | `docker://hydragenetics/fastp:0.20.1` |
 | FastQC | 0.11.9 | `docker://hydragenetics/fastqc:0.11.9` |
 | FusionCatcher | 1.33 | `docker://blcdsdockerregistry/fusioncatcher:1.33` |
+| GATK | 4.2.2.0 | `docker://hydragenetics/gatk4:4.2.2.0` |
 | Manta | 1.6.0 | `docker://hydragenetics/manta:1.6.0` |
 | Mosdepth | 0.3.2 | `docker://hydragenetics/mosdepth:0.3.2` |
 | MultiQC | 1.11 | `docker://hydragenetics/multiqc:1.11` |
+| Parabricks | 4.0.0-1 | `docker://nvcr.io/nvidia/clara/clara-parabricks:4.0.0-1` |
+| Peddy | 0.4.8 | `docker://hydragenetics/peddy:0.4.8` |
 | Picard | 2.25.0 | `docker://hydragenetics/picard:2.25.0` |
 | Pindel | 0.2.5b9 | `docker://hydragenetics/pindel:0.2.5b9` |
 | RSeQC | 4.0.0 | `docker://hydragenetics/rseqc:4.0.0` |
@@ -168,6 +195,7 @@ default container: `docker://hydragenetics/common:0.1.9`
 | SPRING | 1.0.1 | `docker://hydragenetics/spring:1.0.1` |
 | STAR | 2.7.10a | `docker://hydragenetics/star:2.7.10a` |
 | STAR-Fusion | 1.10.1 | `docker://trinityctat/starfusion:1.10.1` |
+| svdb | 2.6.0 | `docker://hydragenetics/svdb:2.6.0` |
 | VEP | 105 | `docker://hydragenetics/vep:105` |
 
 ## :judge: Rule Graph Parabricks version

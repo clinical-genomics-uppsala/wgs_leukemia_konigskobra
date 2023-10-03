@@ -74,14 +74,15 @@ table_columns_visible:
     PCT_30X: False
     PCT_TARGET_BASES_30X: False
     FOLD_ENRICHMENT: False
+    TOTAL_READS: True
   Samtools:
     error_rate: False
     non-primary_alignments: False
-    reads_mapped: True
+    reads_mapped: False
     reads_mapped_percent: True
     reads_properly_paired_percent: True
     reads_MQ0_percent: False
-    raw_total_sequences: True
+    raw_total_sequences: False
 
 # Patriks plug in, addera egna columner till general stats
 multiqc_cgs:
@@ -149,6 +150,7 @@ table_columns_placement:
     predicted_sex_sex_check: 702
     family_id: 703
   Picard:
+    TOTAL_READS: 500
     PCT_SELECTED_BASES: 801
     FOLD_80_BASE_PENALTY: 802
     PCT_PF_READS_ALIGNED: 888
