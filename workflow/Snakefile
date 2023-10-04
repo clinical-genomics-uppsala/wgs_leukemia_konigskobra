@@ -34,7 +34,7 @@ ruleorder: _results_svdb_tbi > misc_tabix
 
 aligner = config.get("aligner", None)
 
-if aligner is None:
+if aligner is None or (aligner != "bwa_gpu" and aligner != "bwa_sentieon"):
     sys.exit("aligner missing from config, valid options: bwa_gpu or bwa_sentieon")
 
 elif aligner == "bwa_gpu":
@@ -65,9 +65,6 @@ elif aligner == "bwa_sentieon":
 
     ruleorder: sentieon_dedup > alignment_samtools_index
     ruleorder: sentieon_realigner > alignment_samtools_index
-
-else:
-    sys.exit("valid options for aligner are: bwa_gpu or bwa_sentieon")
 
 
 rule all:
@@ -538,8 +535,15 @@ if aligner == "bwa_sentieon":
                 ]
             ),
             config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
+            sample_replacement="qc/multiqc/sample_replacement_{report}.tsv",
+            sample_order="qc/multiqc/sample_order_{report}.tsv",
         params:
-            extra=lambda wildcards, input: "--replace-names " + " --sample-names " + " -c " + input.config,
+            extra=lambda wildcards, input: "--replace-names "
+            + input.sample_replacement
+            + " --sample-names "
+            + input.sample_order
+            + " -c "
+            + input.config,
             use_input_files_only=config.get("multiqc", {}).get("use_input_files_only", True),
 
 
@@ -677,7 +681,7 @@ use rule cnv_json from reports as reports_cnv_json_chr with:
     params:
         skip_chromosomes=lambda wildcards: [
             chromosome
-            for chromosome in ['chr' + str(i) for i in range(1, 23)] + ['chrX', 'chrY', 'chrM']
+            for chromosome in [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY", "chrM"]
             if chromosome != wildcards.locus
         ],
     log:
