@@ -34,7 +34,7 @@ ruleorder: _results_svdb_tbi > misc_tabix
 
 aligner = config.get("aligner", None)
 
-if aligner is None or (aligner != "bwa_gpu" and aligner != "bwa_sention"):
+if aligner is None or (aligner != "bwa_gpu" and aligner != "bwa_sentieon"):
     sys.exit("aligner missing from config, valid options: bwa_gpu or bwa_sentieon")
 
 elif aligner == "bwa_gpu":
