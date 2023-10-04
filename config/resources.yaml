@@ -47,6 +47,14 @@ manta_run_workflow_tn:
   mem_mb: 245760
   threads: 40
 
+mosdepth:
+  mem_mb: 24576
+  threads: 4
+
+mosdepth_bed:
+  mem_mb: 24576
+  threads: 4
+
 pbrun_fq2bam:
   gres: "--gres=gres:gpu:4"
   mem_mb: 770000
@@ -71,25 +79,17 @@ pbrun_mutectcaller_tn:
   threads: 40
   time: "20:00:00"
 
-mosdepth:
-  mem_mb: 24576
-  threads: 4
-
-mosdepth_bed:
-  mem_mb: 24576
-  threads: 4
-
 rseqc_gene_body_coverage:
   time: "48:00:00"
+
+sortmerna:
+  mem_mb: 49152
+  threads: 8
 
 spring:
   mem_mb: 49152
   threads: 8
   load: 10
-
-sortmerna:
-  mem_mb: 49152
-  threads: 8
 
 star:
   mem_mb: 122880
