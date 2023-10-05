@@ -49,6 +49,12 @@ properties:
       qc:
         type: string
         description: version/branch/tag
+      reports:
+        type: string
+        description: version/branch/tag
+      sentieon:
+        type: string
+        description: version/branch/tag
       misc:
         type: string
         description: version/branch/tag
@@ -61,6 +67,7 @@ properties:
       - filtering
       - fusions
       - qc
+      - reports
       - misc
 
   default_container:
@@ -76,6 +83,9 @@ properties:
       design_intervals:
         type: string
         description: path to design intervals file for hsmetrics
+      design_intervals_gatk_cnv:
+        type: string
+        description: path to design intervals list for gatk collect read counts
       fai:
         type: string
         description: path to reference fasta index file
@@ -94,9 +104,13 @@ properties:
       wgs_intervals:
         type: string
         description: path to wgs interval file
+      skip_chrs:
+        type: array
+        description: chromosomes to skip in html report
     required:
       - design_bed
       - design_intervals
+      - design_intervals_gatk_cnv
       - fai
       - fasta
       - fasta_rna
@@ -107,6 +121,17 @@ properties:
   trimmer_software:
     type: string
     description: name of rule to be used for trimming
+  
+  aligner:
+    type: string
+    description: available aligner bwa_gpu or bwa_sentieon
+
+  annotate_cnv:
+    type: object
+    properties:
+      cna_exons: 
+        type: string
+        description: path to CNA gene bed file
 
   arriba:
     type: object
@@ -153,6 +178,56 @@ properties:
       - gtf
       - protein_domains
 
+  bcftools_SNV: 
+    type: object
+    description: parameters for bcftools_SNV
+    properties: 
+      all:
+        type: string
+        description: path to all snv bed file 
+      aml:
+        type: string
+        description: path to aml snv bed file 
+    required:
+      - aml
+      - all
+
+  bcftools_SV: 
+    type: object
+    description: parameters for bcftools_SV
+    properties: 
+      all:
+        type: string
+        description: path to all sv bed file 
+      aml:
+        type: string
+        description: path to aml sv bed file 
+    required:
+      - aml
+      - all 
+
+  cnv_html_report:
+    type: object
+    description: parameters for cnv_html_report
+    properties: 
+      cnv_vcf:
+        type: array
+        properties: 
+          annotation: 
+            type: string
+          filter:
+            type: string 
+        description: path to annotation and filter files
+      show_table: 
+        type: boolean
+      template_dir: 
+        type: string
+        description: path to cnv report template
+    required:
+      - cnv_vcf
+      - show_table
+      - template_dir
+
   cnvkit_batch:
     type: object
     description: parameters for cnvkit_batch
@@ -160,6 +235,9 @@ properties:
       container:
         type: string
         description: name or path to docker/singularity container
+      extra:
+        type: string
+        description: extra parameters to be forwarded
       method:
         type: string
         description: cnvkit method to be used, should be wgs
@@ -248,26 +326,6 @@ properties:
     required:
       - container
 
-  manta_config_t:
-    type: object
-    description: parameters for config_manta_t
-    properties:
-      container:
-        type: string
-        description: name or path to docker/singularity container
-    required:
-      - container
-
-  manta_config_tn:
-    type: object
-    description: parameters for config_manta_tn
-    properties:
-      container:
-        type: string
-        description: name or path to docker/singularity container
-    required:
-      - container
-
   crumble:
     type: object
     description: parameters for crumble
@@ -280,6 +338,32 @@ properties:
         description: extra parameters to be forwarded
     required:
       - container
+
+  dux4_igh:
+    type: object
+    description: parameters for samtools dux4-igh translocation read count
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      region:
+        type: string
+        description: position of igh region
+    required:
+      - region
+
+  dux4_erg:
+    type: object
+    description: parameters for samtools dux4-erg translocation read count
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      region:
+        type: string
+        description: position of erg region
+    required:
+      - region
 
   fastp_pe:
     type: object
@@ -308,11 +392,15 @@ properties:
       container:
         type: string
         description: name or path of container
+      cnv_hardfilter:
+        type: string
+        description: path to cnv hard filter yaml file
       germline:
         type: string
         description: path to config file for filtering out germline snvs for baf plots
       required:
         - germline
+        - cnv_hardfilter
 
   fusioncatcher:
     type: object
@@ -326,6 +414,88 @@ properties:
     required:
       - container
       - genome_path
+
+  gatk_call_copy_ratio_segments:
+    type: object
+    description: parameters for gatk_call_copy_ratio_segments
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  gatk_cnv_collect_allelic_counts:
+    type: object
+    description: parameters for gatk_cnv_collect_allelic_counts
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      SNP_interval:
+        type: string
+        description: path to gnomad interval file
+    required:
+      - container
+      - SNP_interval
+
+  gatk_collect_read_counts:
+    type: object
+    description: parameters for gatk_collect_read_counts
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  gatk_model_segments:
+    type: object
+    description: parameters for gatk_model_segments
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  gatk_cnv_denoise_read_counts_by_sex:
+    type: object
+    description: parameters for gatk_cnv_denoise_read_counts_by_sex
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      pon_female: 
+        type: string
+        description: path to female normal pool
+      pon_male: 
+        type: string
+        description: path to male normal pool        
+    required:
+      - container
+      - pon_female
+      - pon_male
+
+  manta_config_t:
+    type: object
+    description: parameters for config_manta_t
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  manta_config_tn:
+    type: object
+    description: parameters for config_manta_tn
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
 
   manta_run_workflow_t:
     type: object
@@ -341,19 +511,6 @@ properties:
     type: object
     description: parameters for manta_run_workflow_tn
     properties:
-      bed_files:
-        type: object
-        description: map of bed files
-        properties:
-          all:
-            type: string
-            description: path to bed file containing relevant genes for ALL
-          aml:
-            type: string
-            description: path to bed file containing relevant genes for AML
-        required:
-          - all
-          - aml
       container:
         type: string
         description: name or path to docker/singularity container
@@ -450,12 +607,46 @@ properties:
       containter:
         type: string
         description: name or path to docker/singularity container
+      config: 
+        type: string
+        description: path to peddy multiqc config file
       extra:
         type: string
         description: additional parameters for peddy
     required:
       - container
+      - config
       - extra
+
+  pbrun_fq2bam: 
+    type: object
+    description: parameters for pbrun_fq2bam
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  pbrun_fq2bam_mutectcaller_t: 
+    type: object
+    description: parameters for mutectcaller_t
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
+
+  pbrun_fq2bam_mutectcaller_tn: 
+    type: object
+    description: parameters for mutectcaller_tn
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+    required:
+      - container
 
   picard_collect_alignment_summary_metrics:
     type: object
@@ -551,6 +742,9 @@ properties:
       container:
         type: string
         description: name or path to docker/singularity container
+      extra:
+        type: string
+        description: parameters to be forwarded
     required:
       - container
 
@@ -682,6 +876,43 @@ properties:
     required:
       - container
       - genome_path
+  
+  svdb_merge:
+    type: object
+    description: parameters for svdb merge
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      tc_method:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            cnv_callers:
+              type: array
+              items:
+                type: string
+        description: list of cnv callers that are included in the vcf merging
+    required:
+      - container
+      - tc_method
+
+  svdb_query:
+  type: object
+    description: parameters for svdb_query
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      db_string:
+        type: string
+        description: parameters to db
+    required:
+      - container
+      - db_string
 
   vep:
     type: object
@@ -693,6 +924,9 @@ properties:
       vep_cache:
         type: string
         description: path to vep cache
+      extra: 
+        type: string
+        description: extra parameters to be forwarded
     required:
       - container
       - vep_cache
@@ -708,6 +942,9 @@ required:
   - trimmer_software
   - arriba
   - arriba_draw_fusion
+  - bcftools_SNV
+  - bcftools_SV
+  - cnv_html_report
   - cnvkit_batch
   - cnvkit_call
   - cnvkit_diagram
@@ -715,6 +952,10 @@ required:
   - cnvkit_scatter_whole
   - cnvkit_table
   - cnvkit_vcf
+  - gatk_call_copy_ratio_segments
+  - gatk_cnv_collect_allelic_counts
+  - gatk_collect_read_counts
+  - gatk_model_segments
   - manta_config_t
   - manta_config_tn
   - crumble
@@ -726,6 +967,7 @@ required:
   - mosdepth
   - mosdepth_bed
   - multiqc
+  - peddy
   - picard_collect_alignment_summary_metrics
   - picard_collect_duplication_metrics
   - picard_collect_gc_bias_metrics
@@ -743,4 +985,6 @@ required:
   - spring
   - star
   - star_fusion
+  - svdb_merge
+  - svdb_query
   - vep
