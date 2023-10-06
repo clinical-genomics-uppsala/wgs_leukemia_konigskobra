@@ -1,1 +1,1 @@
-sample	type	platform	flowcell	lane	barcode	fastq1	fastq2	adapter
+sample	type	platform	flowcell	machine	lane	barcode	fastq1	fastq2	adapter
