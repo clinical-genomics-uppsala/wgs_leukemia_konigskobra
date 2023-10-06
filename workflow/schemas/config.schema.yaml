@@ -901,7 +901,7 @@ properties:
       - tc_method
 
   svdb_query:
-  type: object
+    type: object
     description: parameters for svdb_query
     properties:
       container:

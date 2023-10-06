@@ -29,7 +29,7 @@ properties:
       - time
 
   _copy:
-  type: object
+    type: object
     description: resource definitions for copying results
     properties:
       mem_mb:
