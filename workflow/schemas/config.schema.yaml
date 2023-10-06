@@ -471,7 +471,7 @@ properties:
         description: path to female normal pool
       pon_male: 
         type: string
-        description: path to male normal pool        
+        description: path to male normal pool
     required:
       - container
       - pon_female

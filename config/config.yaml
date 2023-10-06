@@ -323,7 +323,6 @@ star_fusion:
   extra: "--examine_coding_effect"
   genome_path: ""
 
-
 svdb_merge:
   tc_method:
     - name: pathology
