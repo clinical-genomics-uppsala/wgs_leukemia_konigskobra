@@ -49,7 +49,6 @@ cnv_html_report:
     - annotation: cna_exons
       filter: cnv_hardfilter
 
-crumble:
 
 filter_vcf:
   germline: "../../config/config_germline_filter.yaml"
