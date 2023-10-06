@@ -10,7 +10,6 @@ reference:
   genome_dir: "reference"
   sites: "reference/sites.vcf.gz"
   wgs_intervals: "reference/wgs.interval_list"
-  skip_chrs:
     - chrM
 
 annotate_cnv:
