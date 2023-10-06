@@ -1,31 +1,101 @@
 default_resources:
   gres: ""
-  mem_mb: 0
-  mem_per_cpu: 0
-  partition: ""
-  threads: 0
-  time: ""
+  mem_mb: 6144
+  mem_per_cpu: 6144
+  partition: "low"
+  threads: 1
+  time: "24:00:00"
+  load: 1
+
+_copy:
+  time: "1:00:00"
+
+arriba:
+  mem_mb: 30720
+  threads: 5
+  time: "72:00:00"
+
+fastp_pe:
+  mem_mb: 49152
+  threads: 8
+
+fastqc:
+  load: 25
+
+fusioncatcher:
+  mem_mb: 122880 
+  threads: 20
+  time: "160:00:00"
+
+gatk_cnv_collect_allelic_counts:
+  mem_mb: 30720 
+  threads: 5
+
+gatk_cnv_model_segments:
+  mem_mb: 30720
+  threads: 5
+
+manta_run_workflow_t:
+  mem_mb: 245760
+  threads: 40
+
+manta_run_workflow_tn:
+  mem_mb: 245760
+  threads: 40
+
+mosdepth:
+  mem_mb: 24576
+  threads: 4
+
+mosdepth_bed:
+  mem_mb: 24576
+  threads: 4
 
 pbrun_fq2bam:
-  gres: "--gres=gpu:"
-  mem_mb: 0
-  mem_per_cpu: 0
-  partition: ""
-  threads: 0
-  time: ""
+  gres: "--gres=gres:gpu:4"
+  mem_mb: 770000
+  mem_per_cpu: 4096
+  partition: "GPU_low"
+  threads: 40
+  time: "12:00:00"
 
 pbrun_mutectcaller_t:
-  gres: "--gres=gpu:"
-  mem_mb: 0
-  mem_per_cpu: 0
-  partition: ""
-  threads: 0
-  time: ""
+  gres: "--gres=gres:gpu:4"
+  mem_mb: 770000 
+  mem_per_cpu: 4096
+  partition: "GPU_low"
+  threads: 40
+  time: "20:00:00"
 
 pbrun_mutectcaller_tn:
-  gres: "--gres=gpu:"
-  mem_mb: 0
-  mem_per_cpu: 0
-  partition: ""
-  threads: 0
-  time: ""
+  gres: "--gres=gres:gpu:4"
+  mem_mb: 770000
+  mem_per_cpu: 4096
+  partition: "GPU_low"
+  threads: 40
+  time: "20:00:00"
+
+rseqc_gene_body_coverage:
+  time: "48:00:00"
+
+sortmerna:
+  mem_mb: 49152
+  threads: 8
+
+spring:
+  mem_mb: 49152
+  threads: 8
+  load: 10
+
+star:
+  mem_mb: 122880
+  threads: 20
+
+star_fusion:
+  mem_mb: 30720
+  threads: 5
+  time: "72:00:00"
+
+vep:
+  mem_mb: 24576
+  threads: 4

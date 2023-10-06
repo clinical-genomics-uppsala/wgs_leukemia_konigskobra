@@ -12,7 +12,7 @@ properties:
     description: Project name
   sex:
     type: string
-    description: sample sex
+    description: sample sex (M,K,O)
 required:
   - sample
   - tumor_content

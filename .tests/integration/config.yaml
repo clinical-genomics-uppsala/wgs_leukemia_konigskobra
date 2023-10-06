@@ -1,37 +1,15 @@
 output: "../../config/output_files.json"
 
-aligner: "bwa_gpu"
-
-modules:
-  alignment: "906d25d0d4791eb5a54cba9954fddf29e27b85dd"
-  annotation: "3a05574"
-  cnv_sv: "v0.4.1"
-  compression: "v1.1.0"
-  filtering: "b7f4dc3"
-  fusions: "12f8354"
-  parabricks: "v1.1.0"
-  prealignment: "v1.1.0"
-  qc: "v0.3.0"
-  misc: "v0.1.0"
-  sentieon: "develop"
-  reports: "7c8b8c5"
-
-default_container: "docker://hydragenetics/common:0.1.9"
-
 reference:
   design_bed: "reference/homo_sapiens.wgs.bed"
+  design_intervals: "reference/wgs.interval_list" #HSMetrics
+  design_intervals_gatk_cnv: "reference/wgs.interval_list"
   fasta: "reference/reference.fasta"
   fai: "reference/reference.fasta.fai"
   fasta_rna: "reference/reference.fasta"
   genome_dir: "reference"
   sites: "reference/sites.vcf.gz"
   wgs_intervals: "reference/wgs.interval_list"
-  design_intervals: "reference/wgs.interval_list" #HSMetrics
-  design_intervals_gatk_cnv: "reference/wgs.interval_list"
-  skip_chrs:
-    - chrM
-
-trimmer_software: "fastp_pe"
 
 annotate_cnv:
   cna_exons: "reference/hg38_CNA.bed" 
@@ -60,13 +38,9 @@ cnvkit_batch:
 
 cnvkit_table:
   bedfile: "reference/cna_genes.bed"
-  container: "/path/python3.9-0.1.0.sif"
   cyto_coordinates: "reference/cyto_coordinates.txt"
   # log_thresholds: "-0.19,0.2"
   # ploidy: "3"
-
-cnvkit_vcf:
-  container: "docker://python:3.9.9-slim-buster"
 
 cnv_html_report:
   show_table: true
@@ -75,15 +49,6 @@ cnv_html_report:
     - annotation: cna_exons
       filter: cnv_hardfilter
 
-crumble:
-  container: "docker://hydragenetics/crumble:0.8.3"
-  extra: "-O CRAM"
-
-fastp_pe:
-  container: "docker://hydragenetics/fastp:0.20.1"
-
-fastqc:
-  container: "docker://hydragenetics/fastqc:0.11.9"
 
 filter_vcf:
   germline: "../../config/config_germline_filter.yaml"
@@ -93,30 +58,11 @@ fusioncatcher:
   genome_path: "reference"
 
 gatk_cnv_collect_allelic_counts:
-  container: "docker://hydragenetics/gatk4:4.2.2.0"
   SNP_interval: "reference/wgs.interval_list"
 
 gatk_cnv_denoise_read_counts_by_sex:
-  container: "docker://hydragenetics/gatk4:4.2.2.0"
   pon_female: "reference/female.hdf5"
   pon_male: "reference/male.hdf5"
-
-manta_config_tn:
-  container: "docker://hydragenetics/manta:v1.6.0"
-
-manta_config_t:
-  container: "docker://hydragenetics/manta:v1.6.0"
-
-manta_run_workflow_t:
-  container: "docker://hydragenetics/manta:v1.6.0"
-
-manta_run_workflow_tn:
-  container: "docker://hydragenetics/manta:v1.6.0"
-
-mosdepth:
-  by: "500"
-  container: "docker://hydragenetics/mosdepth:0.3.2"
-  extra: "--fast-mode --no-per-base"
 
 mosdepth_bed:
   design_bed: "reference/exome.bed"
@@ -128,22 +74,8 @@ multiqc:
     RNA:
       config: "../../config/multiqc_rna_config.yaml"
 
-pbrun_fq2bam:
-  container: "docker://nvcr.io/nvidia/clara/clara-parabricks:4.0.0-1"
-
-pbrun_mutectcaller_t:
-  container: "docker://nvcr.io/nvidia/clara/clara-parabricks:4.0.0-1"
-
-pbrun_mutectcaller_tn:
-  container: "docker://nvcr.io/nvidia/clara/clara-parabricks:4.0.0-1"
-
 peddy:
-  container: "docker://hydragenetics/peddy:0.4.8"
-  extra: "--sites hg38 "
   config: "peddy_mqc.tsv" 
-
-pindel_update_vcf_sequence_dictionary:
-  container: "docker://hydragenetics/picard:2.25.0"
 
 pindel_call:
   include_bed: "reference/pindel.bed"

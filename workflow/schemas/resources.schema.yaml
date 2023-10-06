@@ -28,6 +28,26 @@ properties:
       - threads
       - time
 
+  _copy:
+    type: object
+    description: resource definitions for copying results
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+
   arriba:
     type: object
     description: resource definitions for arriba
@@ -148,26 +168,6 @@ properties:
         type: string
         description: max execution time
  
-  manta_config_tn:
-    type: object
-    description: resource definitions for config_manta_tn
-    properties:
-      mem_mb:
-        type: integer
-        description: max memory in MB to be available
-      mem_per_cpu:
-        type: integer
-        description: memory in MB used per cpu
-      partition:
-        type: string
-        description: partition to use on cluster
-      threads:
-        type: integer
-        description: number of threads to be available
-      time:
-        type: string
-        description: max execution time
- 
   crumble:
     type: object
     description: resource definitions for crumble
@@ -247,10 +247,90 @@ properties:
       time:
         type: string
         description: max execution time
-         
+
+  gatk_cnv_collect_allelic_counts:
+    type: object
+    description: resource definitions for gatk_cnv_collect_allelic_counts
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+
+  gatk_cnv_model_segments:
+    type: object
+    description: resource definitions for gatk_cnv_model_segments
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+
   germline_vcf:
     type: object
     description: resource definitions for germline_vcf
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+
+  manta_config_t:
+    type: object
+    description: resource definitions for config_manta_t
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+
+  manta_config_tn:
+    type: object
+    description: resource definitions for config_manta_tn
     properties:
       mem_mb:
         type: integer
@@ -311,6 +391,26 @@ properties:
   mosdepth:
     type: object
     description: resource definitions for mosdepth
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+
+  mosdepth_bed:
+    type: object
+    description: resource definitions for mosdepth_bed
     properties:
       mem_mb:
         type: integer
@@ -579,7 +679,27 @@ properties:
       time:
         type: string
         description: max execution time
- 
+
+  rseqc_gene_body_coverage:
+    type: object
+    description: resource definitions for rseqc_gene_body_coverage
+    properties:
+      mem_mb:
+        type: integer
+        description: max memory in MB to be available
+      mem_per_cpu:
+        type: integer
+        description: memory in MB used per cpu
+      partition:
+        type: string
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
+        
   simple_sv_annotation:
     type: object
     description: resource definitions for simple_sv_annotation
