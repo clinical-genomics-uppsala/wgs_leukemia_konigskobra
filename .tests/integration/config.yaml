@@ -52,7 +52,6 @@ cnv_html_report:
       filter: cnv_hardfilter
 
 crumble:
-  extra: "-O CRAM"
 
 filter_vcf:
   germline: "../../config/config_germline_filter.yaml"
