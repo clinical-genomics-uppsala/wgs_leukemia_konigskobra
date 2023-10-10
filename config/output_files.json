@@ -11,7 +11,9 @@
   "Results/{project}/{sample}/RNA_fusions/{sample}_R.fusioncatcher.tsv": {"name": "_results_fusioncatcher", "file": "fusions/fusioncatcher/{sample}_R/final-list_candidate-fusion-genes.txt", "types": ["R"]},
   "Results/{project}/{sample}/Cram/{sample}_R.bam": {"name": "_results_star_cram", "file": "alignment/star/{sample}_R.bam", "types": ["R"]},
   "Results/{project}/{sample}/Cram/{sample}_R.bam.bai": {"name": "_results_star_crai", "file": "alignment/star/{sample}_R.bam.bai", "types": ["R"]},
-
+  "Results/{project}/{sample}/RNA_fusions/{sample}_R.fusioncatcher_dux4-igh_counts.txt": {"name": "_results_fusioncatcher_dux4_igh_counts", "file": "fusions/fusioncatcher/{sample}_R/dux4-igh_counts.txt", "types": ["R"]},
+  "Results/{project}/{sample}/RNA_fusions/{sample}_R.fusioncatcher_dux4-igh_filtered-results.txt": {"name": "_results_fusioncatcher_dux4_igh_hits", "file": "fusions/fusioncatcher/{sample}_R/dux4-igh_hits.txt", "types": ["R"]},
+  
   "Results/{project}/{sample}/Cram/{sample}_{type}.crumble.cram": {"name": "_results_cram", "file": "compression/crumble/{sample}_{type}.crumble.cram", "types": ["T", "N"]},
   "Results/{project}/{sample}/Cram/{sample}_{type}.crumble.cram.crai": {"name": "_results_crai", "file": "compression/crumble/{sample}_{type}.crumble.cram.crai", "types": ["T", "N"]},
   "Results/{project}/{sample}/SNV_indels/{sample}_T.vep.vcf.gz": {"name": "_results_vcf_t", "file": "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf.gz", "types": ["T"]},
