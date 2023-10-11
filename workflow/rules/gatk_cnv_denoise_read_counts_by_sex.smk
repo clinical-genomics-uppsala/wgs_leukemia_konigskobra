@@ -4,6 +4,9 @@ __email__ = "nina.hollfelder@scilifelab.uu.se"
 __license__ = "GPL-3"
 
 
+aligner = config.get("aligner", None)
+
+
 if aligner == "bwa_gpu":
 
     rule gatk_cnv_collect_allelic_counts:
