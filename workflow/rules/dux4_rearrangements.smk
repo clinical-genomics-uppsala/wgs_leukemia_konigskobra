@@ -17,9 +17,9 @@ if aligner == "bwa_gpu":
         log:
             "reports/dux_read_counts/{sample}_{type}.dux4_igh.txt.log",
         benchmark:
-             repeat(
+            repeat(
                 "reports/dux_read_counts/{sample}_{type}.dux4_igh.txt.tsv",
-                 config.get("fix_af", {}).get("benchmark_repeats", 1),
+                config.get("fix_af", {}).get("benchmark_repeats", 1),
             )
         params:
             extra=config.get("dux4_igh", {}).get("extra", ""),
