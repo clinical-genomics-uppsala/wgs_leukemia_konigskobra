@@ -49,15 +49,22 @@ elif aligner == "bwa_gpu":
     ruleorder: _results_tbi_tn > misc_tabix
     ruleorder: _results_tbi_all > misc_tabix
     ruleorder: _results_tbi_aml > misc_tabix
-    ruleorder: _results_tbi_t > misc_tabix
     ruleorder: _results_crai > misc_samtools_index
     ruleorder: _results_vcf_t > misc_bgzip
     ruleorder: _results_tbi_t > misc_tabix
     ruleorder: _results_tbi_tn > misc_tabix
     ruleorder: _results_vcf_aml > misc_bgzip
+    ruleorder: _results_vcf_aml_t > misc_bgzip
     ruleorder: _results_tbi_aml > misc_tabix
+    ruleorder: _results_tbi_aml_t > misc_tabix
     ruleorder: _results_vcf_all > misc_bgzip
     ruleorder: _results_tbi_all > misc_tabix
+    ruleorder: _results_vcf_all_t > misc_bgzip
+    ruleorder: _results_tbi_all_t > misc_tabix
+    ruleorder: _results_vcf_tm > misc_bgzip
+    ruleorder: _results_tbi_tm > misc_tabix
+    ruleorder: _results_vcf_tm_t > misc_bgzip
+    ruleorder: _results_tbi_tm_t > misc_tabix
     ruleorder: parabricks_pbrun_fq2bam > alignment_samtools_index
     ruleorder: _results_star_crai > alignment_samtools_index
 
@@ -351,7 +358,7 @@ use rule bcftools_filter_include_region from filtering as filtering_bcftools_fil
             config.get("bcftools_SNV", {}).get("benchmark_repeats", 1),
         )
     message:
-        "{rule}: Use bcftools to include variants in vcf overlapping bed: {output.vcf}"
+        "{rule}: Use bcftools to include variants in vcf overlapping bed: {output.vcf}. {wildcards.bed}"
 
 
 use rule bcftools_filter_include_region from filtering as filtering_bcftools_filter_include_region_sv with:

@@ -62,7 +62,7 @@ with open(config["output"]) as output:
 wildcard_constraints:
     sample="|".join(samples.index),
     unit="N|T|R",
-    bed="aml|all",
+    bed="aml|all|tm",
 
 
 def type_generator(types):
