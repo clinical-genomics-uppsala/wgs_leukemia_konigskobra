@@ -55,6 +55,7 @@ arriba_draw_fusion:
 bcftools_SNV:
   all: ""
   aml: ""
+  tm: "" 
 
 bcftools_SV:
   all: ""
