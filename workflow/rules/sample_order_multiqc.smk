@@ -29,8 +29,6 @@ rule sample_order_multiqc:
         time=config.get("sample_order_multiqc", {}).get("time", config["default_resources"]["time"]),
     container:
         config.get("sample_order_multiqc", {}).get("container", config["default_container"])
-    conda:
-        "../envs/sample_order_multiqc.yaml"
     message:
         "{rule}: Create a sample order tsv based on {input.sample_sheet}"
     script:
