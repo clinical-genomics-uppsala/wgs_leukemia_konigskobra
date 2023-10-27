@@ -358,7 +358,7 @@ use rule bcftools_filter_include_region from filtering as filtering_bcftools_fil
             config.get("bcftools_SNV", {}).get("benchmark_repeats", 1),
         )
     message:
-        "{rule}: Use bcftools to include variants in vcf overlapping bed: {output.vcf}. {wildcards.bed}"
+        "{rule}: Use bcftools to include variants in vcf overlapping bed: {output.vcf}"
 
 
 use rule bcftools_filter_include_region from filtering as filtering_bcftools_filter_include_region_sv with:
