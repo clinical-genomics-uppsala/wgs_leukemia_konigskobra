@@ -22,6 +22,9 @@
   "Results/{project}/{sample}/SNV_indels/{sample}_T.vep.all.vcf.gz.tbi": {"name": "_results_tbi_all_t", "file": "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.all.vcf.gz.tbi", "types": ["T"]},
   "Results/{project}/{sample}/SNV_indels/{sample}_T.vep.aml.vcf.gz": {"name": "_results_vcf_aml_t", "file": "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.aml.vcf.gz", "types": ["T"]},
   "Results/{project}/{sample}/SNV_indels/{sample}_T.vep.aml.vcf.gz.tbi": {"name": "_results_tbi_aml_t", "file": "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.aml.vcf.gz.tbi", "types": ["T"]},
+  "Results/{project}/{sample}/SNV_indels/{sample}_T.vep.tm.vcf.gz": {"name": "_results_vcf_tm_t", "file": "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.tm.vcf.gz", "types": ["T"]},
+  "Results/{project}/{sample}/SNV_indels/{sample}_T.vep.tm.vcf.gz.tbi": {"name": "_results_tbi_tm_t", "file": "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.tm.vcf.gz.tbi", "types": ["T"]},
+  "Results/{project}/{sample}/SNV_indels/{sample}_T.xlsx": {"name": "_results_xslx_t", "file": "export_to_xlsx/t/{sample}_T.snvs.xslx", "types": ["T"]},
 
   "Results/{project}/{sample}/SNV_indels/{sample}_TN.vep.vcf.gz": {"name": "_results_vcf_tn", "file": "parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.gz", "types": ["TN"]},
   "Results/{project}/{sample}/SNV_indels/{sample}_TN.vep.vcf.gz.tbi": {"name": "_results_tbi_tn", "file": "parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.gz.tbi", "types": ["TN"]},
@@ -29,10 +32,9 @@
   "Results/{project}/{sample}/SNV_indels/{sample}_TN.vep.all.vcf.gz.tbi": {"name": "_results_tbi_all", "file": "parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.all.vcf.gz.tbi", "types": ["TN"]},
   "Results/{project}/{sample}/SNV_indels/{sample}_TN.vep.aml.vcf.gz": {"name": "_results_vcf_aml", "file": "parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.aml.vcf.gz", "types": ["TN"]},
   "Results/{project}/{sample}/SNV_indels/{sample}_TN.vep.aml.vcf.gz.tbi": {"name": "_results_tbi_aml", "file": "parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.aml.vcf.gz.tbi", "types": ["TN"]},
-  "Results/{project}/{sample}/SNV_indels/{sample}_T.vep.tm.vcf.gz": {"name": "_results_vcf_tm_t", "file": "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.tm.vcf.gz", "types": ["T"]},
-  "Results/{project}/{sample}/SNV_indels/{sample}_T.vep.tm.vcf.gz.tbi": {"name": "_results_tbi_tm_t", "file": "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.tm.vcf.gz.tbi", "types": ["T"]},
   "Results/{project}/{sample}/SNV_indels/{sample}_TN.vep.tm.vcf.gz": {"name": "_results_vcf_tm", "file": "parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.tm.vcf.gz", "types": ["TN"]},
   "Results/{project}/{sample}/SNV_indels/{sample}_TN.vep.tm.vcf.gz.tbi": {"name": "_results_tbi_tm", "file": "parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.tm.vcf.gz.tbi", "types": ["TN"]},
+  "Results/{project}/{sample}/SNV_indels/{sample}_TN.xlsx": {"name": "_results_xslx_tn", "file": "export_to_xlsx/tn/{sample}.snvs.xslx", "types": ["TN"]},
   
   "Results/{project}/{sample}/SNV_indels/{sample}_mutectcaller_T.all.tsv": {"name": "_results_tsv_all_t", "file": "tsv_files/{sample}_mutectcaller_t.all.tsv", "types": ["T"]},
   "Results/{project}/{sample}/SNV_indels/{sample}_mutectcaller_T.aml.tsv": {"name": "_results_tsv_aml_t", "file": "tsv_files/{sample}_mutectcaller_t.aml.tsv", "types": ["T"]},
