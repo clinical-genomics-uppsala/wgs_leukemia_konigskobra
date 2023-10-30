@@ -1,0 +1,38 @@
+$schema: "http://json-schema.org/draft-04/schema#"
+description: snakemake rule input and output files description file
+type: object
+properties:
+
+  export_to_xlsx:
+    type: object
+    description: input and output parameters for export_to_xlsx
+    properties:
+      input:
+        type: object
+        description: list of inputs
+        properties:
+          all:
+            type: string
+            description: vcf-file with variants overlapping with genes in all bedfile from filtering module bcftools include region
+          aml:
+            type: string
+            description: vcf-file with variants overlapping with genes in aml bedfile from filtering module bcftools include region
+          tm:
+            type: string
+            description: vcf-file with variants overlapping with genes in tm bedfile from filtering module bcftools include region
+          all_bed:
+            type: string
+            description: all bedfile with genes used in filtering vcf using filtering module bcftools include region
+          aml_bed:
+            type: string
+            description: aml bedfile with genes used in filtering vcf using filtering module bcftools include region
+          tm_bed:
+            type: string
+            description: tm bedfile with genes used in filtering vcf using filtering module bcftools include region
+      output:
+        type: object
+        description: list of outputs
+        properties:
+          xlsx:
+            type: string
+            description: name of xlsx file for summerizing snv results based on different genelists
