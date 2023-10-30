@@ -13,7 +13,7 @@ rule export_to_xlsx:
         tm="parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.vep.include.tm.vcf.gz",
         tm_bed=config["bcftools_SNV"]["tm"],
     output:
-        xlsx=temp("export_to_xlsx/{analysis}/{sample_type}.snvs.xslx"),
+        xlsx=temp("export_to_xlsx/{analysis}/{sample_type}.snvs.xlsx"),
     params:
         extra=config.get("export_to_xlsx", {}).get("extra", ""),
     log:
