@@ -21,7 +21,7 @@ rule export_to_xlsx:
     benchmark:
         repeat(
             "export_to_xlsx/{analysis}/{sample_type}.snvs.xslx.benchmark.tsv",
-            config.get("export_to_xlsx", {}).get("benchmark_repeats", 1)
+            config.get("export_to_xlsx", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("export_to_xlsx", {}).get("threads", config["default_resources"]["threads"])
     resources:
