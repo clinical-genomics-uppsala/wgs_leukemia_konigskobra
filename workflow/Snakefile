@@ -636,10 +636,7 @@ use rule samtools_stats from qc as qc_samtools_stats with:
     wildcard_constraints:
         type="T|N",
     params:
-        extra="%s "
-        % (
-            config.get("samtools_stats", {}).get("extra", ""),
-        ),
+        extra="%s " % (config.get("samtools_stats", {}).get("extra", ""),),
 
 
 use rule mosdepth_bed from qc as qc_mosdepth_bed_rna with:
