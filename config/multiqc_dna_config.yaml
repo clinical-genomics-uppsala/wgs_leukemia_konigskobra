@@ -82,7 +82,7 @@ table_columns_visible:
     reads_mapped_percent: True
     reads_properly_paired_percent: True
     reads_MQ0_percent: False
-    raw_total_sequences: False
+    raw_total_sequences: True
 
 # Patriks plug in, addera egna columner till general stats
 multiqc_cgs:
