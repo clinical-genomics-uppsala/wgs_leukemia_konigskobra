@@ -6,6 +6,11 @@ extra_fn_clean_exts: ##from this until end
 extra_fn_clean_trim:
   - 'Sample_WA-3560_'
 
+report_header_info:
+  - Contact E-mail: "igp-klinsek-bioinfo@lists.uu.se"
+  - Application Type: "TrueSeq PCR Free WGS"
+  - Project Type: "Whole Genome"
+ 
 custom content:
   order:
     - fastqc
@@ -82,7 +87,7 @@ table_columns_visible:
     reads_mapped_percent: True
     reads_properly_paired_percent: True
     reads_MQ0_percent: False
-    raw_total_sequences: False
+    raw_total_sequences: True
 
 # Patriks plug in, addera egna columner till general stats
 multiqc_cgs:

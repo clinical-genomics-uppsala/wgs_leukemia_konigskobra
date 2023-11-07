@@ -6,6 +6,10 @@ extra_fn_clean_exts: ##from this until end
 extra_fn_clean_trim:
   - 'Sample_WA-3560_'
 
+report_header_info:
+  - Contact E-mail: "igp-klinsek-bioinfo@lists.uu.se"
+  - Application Type: "Whole Transcriptome Sequencing"
+  - Project Type: "WTS"
 
 custom content:
   order:
