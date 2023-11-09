@@ -28,7 +28,7 @@ properties:
       - threads
       - time
 
-  _results:
+  _copy:
     type: object
     description: resource definitions for copying results
     properties:
