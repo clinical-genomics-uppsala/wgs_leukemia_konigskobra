@@ -28,6 +28,7 @@ arriba_draw_fusion:
 bcftools_SNV:
   all: "reference/all.bed"
   aml: "reference/aml.bed"
+  tm : "reference/tm.bed"
 
 bcftools_SV:
   all: "reference/all.bed"

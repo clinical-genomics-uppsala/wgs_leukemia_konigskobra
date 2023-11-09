@@ -38,8 +38,6 @@ rule cnvkit_table:
         time=config.get("cnvkit_table", {}).get("time", config["default_resources"]["time"]),
     container:
         config.get("cnvkit_table", {}).get("container", config["default_container"])
-    conda:
-        "../envs/cnvkit_table.yaml"
     message:
         "{rule}: Create output table from {input.cns} and {input.gene_interest}."
     script:

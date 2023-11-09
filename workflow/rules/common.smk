@@ -62,7 +62,7 @@ with open(config["output"]) as output:
 wildcard_constraints:
     sample="|".join(samples.index),
     unit="N|T|R",
-    bed="aml|all",
+    bed="aml|all|tm",
 
 
 def type_generator(types):
@@ -259,7 +259,6 @@ def generate_copy_code(workflow, output_json):
             else:
                 code += f'@workflow.log("logs/{rule_name}_{result_file}.log")\n'
             code += f'@workflow.container("{copy_container}")\n'
-            code += f'@workflow.conda("../envs/copy_result.yaml")\n'
             code += f'@workflow.resources(time = "{time}", threads = {threads}, mem_mb = {mem_mb}, mem_per_cpu = {mem_per_cpu}, partition = "{partition}")\n'
             code += '@workflow.shellcmd("cp {input} {output}")\n\n'
             code += "@workflow.run\n"
@@ -268,7 +267,7 @@ def generate_copy_code(workflow, output_json):
                 "conda_env, container_img, singularity_args, use_singularity, env_modules, bench_record, jobid, is_shell, "
                 "bench_iteration, cleanup_scripts, shadow_dir, edit_notebook, conda_base_path, basedir, runtime_sourcecache_path, "
                 "__is_snakemake_rule_func=True):\n"
-                '\tshell ( "(cp {input[0]} {output[0]}) &> {log}" , bench_record=bench_record, bench_iteration=bench_iteration)\n\n'
+                '\tshell ( "(cp --preserve=timestamps {input[0]} {output[0]}) &> {log}" , bench_record=bench_record, bench_iteration=bench_iteration)\n\n'
             )
     exec(compile(code, "result_to_copy", "exec"), workflow.globals)
 
