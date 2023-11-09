@@ -420,6 +420,7 @@ use rule star_fusion from fusions as fusions_star_fusion with:
         log3=temp("fusions/star_fusion/{sample}_{type}/Log.progress.out"),
         rpg=temp("fusions/star_fusion/{sample}_{type}/ReadsPerGene.out.tab"),
 
+
 module parabricks:
     snakefile:
         github(
