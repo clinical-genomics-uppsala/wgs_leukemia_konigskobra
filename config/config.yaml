@@ -10,7 +10,7 @@ modules:
   annotation: "3a05574"
   cnv_sv: "v0.4.1"
   compression: "v1.1.0"
-  filtering: "b7f4dc3"
+  filtering: "v0.3.0"
   fusions: "12f8354"
   parabricks: "v1.1.0"
   prealignment: "v1.1.0"
