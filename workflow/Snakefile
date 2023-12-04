@@ -497,8 +497,13 @@ use rule mosdepth from qc as qc_mosdepth with:
         bed=temp("qc/mosdepth/{sample}_{type,T|N}.regions.bed.gz"),
         csi=temp("qc/mosdepth/{sample}_{type,T|N}.regions.bed.gz.csi"),
         glob=temp("qc/mosdepth/{sample}_{type,T|N}.mosdepth.global.dist.txt"),
+        thresholds=temp("qc/mosdepth/{sample}_{type,T|N}.thresholds.bed.gz"),
         region=temp("qc/mosdepth/{sample}_{type,T|N}.mosdepth.region.dist.txt"),
         summary=temp("qc/mosdepth/{sample}_{type,T|N}.mosdepth.summary.txt"),
+    params:
+        by=config.get("mosdepth", {}).get("by", ""),
+        extra=config.get("mosdepth", {}).get("extra", ""),
+        thresholds=config.get("mosdepth",{}).get("thresholds", ""),
 
 
 if aligner == "bwa_gpu":
