@@ -503,7 +503,7 @@ use rule mosdepth from qc as qc_mosdepth with:
     params:
         by=config.get("mosdepth", {}).get("by", ""),
         extra=config.get("mosdepth", {}).get("extra", ""),
-        thresholds=config.get("mosdepth",{}).get("thresholds", ""),
+        thresholds=config.get("mosdepth", {}).get("thresholds", ""),
 
 
 if aligner == "bwa_gpu":
