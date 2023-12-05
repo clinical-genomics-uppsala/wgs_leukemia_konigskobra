@@ -89,6 +89,17 @@ table_columns_visible:
     reads_MQ0_percent: False
     raw_total_sequences: True
 
+# mosdepth custom thresholds
+mosdepth_config:
+  general_stats_coverage:
+    - 1
+    - 5
+    - 10
+    - 15
+    - 20
+    - 30
+    - 50
+
 # Patriks plug in, addera egna columner till general stats
 multiqc_cgs:
   Picard:
@@ -135,9 +146,10 @@ table_columns_placement:
     1_x_pc: 666
     5_x_pc: 666
     10_x_pc: 602
-    20_x_pc: 603
-    30_x_pc: 604
-    50_x_pc: 605
+    15_x_pc: 603
+    20_x_pc: 604
+    30_x_pc: 605
+    50_x_pc: 606
   Samtools:
     raw_total_sequences: 500
     reads_mapped: 501
