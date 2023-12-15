@@ -14,6 +14,7 @@ include: "rules/gatk_cnv_denoise_read_counts_by_sex.smk"
 include: "rules/html_output.smk"
 include: "rules/manta_to_tsv.smk"
 include: "rules/peddy_create_ped.smk"
+include: "rules/bcftools.smk"
 
 
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
@@ -566,28 +567,53 @@ if aligner == "bwa_sentieon":
             use_input_files_only=config.get("multiqc", {}).get("use_input_files_only", True),
 
 
-use rule peddy from qc as qc_peddy with:
+use rule peddy from qc as qc_peddy_t with:
     input:
         vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.vcf.gz",
-        ped="qc/peddy/{sample}.peddy.fam",
+        ped="qc/peddy/{sample}_T.peddy.fam",
         tbi="parabricks/pbrun_mutectcaller_t/{sample}_T.vcf.gz.tbi",
     output:
-        ped=temp("qc/peddy/{sample}/peddy.peddy.ped"),
-        ped_check=temp("qc/peddy/{sample}/peddy.ped_check.csv"),
-        sex_check="qc/peddy/{sample}/peddy.sex_check.csv",
-        het_check=temp("qc/peddy/{sample}/peddy.het_check.csv"),
-        ped_html=temp("qc/peddy/{sample}/peddy.html"),
-        ped_vs_html=temp("qc/peddy/{sample}/peddy.vs.html"),
-        pca=temp("qc/peddy/{sample}/peddy.background_pca.json"),
+        ped=temp("qc/peddy/{sample}_T/peddy.peddy.ped"),
+        ped_check=temp("qc/peddy/{sample}_T/peddy.ped_check.csv"),
+        sex_check="qc/peddy/{sample}_T/peddy.sex_check.csv",
+        het_check=temp("qc/peddy/{sample}_T/peddy.het_check.csv"),
+        ped_html=temp("qc/peddy/{sample}_T/peddy.html"),
+        ped_vs_html=temp("qc/peddy/{sample}_T/peddy.vs.html"),
+        pca=temp("qc/peddy/{sample}_T/peddy.background_pca.json"),
     log:
-        "qc/peddy/{sample}.output.log",
+        "qc/peddy/{sample}_T.output.log",
     benchmark:
         repeat(
-            "qc/peddy/{sample}.peddy.benchmark.tsv",
+            "qc/peddy/{sample}_T.peddy.benchmark.tsv",
             config.get("peddy", {}).get("benchmark_repeats", 1),
         )
     params:
-        prefix="qc/peddy/{sample}/",
+        prefix="qc/peddy/{sample}_T/",
+        extra=config.get("peddy", {}).get("extra", ""),
+
+
+use rule peddy from qc as qc_peddy_tn with:
+    input:
+        vcf="parabricks/pbrun_mutectcaller_tn/{sample}_N.only.vcf.gz",
+        ped="qc/peddy/{sample}_N.peddy.fam",
+        tbi="parabricks/pbrun_mutectcaller_tn/{sample}_N.only.vcf.gz.tbi",
+    output:
+        ped=temp("qc/peddy/{sample}_N/peddy.peddy.ped"),
+        ped_check=temp("qc/peddy/{sample}_N/peddy.ped_check.csv"),
+        sex_check="qc/peddy/{sample}_N/peddy.sex_check.csv",
+        het_check=temp("qc/peddy/{sample}_N/peddy.het_check.csv"),
+        ped_html=temp("qc/peddy/{sample}_N/peddy.html"),
+        ped_vs_html=temp("qc/peddy/{sample}_N/peddy.vs.html"),
+        pca=temp("qc/peddy/{sample}_N/peddy.background_pca.json"),
+    log:
+        "qc/peddy/{sample}_N.output.log",
+    benchmark:
+        repeat(
+            "qc/peddy/{sample}_N.peddy.benchmark.tsv",
+            config.get("peddy", {}).get("benchmark_repeats", 1),
+        )
+    params:
+        prefix="qc/peddy/{sample}_N/",
         extra=config.get("peddy", {}).get("extra", ""),
 
 

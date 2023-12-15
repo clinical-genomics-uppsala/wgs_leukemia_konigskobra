@@ -190,6 +190,16 @@ def get_json_for_merge_cnv_json(wildcards):
     return ["reports/cnv_html_report/{sample}_{type}.{caller}.{tc_method}.json".format(caller=c, **wildcards) for c in callers]
 
 
+def get_peddy_samples (samples,units):
+    result = []
+    for sample in samples.itertuples():
+      sample_types=get_unit_types(units,sample.Index)
+      if "T" in sample_types or len({"N","T"}.intersection(sample_types)) == 2:
+          for t in sample_types:
+              result.append((sample.Index, t))
+    return result
+
+
 def compile_output_list(wildcards):
     output_files = []
     types = type_generator(set([unit.type for unit in units.itertuples()]))

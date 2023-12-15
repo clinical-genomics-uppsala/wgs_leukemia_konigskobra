@@ -53,7 +53,7 @@ rule gatk_cnv_denoise_read_counts_by_sex:
         hdf5PoN_f=config.get("gatk_cnv_denoise_read_counts_by_sex", {}).get("pon_female", ""),
         hdf5PoN_m=config.get("gatk_cnv_denoise_read_counts_by_sex", {}).get("pon_male", ""),
         hdf5Tumor="cnv_sv/gatk_collect_read_counts/{sample}_{type}.counts.hdf5",
-        sex="qc/peddy/{sample}/peddy.sex_check.csv",
+        sex="qc/peddy/{sample}_T/peddy.sex_check.csv",
     output:
         denoisedCopyRatio=temp("cnv_sv/gatk_denoise_read_counts/{sample}_{type}.clean.denoisedCR.tsv"),
         stdCopyRatio=temp("cnv_sv/gatk_denoise_read_counts/{sample}_{type}.clean.standardizedCR.tsv"),

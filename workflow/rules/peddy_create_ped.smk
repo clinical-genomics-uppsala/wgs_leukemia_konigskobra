@@ -8,7 +8,8 @@ rule peddy_create_ped:
     input:
         config["samples"],
     output:
-        [f"qc/peddy/{sample}.peddy.fam" for sample in get_samples(samples)],
+        t=[f"qc/peddy/{sample}_T.peddy.fam" for sample in get_samples(samples)],
+        n=[f"qc/peddy/{sample}_N.peddy.fam" for sample in get_samples(samples)],
     log:
         "qc/peddy/peddy_create_ped.fam.log",
     benchmark:
@@ -34,11 +35,10 @@ rule peddy_create_ped:
 rule combine_peddy_results:
     input:
         sex=lambda wildcards: [
-            "qc/peddy/%s/peddy.sex_check.csv" % (s)
-            for s in set([row["sample"] for index, row in units.iterrows() if row["type"] == "T"])
+            "qc/peddy/%s_%s/peddy.sex_check.csv" % (s,t) for s,t in get_peddy_samples(samples, units) 
         ],
         fam=lambda wildcards: [
-            "qc/peddy/%s.peddy.fam" % (s) for s in set([row["sample"] for index, row in units.iterrows() if row["type"] == "T"])
+            "qc/peddy/%s_%s.peddy.fam" % (s,t) for s,t in get_peddy_samples(samples, units)
         ],
     output:
         peddy_sex_check="qc/peddy/peddy.sex_check.csv",

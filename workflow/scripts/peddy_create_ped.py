@@ -18,5 +18,19 @@ with open(input_file, 'r') as samplesheet:
             sex = "2"
         else:
             sex = "0"
-        with open("qc/peddy/" + line[0] + ".peddy.fam", 'w+') as pedfile:
+        with open("qc/peddy/" + line[0] + "_T.peddy.fam", 'w+') as pedfile:
             pedfile.write("\t".join([line[0], line[0] + "_T", "0", "0", sex, "-9"])+"\n")
+
+
+with open(input_file, 'r') as samplesheet:
+    next(samplesheet)
+    for lline in samplesheet:
+        line = lline.strip().split("\t")
+        if line[3] == "M":
+            sex = "1"
+        elif line[3] == "K":
+            sex = "2"
+        else:
+            sex = "0"
+        with open("qc/peddy/" + line[0] + "_N.peddy.fam", 'w+') as pedfile:
+            pedfile.write("\t".join([line[0], line[0] + "_N", "0", "0", sex, "-9"])+"\n")
