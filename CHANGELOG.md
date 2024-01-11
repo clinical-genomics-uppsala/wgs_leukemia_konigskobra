@@ -1,0 +1,95 @@
+# Changelog
+
+## [1.1.0](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/compare/v1.0.1...v1.1.0) (2024-01-11)
+
+
+### Features
+
+* add multiqc rna config ([59612f7](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/59612f7dd59528b06ad290dd266861b15f1c6291))
+* add new copy result files to seperate folder ([265f836](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/265f83623b89083d85c286216155a7f1e705114d))
+* add sample order to multiqc general stats ([c92267c](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/c92267caee84752228c399f358cfe467d1e9d46b))
+* add xlsx file with snvs ([223d9cf](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/223d9cfc471303c290fb223f08acd7386e37c032))
+* additional Manta output file that does not filter for disease type ([31e84e8](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/31e84e8203555e6e4d8e17775cf10798042ee129))
+* adds peddy to MultiQC report ([6ab071e](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/6ab071e8c2db8c1e09155fe06e9abe0a5b968e7e))
+* adds peddy to MultiQC report ([c40fd6c](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/c40fd6c07ac76373a162bde74274414b7a1b2aba))
+* adds peddy to MultiQC report ([8b69390](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/8b6939075a7956d5f1b8ea6888ee22b6fa8fa80a))
+* Arriba produces pdf output ([2dee8d7](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/2dee8d7f4f28ac8464661f1f8ae499a5b3a84ed0))
+* cnvkit highlights genes in chromosome scatter plots ([c5b50dd](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/c5b50dd45a010f60ab3d68aa8d3c9eec1006f0fd))
+* dux4-igh rna fusioncatcher count added ([5099d48](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/5099d48be675fa4e1d2a32dd5574fa4b3020e022))
+* GATK implemented ([229e649](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/229e6498182a3d65bfc1bf7e2e80cd91fa515b6a))
+* html report ([72c559e](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/72c559e5d94a9d5ab65c329e3f5e2181c478c2cb))
+* html report ([cc30051](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/cc3005158876e3c068c209dc864ab0620a8ec89a))
+* intial commit for cnv summary table ([62c6d53](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/62c6d533e94b571e0d006807636a6e7cc65380e4))
+* Manta filters ins del dup on length ([c7eb206](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/c7eb206f7403ce8d026e17ed4c9896ac317b9151))
+* Manta output on indels and duplications ([5ab34a2](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/5ab34a2a1995c141f8816a1db11e1362f270b684))
+* merged in T-only and RNA pipelines ([0eb36b0](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/0eb36b05ab41c6b1bec71f97a489cd16dcb1cb35))
+* mosdepth shows 15x ([4da17a1](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/4da17a1824ed0cf5311a130340744147a9e0e157))
+* mosdepth thresholds ([58da543](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/58da54316fd4299c9f613fc1eefb98ace58ee043))
+* Peddy implemented ([df22206](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/df22206f88e4551e3852b08380b43e607569345c))
+* remove neutral calls and highlight low conf ([efd61f4](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/efd61f4230482462932a7b1e7bd165fc6a16e06f))
+* search DUX4 fusion in t and upgrade fusioncatcher results to hg38 ([ddc4c66](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/ddc4c66dfda3bc90a258f0040383b720b005e1ce))
+* star to multiqc_r ([4432f3e](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/4432f3e8b527c1f4cb1b6302942f09101fb05513))
+* star to multiqc_r ([ae2ba1a](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/ae2ba1af26f65fa99d87f665d2588e19852bc2c6))
+* svdb and gatk ([6514f2a](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/6514f2a64ec14cee40df09d23a20ffde424f202c))
+* svdb and gatk ([74976f8](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/74976f87ed0bc0d6b8efb4669d08d83b7e30229f))
+* svdb running ([701e98c](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/701e98c1191fb1ea25b4891b1e775d022ddb85c7))
+* vcf filtering on tm exons ([05cdc78](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/05cdc78fa4e16f5e623708e41a032524462df2dc))
+
+
+### Bug Fixes
+
+* add back conda vars in common create rule ([b67bd42](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/b67bd428a3dac59cc34ef8eb62298869b69805a1))
+* add env for cp results ([643c4b7](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/643c4b79ce9bbe6dc151b5267eb7c69e36e96239))
+* add missing container and conda envs ([b01edfd](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/b01edfd8e6ade0e5ecf32c0297167c48bc9c5d10))
+* Add TN to filenames ([473fcf0](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/473fcf0af8cbaf28ce096648c469c7df04d657d9))
+* added output json and removed imagemagick requirement ([80946a8](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/80946a89be73df29ab6c34a54e55c5a171f475b6))
+* added path ([a4ba402](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/a4ba4025e4803157c34f4eb6c982baa6de854757))
+* adjusted bugs in Manta ([7e5f331](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/7e5f331fddf6fd19ded0643dae393fdcb1353280))
+* adjusted paths in test config ([fae6b1d](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/fae6b1d048a36ac9a19311af2b1b7097302f698b))
+* can handle not annotated variants now ([0f8ea9d](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/0f8ea9d88b5226bedf23952e4a0ca4074b4af155))
+* changed according to reviews ([c4c707e](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/c4c707e5c36fbdd14451a1dd695ca4d9848dbc43))
+* cnvkit highlights ([2eb8523](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/2eb85231f2a0524f401de7204b2df0b13f920058))
+* cnvkit_to_table.py ([5826f69](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/5826f69cbb0f5d58a7609871c74919fb9bb9f603))
+* dry run ([32bffa9](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/32bffa906d4466ea0872e47bf0bc79d7739d24b8))
+* dry run schema fix ([ab5577d](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/ab5577d1969ab48184c45a43172fee94ea343c81))
+* filtering version upgrade ([f70c81d](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/f70c81dfb2952ed61d0d7f52aa5b5efee701f316))
+* fix spelling in cnvkit table ([73118fd](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/73118fd97318465a8c97ce1cc9d25922c26024a1))
+* fix spelling on putput ([68b8da4](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/68b8da4a9cf9b084aba7fc63d537b31a16c67b18))
+* header row changed ([9920264](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/9920264fe662f1388b0f3eeaf3c19d1a3464d0fd))
+* Manta filtering fixed ([8a34e15](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/8a34e15210f52f2458db9ab13371c7737f7332bb))
+* MultiQC DNA running now ([bfa5b51](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/bfa5b51fe68ac3fce34fd2e8d9c514c186bec2f2))
+* multiqc fix naming and inputfiles ([a1e3ef3](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/a1e3ef34cd37669442470f9cf3d388d092f449db))
+* multiqc replacename parameter fixed ([2629d56](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/2629d564cf230c77d78204bc3d63d62ce03e0a94))
+* prealignment update ([18ddcb2](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/18ddcb24734a5163e36efd392db3066ce0fe1186))
+* protected space fixed ([0652d41](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/0652d41937f5b45c9b7b67c984e6701853394447))
+* removed double command for cnv_scatter ([de84855](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/de84855e9c6927c8cc36b6085fd5d8a5dd628d12))
+* replace total seq(samtools) with total reads (picard) ([3fe896d](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/3fe896dd49a17e0927e7322f794ed6e99901838a))
+* run samtools stats w/o bed to get correct total reads in multiqc ([bb4d1d4](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/bb4d1d4fb54507491eab66a35c707dc7701c4943))
+* runs and creates all wanted output ([f9a8daa](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/f9a8daa108f536db501e6d5eac69daddd2bb1207))
+* set requirments so they work on marvin at least ([da277e2](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/da277e29e24feb5c017f57b603ac9cda16bb09eb))
+* testing config fixed ([4b2b383](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/4b2b383f36d5f5df7c9c06c7ea1fe42b9f79da7c))
+* testing config fixed ([7f99e2b](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/7f99e2b7afc44f98ca8cbb42f6c74cd3d875ab03))
+* testing config missing property added ([441e58c](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/441e58cac7d262803c7b84942a71e1d5c8423f37))
+* type included ([aa9ef7e](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/aa9ef7e7cf6cb17b7a0a3e631caf4bd6d2e7d381))
+* typo found in Snakefile ([26654df](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/26654df48060185d8dcd4da40c0a417452aaf48b))
+* update multiqc sample order to use pedegree names ([1a19652](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/1a19652bcb836c6d6b77057c0014d43de37f2103))
+* update order of multiqc inputfiles so Fold80 is from HSMetrics not wgs metrics ([bb8d5fb](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/bb8d5fb724e61f27027e1398995a7c64a2f14e61))
+
+
+### Performance Improvements
+
+* add log thresholds and ploidy to cnvkit table ([a798609](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/a7986090a245b323d550fca186d75407f56d0c3f))
+* adjusted for new cluster ([779b5eb](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/779b5eb7a0a4a8fd912e711eba7972165c374a84))
+* Manta now filters anything that did not PASS all filters ([5832c8d](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/5832c8d10f783a88fd8e5c4cedc1d73be4165331))
+* priority now for parabricks fq2bam ([584ed9e](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/584ed9e88233939aafb484c79c43a95d0e08c885))
+* prority to fusioncatcher ([6db152a](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/6db152a77dacb6be730cd20a2d3e5f99a2bfd3fa))
+
+
+### Documentation
+
+* add contact email to multiqc reports ([d540ddb](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/d540ddb7ea2f9a6940ccf309fc57855f1ae51072))
+* add general stats and some program version updates ([2474add](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/2474addd3bbd1408857b8ecf60681dccea48a378))
+* clean config ([3de34d4](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/3de34d48e4d927dedfb008b7932d33b69fb72b4f))
+* deleted some safety copies ([77f23d2](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/77f23d2c0508637b58e2a9eff9467d75c3f9925f))
+* new rulegrpah ([4ea6914](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/4ea691462b0f4ab1e4b686aba31ba5748ae41b39))
+* schema files adjusted to new pipeline ([8ec5da5](https://www.github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/commit/8ec5da5c23f021558332034c966ce4219e9553c4))
