@@ -1,0 +1,5 @@
+filters:
+  artifacts:
+    description: "Hard filter variants found in more than 15% of the normal samples"
+    expression: "(INFO:Normal_AF > 0.15)"
+    soft_filter: "False"

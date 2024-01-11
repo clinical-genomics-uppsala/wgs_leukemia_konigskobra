@@ -1,12 +1,78 @@
-__author__ = "Martin Rippin"
-__copyright__ = "Copyright 2021, Martin Rippin"
-__email__ = "martin.rippin@igp.uu.se"
+__author__ = "Martin Rippin, Arielle R Munters, Nina Hollfelder, Jonas Almstrom"
+__copyright__ = "Copyright 2022, Martin Rippin, Arielle R Munters"
+__email__ = "arielle.munters@scilifelab.uu.se, nina.hollfelder@scilifelab.uu.se"
 __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
+include: "rules/cnvkit.smk"
+include: "rules/cnvkit_table.smk"
+include: "rules/dux4_rearrangements.smk"
+include: "rules/export.smk"
+include: "rules/fix_af.smk"
+include: "rules/gatk_cnv_denoise_read_counts_by_sex.smk"
+include: "rules/html_output.smk"
 include: "rules/manta_to_tsv.smk"
-include: "rules/mutectcaller_to_tsv.smk"
+include: "rules/peddy_create_ped.smk"
+
+
+ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
+ruleorder: cnv_sv_manta_run_workflow_tn > misc_bgzip
+ruleorder: cnv_sv_manta_run_workflow_t > misc_tabix
+ruleorder: cnv_sv_manta_run_workflow_t > misc_bgzip
+ruleorder: _results_manta_tn_tbi > misc_tabix
+ruleorder: _results_manta_t_tbi > misc_tabix
+ruleorder: _results_cnvkit_tbi > misc_tabix
+ruleorder: _results_vcf_tn > misc_bgzip
+ruleorder: _results_gatk_vcf > misc_bgzip
+ruleorder: _results_gatk_vcf_tbi > misc_tabix
+ruleorder: annotation_simple_sv_annotation_tn > misc_bgzip
+ruleorder: _results_pindel_vcf > misc_bgzip
+ruleorder: gatk_model_segments > cnv_sv_gatk_model_segments
+ruleorder: _results_svdb_vcf > misc_bgzip
+ruleorder: _results_svdb_tbi > misc_tabix
+
+
+aligner = config.get("aligner", None)
+
+if aligner is None or (aligner != "bwa_gpu" and aligner != "bwa_sentieon"):
+    sys.exit("aligner missing from config, valid options: bwa_gpu or bwa_sentieon")
+
+elif aligner == "bwa_gpu":
+
+    include: "rules/mutectcaller_to_tsv.smk"
+    include: "rules/sample_order_multiqc.smk"
+
+    ruleorder: _results_manta_tn_tbi_all > misc_tabix
+    ruleorder: _results_manta_tn_tbi_aml > misc_tabix
+    ruleorder: _results_manta_t_tbi_all > misc_tabix
+    ruleorder: _results_manta_t_tbi_aml > misc_tabix
+    ruleorder: _results_tbi_tn > misc_tabix
+    ruleorder: _results_tbi_all > misc_tabix
+    ruleorder: _results_tbi_aml > misc_tabix
+    ruleorder: _results_crai > misc_samtools_index
+    ruleorder: _results_vcf_t > misc_bgzip
+    ruleorder: _results_tbi_t > misc_tabix
+    ruleorder: _results_tbi_tn > misc_tabix
+    ruleorder: _results_vcf_aml > misc_bgzip
+    ruleorder: _results_vcf_aml_t > misc_bgzip
+    ruleorder: _results_tbi_aml > misc_tabix
+    ruleorder: _results_tbi_aml_t > misc_tabix
+    ruleorder: _results_vcf_all > misc_bgzip
+    ruleorder: _results_tbi_all > misc_tabix
+    ruleorder: _results_vcf_all_t > misc_bgzip
+    ruleorder: _results_tbi_all_t > misc_tabix
+    ruleorder: _results_vcf_tm > misc_bgzip
+    ruleorder: _results_tbi_tm > misc_tabix
+    ruleorder: _results_vcf_tm_t > misc_bgzip
+    ruleorder: _results_tbi_tm_t > misc_tabix
+    ruleorder: parabricks_pbrun_fq2bam > alignment_samtools_index
+    ruleorder: _results_star_crai > alignment_samtools_index
+
+elif aligner == "bwa_sentieon":
+
+    ruleorder: sentieon_dedup > alignment_samtools_index
+    ruleorder: sentieon_realigner > alignment_samtools_index
 
 
 rule all:
@@ -35,7 +101,7 @@ use rule vep from annotation as annotation_vep with:
         cache=config["vep"]["vep_cache"],
         fasta=config["reference"]["fasta"],
     output:
-        vcf="parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf",
+        vcf=temp("parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf"),
     log:
         "parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.log",
     benchmark:
@@ -54,7 +120,7 @@ use rule vep from annotation as annotation_vep_t with:
         cache=config["vep"]["vep_cache"],
         fasta=config["reference"]["fasta"],
     output:
-        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf",
+        vcf=temp("parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf"),
     log:
         "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf.log",
     benchmark:
@@ -66,13 +132,13 @@ use rule vep from annotation as annotation_vep_t with:
         "{rule}: Annotate {wildcards.sample}_T.vcf"
 
 
-use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation with:
+use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation_tn with:
     input:
         vcf="cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.snpeff.vcf.gz",
         panel=config["simple_sv_annotation"]["panel"],
         fusion_pairs=config["simple_sv_annotation"]["fusion_pairs"],
     output:
-        vcf="cnv_sv/manta_run_workflow_tn/{sample}.ssa.vcf",
+        vcf=temp("cnv_sv/manta_run_workflow_tn/{sample}.ssa.vcf"),
     log:
         "cnv_sv/manta_run_workflow_tn/{sample}.ssa.vcf.log",
     benchmark:
@@ -82,6 +148,41 @@ use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation
         )
     message:
         "{rule}: Annotate cnv_sv/manta_run_workflow_tn/{wildcards.sample}/results/variants/somaticSV.snpeff.vcf.gz"
+
+
+use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation_t with:
+    input:
+        vcf="cnv_sv/manta_run_workflow_t/{sample}/results/variants/tumorSV.snpeff.vcf.gz",
+        panel=config["simple_sv_annotation"]["panel"],
+        fusion_pairs=config["simple_sv_annotation"]["fusion_pairs"],
+    output:
+        vcf="cnv_sv/manta_run_workflow_t/{sample}.ssa.vcf",
+    log:
+        "cnv_sv/manta_run_workflow_t/{sample}.ssa.vcf.log",
+    benchmark:
+        repeat(
+            "cnv_sv/manta_run_workflow_t/{sample}.ssa.vcf.benchmark.tsv",
+            config.get("snpeff", {}).get("benchmark_repeats", 1),
+        )
+    message:
+        "{rule}: Annotate {input.vcf}"
+
+
+module alignment:
+    snakefile:
+        github(
+            "hydra-genetics/alignment",
+            path="workflow/Snakefile",
+            tag=config["modules"]["alignment"],
+        )
+    config:
+        config
+
+
+use rule star from alignment as alignment_star
+
+
+use rule samtools_index from alignment as alignment_samtools_index
 
 
 module cnv_sv:
@@ -95,93 +196,95 @@ module cnv_sv:
         config
 
 
-use rule * from cnv_sv as cnv_sv_*
+use rule * from cnv_sv exclude cnvkit_call, cnvkit_scatter, gatk_denoise_read_counts, gatk_collect_allelic_counts as cnv_sv_*
 
 
 use rule cnvkit_batch from cnv_sv as cnv_sv_cnvkit_batch with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_T.bam",
-        bai="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
+        bam=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
+        bai=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
         cnv_reference=config["cnvkit_batch"]["normal_reference"],
 
 
-use rule cnvkit_call from cnv_sv as cnv_sv_cnvkit_call with:
+use rule cnvkit_scatter from cnv_sv as cnv_sv_cnvkit_scatter_whole with:
+    input:
+        segments="cnv_sv/cnvkit_call/{sample}_{type}.pathology.loh.cns",
+        segment_regions="cnv_sv/cnvkit_batch/{sample}/{sample}_{type}.cnr",
+        vcf=lambda wildcards: get_vcf_input(wildcards),
     output:
-        segment="cnv_sv/cnvkit_call/{sample}_{type}.loh.cns",
-
-
-use rule cnvkit_scatter from cnv_sv as cnv_sv_cnvkit_scatter with:
-    output:
-        plot="cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.png",
+        plot=temp("cnv_sv/cnvkit_scatter/{sample}_{type}.png"),
+    params:
+        extra=config.get("cnvkit_scatter_whole", {}).get("extra", ""),
     log:
-        "cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.log",
+        "cnv_sv/cnvkit_scatter/{sample}_{type}.log",
     benchmark:
         repeat(
-            "cnv_sv/cnvkit_scatter/{sample}_{type}_{locus}.benchmark.tsv",
-            config.get("cnvkit_scatter", {}).get("benchmark_repeats", 1),
+            "cnv_sv/cnvkit_scatter/{sample}_{type}.benchmark.tsv",
+            config.get("cnvkit_scatter_whole", {}).get("benchmark_repeats", 1),
         )
 
 
-use rule cnvkit_vcf from cnv_sv as cnv_sv_cnvkit_vcf with:
-    output:
-        vcf="cnv_sv/cnvkit_vcf/{sample}_{type}.vcf",
-
-
-use rule config_manta_tn from cnv_sv as cnv_sv_config_manta_tn with:
+use rule manta_config_tn from cnv_sv as cnv_sv_manta_config_tn with:
     input:
-        bam_t="parabricks/pbrun_fq2bam/{sample}_T.bam",
-        bai_t="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
-        bam_n="parabricks/pbrun_fq2bam/{sample}_N.bam",
-        bai_n="parabricks/pbrun_fq2bam/{sample}_N.bam.bai",
+        bam_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
+        bai_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
+        bam_n=lambda wildcards: get_bam_input(wildcards, t_n="N")[0],
+        bai_n=lambda wildcards: get_bam_input(wildcards, t_n="N")[1],
         ref=config["reference"]["fasta"],
 
 
-use rule generate_pindel_config from cnv_sv as cnv_sv_generate_pindel_config with:
+use rule manta_config_t from cnv_sv as cnv_sv_manta_config_t with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_T.bam",
+        bam_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
+        bai_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
+        ref=config["reference"]["fasta"],
+
+
+if aligner == "bwa_gpu":
+
+    use rule gatk_collect_read_counts from cnv_sv as cnv_sv_gatk_collect_read_counts with:
+        input:
+            bam="parabricks/pbrun_fq2bam/{sample}_T.bam",
+            bai="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
+            interval=config.get("reference", {}).get("design_intervals_gatk_cnv", ""),
+
+
+use rule pindel_generate_config from cnv_sv as cnv_sv_pindel_generate_config with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
         metrics="qc/picard_collect_multiple_metrics/{sample}_T.insert_size_metrics",
-
-
-use rule germline_vcf from cnv_sv as cnv_sv_germline_vcf with:
-    input:
-        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf",
-    output:
-        vcf="cnv_sv/germline_vcf/{sample}_T.germline.vcf",
-    log:
-        "cnv_sv/germline_vcf/{sample}_T.germline.vcf.log",
-    benchmark:
-        repeat(
-            "cnv_sv/germline_vcf/{sample}_T.germline.vcf.benchmark.tsv",
-            config.get("germline_vcf", {}).get("benchmark_repeats", 1),
-        )
-    message:
-        "{rule}: Create a germline only vcf cnv_sv/germline_vcf/{wildcards.sample}_T.germline.vcf"
 
 
 use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
     input:
-        bam_t="parabricks/pbrun_fq2bam/{sample}_T.bam",
-        bai_t="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
-        bam_n="parabricks/pbrun_fq2bam/{sample}_N.bam",
-        bai_n="parabricks/pbrun_fq2bam/{sample}_N.bam.bai",
+        bam_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
+        bai_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
+        bam_n=lambda wildcards: get_bam_input(wildcards, t_n="N")[0],
+        bai_n=lambda wildcards: get_bam_input(wildcards, t_n="N")[1],
         ref=config["reference"]["fasta"],
         scrpt="cnv_sv/manta_run_workflow_tn/{sample}/runWorkflow.py",
     output:
-        som_sv_vcf="cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.vcf.gz",
-        som_sv_tbi="cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.vcf.gz.tbi",
+        som_sv_vcf=temp("cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.vcf.gz"),
+        som_sv_tbi=temp("cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.vcf.gz.tbi"),
+    priority: 4
+
+
+use rule manta_run_workflow_t from cnv_sv as cnv_sv_manta_run_workflow_t with:
+    input:
+        bam_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
+        bai_t=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
+        ref=config["reference"]["fasta"],
+        scrpt="cnv_sv/manta_run_workflow_t/{sample}/runWorkflow.py",
+    priority: 4
 
 
 use rule pindel_call from cnv_sv as cnv_sv_pindel_call with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_T.bam",
-        bai="parabricks/pbrun_fq2bam/{sample}_T.bam.bai",
-        config="cnv_sv/pindel/{sample}.cfg",
+        bam=lambda wildcards: get_bam_input(wildcards, t_n="T")[0],
+        bai=lambda wildcards: get_bam_input(wildcards, t_n="T")[1],
+        config="cnv_sv/pindel/{sample}_T.cfg",
         ref=config["reference"]["fasta"],
-
-
-use rule pindel2vcf from cnv_sv as cnv_sv_pindel2vcf with:
-    output:
-        vcf="cnv_sv/pindel/{sample}.vcf",
+        include_bed=config.get("pindel_call", {}).get("include_bed", []),
 
 
 module compression:
@@ -198,21 +301,124 @@ module compression:
 use rule * from compression as compression_*
 
 
-use rule crumble from compression as compression_crumble with:
-    output:
-        crum="compression/crumble/{file}.crumble.cram",
-
-
 use rule samtools_view from compression as compression_samtools_view with:
     input:
-        bam="parabricks/pbrun_fq2bam/{file}.bam",
-        bai="parabricks/pbrun_fq2bam/{file}.bam.bai",
+        bam=lambda wildcards: get_bam_input(wildcards, t_n=None, use_sample_wildcard=False)[0],
+        bai=lambda wildcards: get_bam_input(wildcards, t_n=None, use_sample_wildcard=False)[1],
         ref=config.get("reference", {}).get("fasta", ""),
 
 
-use rule spring from compression as compression_spring with:
+module filtering:
+    snakefile:
+        github(
+            "hydra-genetics/filtering",
+            path="workflow/Snakefile",
+            tag=config["modules"]["filtering"],
+        )
+    config:
+        config
+
+
+use rule filter_vcf from filtering as filtering_filter_vcf
+
+
+use rule bcftools_filter_include_region from filtering as filtering_bcftools_filter_include_region_snv_t with:
+    input:
+        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf.gz",
+        tabix="parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf.gz.tbi",
     output:
-        spring="compression/spring/{sample}_{flowcell}_{lane}_{barcode}_{type}.spring",
+        vcf=temp("parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.{bed}.vcf"),
+    params:
+        filter=lambda wildcards: "-R %s" % config["bcftools_SNV"][wildcards.bed],
+        extra=config.get("bcftools_SNV", {}).get("extra", ""),
+    log:
+        "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.{bed}.vcf.log",
+    benchmark:
+        repeat(
+            "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.{bed}.vcf.benchmark.tsv",
+            config.get("bcftools_SNV", {}).get("benchmark_repeats", 1),
+        )
+    message:
+        "{rule}: Use bcftools to include variants in vcf overlapping bed: {output.vcf}"
+
+
+use rule bcftools_filter_include_region from filtering as filtering_bcftools_filter_include_region_snv_tn with:
+    input:
+        vcf="parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.gz",
+        tabix="parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.gz.tbi",
+    output:
+        vcf=temp("parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.{bed}.vcf"),
+    params:
+        filter=lambda wildcards: "-R %s" % config["bcftools_SNV"][wildcards.bed],
+        extra=config.get("bcftools_SNV", {}).get("extra", ""),
+    log:
+        "parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.{bed}.vcf.log",
+    benchmark:
+        repeat(
+            "parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.{bed}.vcf.benchmark.tsv",
+            config.get("bcftools_SNV", {}).get("benchmark_repeats", 1),
+        )
+    message:
+        "{rule}: Use bcftools to include variants in vcf overlapping bed: {output.vcf}"
+
+
+use rule bcftools_filter_include_region from filtering as filtering_bcftools_filter_include_region_sv with:
+    input:
+        vcf="cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.vcf.gz",
+        tabix="cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.vcf.gz.tbi",
+    output:
+        vcf=temp("cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf"),
+    params:
+        filter=lambda wildcards: "-R %s" % config["bcftools_SV"][wildcards.bed],
+        extra=config.get("bcftools_SV", {}).get("extra", ""),
+    log:
+        "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.log",
+    benchmark:
+        repeat(
+            "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.benchmark.tsv",
+            config.get("bcftools_SV", {}).get("benchmark_repeats", 1),
+        )
+    message:
+        "{rule}: Use bcftools to include variants in vcf overlapping bed: {output.vcf}"
+
+
+module fusions:
+    snakefile:
+        github(
+            "hydra-genetics/fusions",
+            path="workflow/Snakefile",
+            tag=config["modules"]["fusions"],
+        )
+    config:
+        config
+
+
+use rule * from fusions as fusions_*
+
+
+use rule arriba from fusions as fusions_arriba with:
+    output:
+        fusions="fusions/arriba/{sample}_{type}.fusions.tsv",
+        fusions_dis="fusions/arriba/{sample}_{type}.fusions.discarded.tsv",
+
+
+use rule fusioncatcher from fusions as fusions_fusioncatcher with:
+    priority: 4
+    output:
+        fusions="fusions/fusioncatcher/{sample}_{type}/final-list_candidate-fusion-genes.txt",
+        fusions_summary="fusions/fusioncatcher/{sample}_{type}/summary_candidate_fusions.txt",
+
+
+use rule star_fusion from fusions as fusions_star_fusion with:
+    output:
+        bam="fusions/star_fusion/{sample}_{type}/Aligned.out.bam",
+        fusions="fusions/star_fusion/{sample}_{type}/star-fusion.fusion_predictions.tsv",
+        fusions_abridged="fusions/star_fusion/{sample}_{type}/star-fusion.fusion_predictions.abridged.tsv",
+        sj="fusions/star_fusion/{sample}_{type}/SJ.out.tab",
+        log1=temp("fusions/star_fusion/{sample}_{type}/Log.final.out"),
+        log2=temp("fusions/star_fusion/{sample}_{type}/Log.out"),
+        log3=temp("fusions/star_fusion/{sample}_{type}/Log.progress.out"),
+        rpg=temp("fusions/star_fusion/{sample}_{type}/ReadsPerGene.out.tab"),
 
 
 module parabricks:
@@ -227,6 +433,24 @@ module parabricks:
 
 
 use rule * from parabricks as parabricks_*
+
+
+use rule pbrun_fq2bam from parabricks as parabricks_pbrun_fq2bam with:
+    priority: 5
+
+
+module sentieon:
+    snakefile:
+        github(
+            "hydra-genetics/sentieon",
+            path="workflow/Snakefile",
+            tag=config["modules"]["sentieon"],
+        )
+    config:
+        config
+
+
+use rule * from sentieon as sentieon_*
 
 
 module prealignment:
@@ -253,51 +477,251 @@ module qc:
 use rule * from qc as qc_*
 
 
+if aligner == "bwa_gpu":
+
+    use rule fastqc from qc as qc_fastqc with:
+        resources:
+            mem_mb=config.get("fastqc", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
+            mem_per_cpu=config.get("fastqc", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
+            partition=config.get("fastqc", {}).get("partition", config["default_resources"]["partition"]),
+            threads=config.get("fastqc", {}).get("threads", config["default_resources"]["threads"]),
+            time=config.get("fastqc", {}).get("time", config["default_resources"]["time"]),
+            load=25,
+
+
 use rule mosdepth from qc as qc_mosdepth with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
-        bai="parabricks/pbrun_fq2bam/{sample}_{type}.bam.bai",
-
-
-use rule multiqc from qc as qc_multiqc with:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bai=lambda wildcards: get_bam_input(wildcards)[1],
     output:
-        html="qc/multiqc/multiqc_{report}.html",
-        directory=directory("qc/multiqc/multiqc_{report}_data"),
+        bed=temp("qc/mosdepth/{sample}_{type,T|N}.regions.bed.gz"),
+        csi=temp("qc/mosdepth/{sample}_{type,T|N}.regions.bed.gz.csi"),
+        glob=temp("qc/mosdepth/{sample}_{type,T|N}.mosdepth.global.dist.txt"),
+        thresholds=temp("qc/mosdepth/{sample}_{type,T|N}.thresholds.bed.gz"),
+        region=temp("qc/mosdepth/{sample}_{type,T|N}.mosdepth.region.dist.txt"),
+        summary=temp("qc/mosdepth/{sample}_{type,T|N}.mosdepth.summary.txt"),
+    params:
+        by=config.get("mosdepth", {}).get("by", ""),
+        extra=config.get("mosdepth", {}).get("extra", ""),
+        thresholds=config.get("mosdepth", {}).get("thresholds", ""),
+
+
+if aligner == "bwa_gpu":
+
+    use rule multiqc from qc as qc_multiqc with:
+        input:
+            files=lambda wildcards: set(
+                [
+                    file.format(
+                        sample=sample, type=u.type, lane=u.lane, flowcell=u.flowcell, barcode=u.barcode, read=read, ext=ext
+                    )
+                    for file in config["multiqc"]["reports"][wildcards.report]["qc_files"]
+                    for sample in get_samples(samples)
+                    for u in units.loc[sample].dropna().itertuples()
+                    if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
+                    for read in ["fastq1", "fastq2"]
+                    for ext in config.get("picard_collect_multiple_metrics", {}).get("output_ext", [""])
+                ]
+            ),
+            config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
+            sample_replacement="qc/multiqc/sample_replacement_{report}.tsv",
+            sample_order="qc/multiqc/sample_order_{report}.tsv",
+        params:
+            extra=lambda wildcards, input: "--replace-names "
+            + input.sample_replacement
+            + " --sample-names "
+            + input.sample_order
+            + " -c "
+            + input.config,
+            use_input_files_only=config.get("multiqc", {}).get("use_input_files_only", True),
+
+
+if aligner == "bwa_sentieon":
+
+    use rule multiqc from qc as qc_multiqc with:
+        input:
+            files=lambda wildcards: set(
+                [
+                    file.format(
+                        sample=sample, type=u.type, lane=u.lane, flowcell=u.flowcell, barcode=u.barcode, read=read, ext=ext
+                    )
+                    for file in config["multiqc"]["reports"][wildcards.report]["qc_files"]
+                    for sample in get_samples(samples)
+                    for u in units.loc[sample].dropna().itertuples()
+                    if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
+                    for read in ["fastq1", "fastq2"]
+                    for ext in config.get("picard_collect_multiple_metrics", {}).get("output_ext", [""])
+                ]
+            ),
+            config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
+            sample_replacement="qc/multiqc/sample_replacement_{report}.tsv",
+            sample_order="qc/multiqc/sample_order_{report}.tsv",
+        params:
+            extra=lambda wildcards, input: "--replace-names "
+            + input.sample_replacement
+            + " --sample-names "
+            + input.sample_order
+            + " -c "
+            + input.config,
+            use_input_files_only=config.get("multiqc", {}).get("use_input_files_only", True),
+
+
+use rule peddy from qc as qc_peddy with:
+    input:
+        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.vcf.gz",
+        ped="qc/peddy/{sample}.peddy.fam",
+        tbi="parabricks/pbrun_mutectcaller_t/{sample}_T.vcf.gz.tbi",
+    output:
+        ped=temp("qc/peddy/{sample}/peddy.peddy.ped"),
+        ped_check=temp("qc/peddy/{sample}/peddy.ped_check.csv"),
+        sex_check="qc/peddy/{sample}/peddy.sex_check.csv",
+        het_check=temp("qc/peddy/{sample}/peddy.het_check.csv"),
+        ped_html=temp("qc/peddy/{sample}/peddy.html"),
+        ped_vs_html=temp("qc/peddy/{sample}/peddy.vs.html"),
+        pca=temp("qc/peddy/{sample}/peddy.background_pca.json"),
+    log:
+        "qc/peddy/{sample}.output.log",
+    benchmark:
+        repeat(
+            "qc/peddy/{sample}.peddy.benchmark.tsv",
+            config.get("peddy", {}).get("benchmark_repeats", 1),
+        )
+    params:
+        prefix="qc/peddy/{sample}/",
+        extra=config.get("peddy", {}).get("extra", ""),
 
 
 use rule picard_collect_alignment_summary_metrics from qc as qc_picard_alignment_summary_metrics with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
         ref=config["reference"]["fasta"],
+    wildcard_constraints:
+        type="T|N",
+
+
+use rule picard_collect_alignment_summary_metrics from qc as qc_picard_alignment_summary_metrics_rna with:
+    input:
+        bam="alignment/star/{sample}_{type}.bam",
+        ref=config["reference"]["fasta_rna"],
+    wildcard_constraints:
+        type="R",
 
 
 use rule picard_collect_duplication_metrics from qc as qc_picard_duplication_metrics with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
 
 
 use rule picard_collect_gc_bias_metrics from qc as qc_picard_collect_gc_bias_metrics with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
         ref=config["reference"]["fasta"],
+
+
+use rule picard_collect_hs_metrics from qc as qc_picard_collect_hs_metrics with:
+    input:
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+        bait_intervals=config["reference"]["design_intervals"],
+        reference=config["reference"]["fasta"],
+        target_intervals=config["reference"]["design_intervals"],
 
 
 use rule picard_collect_multiple_metrics from qc as qc_picard_collect_multiple_metrics with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
         ref=config["reference"]["fasta"],
 
 
 use rule picard_collect_wgs_metrics from qc as qc_picard_collect_wgs_metrics with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
         ref=config["reference"]["fasta"],
         interval=config["reference"]["wgs_intervals"],
 
 
 use rule samtools_stats from qc as qc_samtools_stats with:
     input:
-        bam="parabricks/pbrun_fq2bam/{sample}_{type}.bam",
+        bam=lambda wildcards: get_bam_input(wildcards)[0],
+    wildcard_constraints:
+        type="T|N",
+    params:
+        extra="%s " % (config.get("samtools_stats", {}).get("extra", ""),),
+
+
+use rule mosdepth_bed from qc as qc_mosdepth_bed_rna with:
+    input:
+        bam="alignment/star/{sample}_R.bam",
+        bai="alignment/star/{sample}_R.bam.bai",
+        bed=config.get("mosdepth_bed", {}).get("design_bed", ""),
+
+
+use rule rseqc_gene_body_coverage from qc as qc_rseqc_gene_body_coverage with:
+    output:
+        pdf="qc/rseqc_gene_body_coverage/{sample}_{type}.geneBodyCoverage.curves.pdf",
+        rscrpt=temp("qc/rseqc_gene_body_coverage/{sample}_{type}.geneBodyCoverage.r"),
+        txt=temp("qc/rseqc_gene_body_coverage/{sample}_{type}.geneBodyCoverage.txt"),
+
+
+use rule rseqc_inner_distance from qc as qc_rseqc_inner_distance with:
+    output:
+        freq=temp("qc/rseqc_inner_distance/{sample}_{type}.inner_distance_freq.txt"),
+        plot="qc/rseqc_inner_distance/{sample}_{type}.inner_distance_plot.pdf",
+        rscrpt=temp("qc/rseqc_inner_distance/{sample}_{type}.inner_distance_plot.r"),
+        txt=temp("qc/rseqc_inner_distance/{sample}_{type}.inner_distance.txt"),
+
+
+module reports:
+    snakefile:
+        github(
+            "hydra-genetics/reports",
+            path="workflow/Snakefile",
+            tag=config["modules"]["reports"],
+        )
+    config:
+        config
+
+
+use rule * from reports as reports_*
+
+
+use rule merge_cnv_json from reports as reports_merge_cnv_json with:
+    input:
+        json=get_json_for_merge_cnv_json,
+        fai=config.get("reference", {}).get("fai", ""),
+        annotation_bed=list(config.get("annotate_cnv", {}).values()),
+        germline_vcf=lambda wildcards: get_vcf_input(wildcards),
+        filtered_cnv_vcfs=get_filtered_cnv_vcfs_for_merge_json,
+        cnv_vcfs=get_unfiltered_cnv_vcfs_for_merge_json,
+        filtered_cnv_vcfs_tbi=get_filtered_cnv_vcfs_tbi_for_merge_json,
+        cnv_vcfs_tbi=get_unfiltered_cnv_vcfs_tbi_for_merge_json,
+
+
+use rule cnv_json from reports as reports_cnv_json_chr with:
+    output:
+        json=temp("reports/cnv_html_report/{sample}_{type}.{caller}.{tc_method}.{locus}.json"),
+    params:
+        skip_chromosomes=lambda wildcards: [
+            chromosome
+            for chromosome in [f"chr{i}" for i in range(1, 23)] + ["chrX", "chrY", "chrM"]
+            if chromosome != wildcards.locus
+        ],
+    log:
+        "reports/cnv_html_report/{sample}_{type}.{caller}.{tc_method}.{locus}.json.log",
+    benchmark:
+        repeat(
+            "reports/cnv_html_report/{sample}_{type}.{caller}.{tc_method}.{locus}.json.benchmark.tsv",
+            config.get("cnv_json", {}).get("benchmark_repeats", 1),
+        )
+    message:
+        "{rule}: Create JSON representation for CNV results per from {wildcards.caller} "
+        "for {wildcards.sample}_{wildcards.type} {wildcards.locus}"
+
+
+use rule cnv_html_report from reports as reports_cnv_html_report with:
+    params:
+        include_table=config.get("cnv_html_report", {}).get("show_table", True),
+        tc=get_tc,
+        tc_method="pathology",
 
 
 module misc:
@@ -307,24 +731,17 @@ module misc:
         config
 
 
-use rule * from misc as misc_*
+use rule bgzip from misc as misc_bgzip
 
 
-use rule bedtools_intersect from misc as misc_bedtools_intersect with:
-    output:
-        vcf="{module}/{caller}/{file}.{bed}.vcf",
-
-
-use rule imagemagick_convert from misc as misc_imagemagick_convert with:
-    output:
-        png="{file}.png",
+use rule tabix from misc as misc_tabix
 
 
 use rule samtools_index from misc as misc_samtools_index with:
     input:
         cram="{file}.crumble.cram",
     output:
-        crai="{file}.crumble.cram.crai",
+        crai=temp("{file}.crumble.cram.crai"),
     params:
         extra=config.get("extra", {}).get("extra", ""),
     log:
@@ -336,8 +753,3 @@ use rule samtools_index from misc as misc_samtools_index with:
         )
     message:
         "{rule}: Index {wildcards.file}.crumble.cram file"
-
-
-ruleorder: parabricks_pbrun_fq2bam > misc_samtools_index
-ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
-ruleorder: cnv_sv_manta_run_workflow_tn > misc_bgzip

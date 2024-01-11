@@ -1,9 +1,9 @@
-# :crown: WGS Leukemia Königskobra :snake:
+# :dog: :dog: :dog: :notes: WGS Leukemia Fluffy :snake:
 
 Snakemake workflow to analyse hematological malignancies in whole genome data
 
-![snakefmt](https://github.com/clinical-genomics-uppsala/wgs_leukemia_konigskobra/actions/workflows/snakefmt.yaml/badge.svg?branch=develop)
-![snakemake dry run](https://github.com/clinical-genomics-uppsala/wgs_leukemia_konigskobra/actions/workflows/snakemake-dry-run.yaml/badge.svg?branch=develop)
+![snakefmt](https://github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/actions/workflows/snakefmt.yaml/badge.svg?branch=develop)
+![snakemake dry run](https://github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/actions/workflows/snakemake-dry-run.yaml/badge.svg?branch=develop)
 
 [![License: GPL-3](https://img.shields.io/badge/License-GPL3-yellow.svg)](https://opensource.org/licenses/gpl-3.0.html)
 
@@ -11,13 +11,14 @@ Snakemake workflow to analyse hematological malignancies in whole genome data
 
 This snakemake workflow uses modules from hydragenetics to process `.fastq` files and obtain different kind
 of variants (SNV, indels, CNV, SV). Alongside diagnosis-filtered `.vcf` files, the workflow produces a
-multiqc report `.html` file and some CNV plots. One of the modules contains the **commercial**
-[parabricks toolkit](https://docs.nvidia.com/clara/parabricks/3.7.0/index.html) which can be replaced by
+multiqc report `.html` file and some CNV plots and `.tsv` files with relevant information from mutect and Manta. One of the modules contains the **commercial**
+[parabricks toolkit](https://docs.nvidia.com/clara/parabricks/3.7.0/index.html) which can be replaced by sentieon or 
 opensource GATK tools if required. The following modules are currently part of this pipeline:
 
 - annotation
 - cnv_sv
 - compression
+- filtering
 - misc
 - parabricks
 - prealignment
@@ -38,9 +39,9 @@ In order to use this module, the following dependencies are required:
 ### Sample and unit data
 
 Input data should be added to
-[`samples.tsv`](https://github.com/clinical-genomics-uppsala/wgs_leukemia_konigskobra/blob/develop/config/samples.tsv)
+[`samples.tsv`](https://github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/blob/develop/config/samples.tsv)
 and
-[`units.tsv`](https://github.com/clinical-genomics-uppsala/wgs_leukemia_konigskobra/blob/develop/config/units.tsv).
+[`units.tsv`](https://github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/blob/develop/config/units.tsv).
 The following information need to be added to these files:
 
 | Column Id | Description |
@@ -62,7 +63,7 @@ The following information need to be added to these files:
 ### Reference data
 
 Reference files should be specified in
-[`config.yaml`](https://github.com/clinical-genomics-uppsala/wgs_leukemia_konigskobra/blob/develop/config/config.yaml)
+[`config.yaml`](https://github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/blob/develop/config/config.yaml)
 
 1. A `.fasta` reference file of the human genome is required as well as an `.fai` file and an bwa index of this
 file.
@@ -86,31 +87,119 @@ to running the workflow.
 ## :rocket: Usage
 
 To run the workflow,
-[`resources.yaml`](https://github.com/clinical-genomics-uppsala/wgs_leukemia_konigskobra/blob/develop/config/resources.yaml)
+[`resources.yaml`](https://github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/blob/develop/config/resources.yaml)
 is needed which defines different resources as default and for different rules. For parabricks, the `gres`
-stanza is needed and should specify the number of GPUs available.
+stanza is needed and should specify the number of GPUs available. You also need a [`config.yaml`](https://github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/blob/develop/config/config.yaml) where all run-variables are defined. 
 
 ```bash
-snakemake --profile my-profile
+snakemake --profile my-profile --configfile config/config.yaml
 ```
 
-### Relevant output files
+To run the integration test you only need to add lines in the `tests/integration/config.yaml` that differs from the original `config.yaml`. As of now it is only a dryrun test, no small dataset is available.
+
+```bash
+cd .tests/integration/
+snakemake --snakefile ../../workflow/Snakefile --configfiles ../../config/config.yaml config.yaml -n
+```
+### Output files
+
+.fastq files are archived as compressed file pair as .spring: `Archive/{project}/{sample}_{flowcell}_{lane}_{barcode}_{type}.spring`
+
+The MultiQC html report can be found here: `Results/MultiQC_TN.html`
+
+All results (as described in table below) are located in: `Results/{project}/{sample}/`
 
 | File | Description |
 |---|---|
-| `cnv_sv/cnvkit_diagram/{sample}_T.png` | chromosome diagram from cnvkit |
-| `cnv_sv/cnvkit_scatter/{sample}_T_{chromosome}.png` | scatter plot per chromosome from cnvkit |
-| `cnv_sv/cnvkit_vcf/{sample}_T.vcf` | `.vcf` output from cnvkit |
-| `cnv_sv/pindel/{sample}.vcf` | `.vcf` output from pindel |
-| `compression/crumble/{sample}_{type}.crumble.cram` | crumbled `.cram` file |
-| `compression/crumble/{sample}_{type}.crumble.cram.crai` | index for crumbled `.cram` file |
-| `compression/spring/{sample}_{flowcell}_{lane}_{barcode}_{type}.spring` | compressed `.fastq` file pair |
-| `tsv_files/{sample}_mutectcaller_tn.aml.tsv` | `.tsv` file for excel containing SNVs from mutect2 for AML |
-| `tsv_files/{sample}_mutectcaller_tn.all.tsv` | `.tsv` file for excel containing SNVs from mutect2 for ALL |
-| `tsv_files/{sample}_manta_tn.aml.tsv` | `.tsv` file for excel containing SVs from manta for AML |
-| `tsv_files/{sample}_manta_tn.all.tsv` | `.tsv` file for excel containing SVs from manta for ALL |
-| `qc/multiqc/multiqc_DNA.html` | `.html` report from MultiQC |
+| `Cram/{sample}_{type}.crumble.cram` | crumbled `.cram` file |
+| `Cram/{sample}_{type}.crumble.cram.crai` | index for crumbled `.cram` file |
+| `SNV_indels/{sample}_T.vep.vcf.gz` | `.vcf` output for SNV and small indels annotated with VEP for tumor_only |
+| `SNV_indels/{sample}_T.vep.vcf.gz.tbi` | index for `.vcf` output from VEP for tumor_only |
+| `SNV_indels/{sample}_TN.vep.vcf.gz` | `.vcf` output from VEP for tumor/normal |
+| `SNV_indels/{sample}_TN.vep.vcf.gz.tbi` | index for `.vcf` output from VEP for tumor/normal|
+| `SNV_indels/{sample}_TN.vep.all.vcf.gz` |  `.vcf` output from VEP for tumor/normal, hard-filtered for ALL genes |
+| `SNV_indels/{sample}_TN.vep.all.vcf.gz.tbi` | index for  `.vcf` output from VEP for tumor/normal, hard-filtered for ALL genes |
+| `SNV_indels/{sample}_TN.vep.aml.vcf.gz` |  `.vcf` output from VEP for tumor/normal, hard-filtered for AML genes  |
+| `SNV_indels/{sample}_TN.vep.aml.vcf.gz.tbi` | index for `.vcf` output from VEP for tumor/normal, hard-filtered for AML genes  |
+| `SNV_indels/{sample}_mutectcaller_TN.all.tsv` | `.tsv` file for excel containing SNVs and small indels from mutect2 for ALL  |
+| `SNV_indels/{sample}_mutectcaller_TN.aml.tsv` | `.tsv` file for excel containing SNVs and small indels from mutect2 for AML  |
+| `SNV_indels/{sample}.pindel.vcf.gz` | `.vcf` output from pindel  |
+| `SNV_indels/{sample}.pindel.vcf.gz.tbi` | index for `.vcf` output from pindel  |
+| `CNV/{sample}_T.vcf.gz` | `.vcf` output from cnvkit |
+| `CNV/{sample}_T.vcf.gz.tbi` | index for `.vcf` output from cnvkit |
+| `CNV/{sample}_{type}.CNV.xlsx` | Excel file containing overview of CNVkit results |
+| `CNV/{sample}_T.png` | scatter plot from cnvkit for entire genome |
+| `CNV/{sample}_T_chr{chr}.png` | scatter plot per chromosome from cnvkit |
+| `SV/{sample}_manta_TN.ssa.vcf.gz` | `.vcf` output from Manta |
+| `SV/{sample}_manta_TN.ssa.vcf.gz.tbi` | index for `.vcf` output from Manta  |
+| `SV/{sample}_manta_TN.ssa.all.vcf.gz` | `.vcf` output from Manta filtered for ALL genes |
+| `SV/{sample}_manta_TN.ssa.all.vcf.gz.tbi` | index for `.vcf` output from Manta filtered for ALL genes |
+| `SV/{sample}_manta_TN.ssa.aml.vcf.gz` | `.vcf` output from Manta filtered for AML genes |
+| `SV/{sample}_manta_TN.ssa.aml.vcf.gz.tbi` | index for `.vcf` output from Manta filtered for AML genes |
+| `SV/{sample}_manta_TN.del.tsv` | `.tsv` file for excel containing deletions found by Manta (filtered) |
+| `SV/{sample}_manta_TN.ins.tsv` | `.tsv` file for excel containing insertions found by Manta (filtered) |
+| `SV/{sample}_manta_TN.dup.tsv` | `.tsv` file for excel containing duplications found by Manta (filtered) |
+| `SV/{sample}_manta_TN.bnd.tsv` | `.tsv` file for excel containing breakends found by Manta (filtered) |
+| `SV/{sample}_manta_TN.bnd.all.tsv` | `.tsv` file for excel containing breakends found by Manta (filtered), filtered for ALL genes |
+| `SV/{sample}_manta_TN.bnd.aml.tsv` |  `.tsv` file for excel containing breakends found by Manta (filtered), filtered for AML genes|
 
-## :judge: Rule Graph
+
+#### General Statistics - DNA
+The general statistics table are ordered based on the sample order in `SampleSheet.csv`, this is done by renaming the samples in two steps using the script `sample_order_multiqc.py`. To toggle between "Sample Order" and "Sample Name" use the buttons just above General Stats header.
+
+<br />
+
+| Column Name | Origin | Comment | 
+| --- | --- | --- |
+| M Reads | [Picard](https://broadinstitute.github.io/picard/) HSMetrics | Total number of reads in inputfile (`alignment/samtools_merge_bam/{sample}_{type}.bam`) |
+| % Mapped| [Samtools stats](http://www.htslib.org/doc/samtools-stats.html) | Only reads on target (`config[reference][design_bed]`) |
+| % Proper pairs| [Samtools stats](http://www.htslib.org/doc/samtools-stats.html) | Only reads on target (`config[reference][design_bed]`) |
+| Average Quality | [Samtools stats](http://www.htslib.org/doc/samtools-stats.html) | Ratio between sum of base quality over total length. Only reads on target (`config[reference][design_bed]`) |
+| Median | [Mosdepth](https://github.com/brentp/mosdepth) | Median Coverage over reference |
+| >= 10X | [Mosdepth](https://github.com/brentp/mosdepth) | Fraction of reference with coverage over 10x |
+| >= 30X | [Mosdepth](https://github.com/brentp/mosdepth) | Fraction of reference with coverage over 30x |
+| >=50X |[Mosdepth](https://github.com/brentp/mosdepth) | Fraction of reference with coverage over 50x |
+| Error sex check |[Peddy](https://github.com/brentp/peddy)| Result of sex check based on sex in samplesheet |
+| Predicted sex sex check |[Peddy](https://github.com/brentp/peddy)| |
+| Bases on Target | [Picard](https://broadinstitute.github.io/picard/) HSMetrics | Bases inside the capture design (`config[reference][design_intervals]`) |
+| Fold80 |[Picard](https://broadinstitute.github.io/picard/) HSMetrics | The fold over-coverage necessary to raise 80% of bases in "non-zero-cvg" targets to the mean coverage level in those targets (`config[reference][design_intervals]`) |
+| % Dups | [Picard](https://broadinstitute.github.io/picard/) DuplicationMetrics |  |
+| Mean Insert Size | [Picard](https://broadinstitute.github.io/picard/) InsertSizeMetrics |  |
+| Target Bases with zero coverage [%] | [Picard](https://broadinstitute.github.io/picard/) HSMetrics | Percent target (`config[reference][design_intervals]`) bases with 0 coverage |
+| % Adapter | [fastp](https://github.com/OpenGene/fastp) | |
+
+### Program versions
+
+default container: `docker://hydragenetics/common:0.1.9`
+
+| Program | Version | Container | 
+|---|---|---|
+| Arriba | 2.3.0 | `docker://hydragenetics/arriba:2.3.0` |
+| CNVkit | 0.9.9 | `docker://hydragenetics/cnvkit:0.9.9` `docker://python:3.9.9-slim-buster` |
+| Crumble | 0.8.3 | `docker://hydragenetics/crumble:0.8.3` |
+| fastp | 0.20.1 | `docker://hydragenetics/fastp:0.20.1` |
+| FastQC | 0.11.9 | `docker://hydragenetics/fastqc:0.11.9` |
+| FusionCatcher | 1.33 | `docker://blcdsdockerregistry/fusioncatcher:1.33` |
+| GATK | 4.2.2.0 | `docker://hydragenetics/gatk4:4.2.2.0` |
+| Manta | 1.6.0 | `docker://hydragenetics/manta:1.6.0` |
+| Mosdepth | 0.3.2 | `docker://hydragenetics/mosdepth:0.3.2` |
+| MultiQC | 1.11 | `docker://hydragenetics/multiqc:1.11` |
+| Parabricks | 4.0.0-1 | `docker://nvcr.io/nvidia/clara/clara-parabricks:4.0.0-1` |
+| Peddy | 0.4.8 | `docker://hydragenetics/peddy:0.4.8` |
+| Picard | 2.25.0 | `docker://hydragenetics/picard:2.25.0` |
+| Pindel | 0.2.5b9 | `docker://hydragenetics/pindel:0.2.5b9` |
+| RSeQC | 4.0.0 | `docker://hydragenetics/rseqc:4.0.0` |
+| simple_sv_annotation.py  | 2019.02.18 | `docker://hydragenetics/simple_sv_annotation:2019.02.18` |
+| snpEff | 5.0 | `docker://hydragenetics/snpeff:5.0` |
+| SortMeRNA | 4.3.4 | `docker://hydragenetics/sortmerna:4.3.4` |
+| SPRING | 1.0.1 | `docker://hydragenetics/spring:1.0.1` |
+| STAR | 2.7.10a | `docker://hydragenetics/star:2.7.10a` |
+| STAR-Fusion | 1.10.1 | `docker://trinityctat/starfusion:1.10.1` |
+| svdb | 2.6.0 | `docker://hydragenetics/svdb:2.6.0` |
+| VEP | 105 | `docker://hydragenetics/vep:105` |
+
+## :judge: Rule Graph Parabricks version
 
 ![rule_graph](images/rulegraph.svg)
+
+## :judge: Rule Graph Sentieon version

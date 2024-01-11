@@ -6,13 +6,13 @@ default_resources:
   time: "1:00:00"
 
 pbrun_fq2bam:
-  gres: "--gres=gpu:1"
+  gres: "--gres=gres:gpu:1"
   partition: "GPU"
 
 pbrun_mutectcaller_t:
-  gres: "--gres=gpu:1"
+  gres: "--gres=gres:gpu:1"
   partition: "GPU"
 
 pbrun_mutectcaller_tn:
-  gres: "--gres=gpu:1"
+  gres: "--gres=gres:gpu:1"
   partition: "GPU"

@@ -1,0 +1,19 @@
+[Header]
+Done at NGI
+Experiment Name,XXX
+Date,230828
+Module,GenerateFASTQ - 2.0.1
+Workflow,GenerateFASTQ
+Library Prep Kit,Custom
+Chemistry,
+[Reads]
+149
+149
+
+[Settings]
+
+[Data]
+Sample_ID,Sample_Name,Description,I7_Index_ID,index,I5_Index_ID,index2,Sample_Project
+D99-0000,D99-0000,T_K_PED99-0000_XXX_PROJ-0001,A7,AAATTTCCCT,A7,ACTACTACTGT,WGSWP2
+D99-0001,D99-0001,N_K_PED99-0000_XXX_PROJ-0001,A8,AAATTCATCT,A8,AGGGTGAACTT,WGSWP2
+D99-0001,D99-0001,R_K_PED99-0000_XXX_PROJ-0001,B7,GGTTTCGCCT,B7,AGATGTGACTT,WGSWP2
