@@ -87,9 +87,6 @@ rseqc_gene_body_coverage:
 rseqc_inner_distance:
   bed: "reference/gene_model.bed"
 
-sample_order_multiqc:
-  sample_sheet: "SampleSheet.csv"
-
 simple_sv_annotation:
   panel: "reference/panel.txt"
   fusion_pairs: "reference/fusion_pairs.txt"

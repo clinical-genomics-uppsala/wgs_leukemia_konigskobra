@@ -788,11 +788,9 @@ properties:
   sample_order_multiqc:
     type: object
     properties:
-      sample_sheet:
+      container:
         type: string
-        description: Path to SampleSheet.csv
-    required:
-      - sample_sheet
+        description: name or path to docker/singularity container
 
   simple_sv_annotation:
     type: object
@@ -991,7 +989,6 @@ required:
   - pindel2vcf
   - rseqc_gene_body_coverage
   - rseqc_inner_distance
-  - sample_order_multiqc
   - simple_sv_annotation
   - snpeff
   - spring

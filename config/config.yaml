@@ -276,9 +276,6 @@ rseqc_inner_distance:
   bed: ""
   container: "docker://hydragenetics/rseqc:4.0.0"
 
-sample_order_multiqc:
-  sample_sheet: "SampleSheet.csv"
-
 sentieon:
   container: "" 
   reference: ""

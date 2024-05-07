@@ -5,8 +5,6 @@ __license__ = "GPL-3"
 
 
 rule sample_order_multiqc:
-    input:
-        sample_sheet=config["sample_order_multiqc"]["sample_sheet"],
     output:
         replacement_rna="qc/multiqc/sample_replacement_RNA.tsv",
         order_rna="qc/multiqc/sample_order_RNA.tsv",
@@ -15,7 +13,7 @@ rule sample_order_multiqc:
         dnanumber="qc/multiqc/DNA_number.table.tsv",
         rnanumber="qc/multiqc/RNA_number.table.tsv",
     params:
-        extra=config.get("sample_order_multiqc", {}).get("extra", ""),
+        filelist=[(u.sample, u.type, u.fastq1) for u in units.itertuples()],
     log:
         "qc/multiqc/sample_order.tsv.log",
     benchmark:
@@ -30,6 +28,6 @@ rule sample_order_multiqc:
     container:
         config.get("sample_order_multiqc", {}).get("container", config["default_container"])
     message:
-        "{rule}: Create a sample order tsv based on {input.sample_sheet}"
+        "{rule}: Create a sample order tsv based on units.tsv."
     script:
         "../scripts/sample_order_multiqc.py"
