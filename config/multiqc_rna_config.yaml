@@ -64,6 +64,7 @@ table_columns_visible:
     rRNA_pct: True
   Picard:
     PCT_PF_READS_ALIGNED: True
+    PERCENT_DUPLICATION: True
   Samtools:
     error_rate: False
     non-primary_alignments: False
