@@ -37,7 +37,8 @@ with open(snakemake.output.replacement_dna "w+") as replacement_dna, \
     for sample_line in sample_order:
         replacement_line = [sample_line[sample_order_index.index("sample")]]
         order_line = [sample_line[sample_order_index.index("sample")], sample_line[sample_order_index.index("lab_id")]]
-        if sample_line[sample_order_index.index("type")].lower() == "t" or sample_line[sample_order_index.index("type")].lower() == "n":
+        if (sample_line[sample_order_index.index("type")].lower() == "t" or
+                sample_line[sample_order_index.index("type")].lower() == "n"):
             replacement_tsv_dna.write("\t".join(replacement_line + ["sample_"+str(f"{i:03}")]) + "\n")
             order_tsv_dna.write("\t".join(["sample_"+str(f"{i:03}")] + order_line) + "\n")
             dna_table.write("\t".join(["sample_"+str(f"{i:03}")] + order_line)+"\n")
