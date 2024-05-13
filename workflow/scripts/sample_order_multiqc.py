@@ -20,8 +20,8 @@ for sample, type, fastq_path in snakemake.params.filelist:
 sample_order = [list(x) for x in set(tuple(x) for x in sample_order_duplicates)]
 sample_order.sort(key=lambda x: int(x[1]))
 
-with open(snakemake.output.replacement_dna "w+") as replacement_dna, \
-     open(snakemake.output.replacement_rna "w+") as replacement_dna, \
+with open(snakemake.output.replacement_dna, "w+") as replacement_dna, \
+     open(snakemake.output.replacement_rna, "w+") as replacement_dna, \
      open(snakemake.output.order_dna, "w+") as order_tsv_dna, \
      open(snakemake.output.order_rna, "w+") as order_tsv_rna, \
      open(snakemake.output.dnanumber, "w+") as dna_table, \
