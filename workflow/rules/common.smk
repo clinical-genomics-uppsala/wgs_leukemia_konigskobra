@@ -21,6 +21,7 @@ min_version("7.8.0")
 ### Set and validate config file
 configfile: "config.yaml"
 
+
 config = replace_dict_variables(config)
 
 try:
