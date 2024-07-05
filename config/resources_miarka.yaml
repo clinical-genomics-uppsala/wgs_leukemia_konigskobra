@@ -27,11 +27,11 @@ fusioncatcher:
   threads: 20
   time: "160:00:00"
 
-gatk_cnv_collect_allelic_counts:
+gatk_collect_allelic_counts:
   mem_mb: 30720 
   threads: 5
 
-gatk_cnv_model_segments:
+gatk_model_segments:
   mem_mb: 30720
   threads: 5
 
