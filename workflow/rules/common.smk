@@ -201,7 +201,6 @@ def compile_output_list(wildcards):
                 output.format(
                     sample=sample,
                     type=unit_type,
-                    project=samples.loc[(sample)]["project"],
                     chr=chromosome_number,
                     flowcell=flowcell,
                     barcode=barcode,
@@ -222,7 +221,6 @@ def compile_output_list(wildcards):
                 output.format(
                     sample=sample,
                     type=unit_type,
-                    project=samples.loc[(sample)]["project"],
                     chr=chromosome_number,
                 )
                 for chromosome_number in chromosome_numbers
@@ -251,11 +249,8 @@ def generate_copy_code(workflow, output_json):
             code += f'@workflow.rule(name="{rule_name}")\n'
             code += f'@workflow.input("{input_file}")\n'
             code += f'@workflow.output("{output_file}")\n'
-            if "{project}" in output_file:
-                if "{chr}" in output_file:
-                    code += f'@workflow.log("logs/{rule_name}_{{project}}_{result_file}_chr{{chr}}.log")\n'
-                else:
-                    code += f'@workflow.log("logs/{rule_name}_{{project}}_{result_file}.log")\n'
+            if "{chr}" in output_file:
+                code += f'@workflow.log("logs/{rule_name}_{result_file}_chr{{chr}}.log")\n'
             else:
                 code += f'@workflow.log("logs/{rule_name}_{result_file}.log")\n'
             code += f'@workflow.container("{copy_container}")\n'
