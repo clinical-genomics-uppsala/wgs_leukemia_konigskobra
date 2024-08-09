@@ -477,17 +477,6 @@ module qc:
 use rule * from qc as qc_*
 
 
-if aligner == "bwa_gpu":
-
-    use rule fastqc from qc as qc_fastqc with:
-        resources:
-            mem_mb=config.get("fastqc", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
-            mem_per_cpu=config.get("fastqc", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
-            partition=config.get("fastqc", {}).get("partition", config["default_resources"]["partition"]),
-            threads=config.get("fastqc", {}).get("threads", config["default_resources"]["threads"]),
-            time=config.get("fastqc", {}).get("time", config["default_resources"]["time"]),
-            load=25,
-
 
 use rule mosdepth from qc as qc_mosdepth with:
     input:
