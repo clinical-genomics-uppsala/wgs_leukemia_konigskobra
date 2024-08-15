@@ -6,11 +6,11 @@ __license__ = "GPL-3"
 
 rule export_to_xlsx:
     input:
-        all="parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.vep.include.all.vcf.gz",
+        all="parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.normalized.vep.include.all.vcf.gz",
         all_bed=config["bcftools_SNV"]["all"],
-        aml="parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.vep.include.aml.vcf.gz",
+        aml="parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.normalized.vep.include.aml.vcf.gz",
         aml_bed=config["bcftools_SNV"]["aml"],
-        tm="parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.vep.include.tm.vcf.gz",
+        tm="parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.normalized.vep.include.tm.vcf.gz",
         tm_bed=config["bcftools_SNV"]["tm"],
     output:
         xlsx=temp("export_to_xlsx/{analysis}/{sample_type}.snvs.xlsx"),

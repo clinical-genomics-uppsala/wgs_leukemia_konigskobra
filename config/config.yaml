@@ -16,6 +16,7 @@ modules:
   prealignment: "v1.1.0"
   qc: "v0.3.0"
   reports: "7c8b8c5"
+  snv_indels: "v0.6.0"
   misc: "v0.1.0"
   sentieon: "b002d39"
 
