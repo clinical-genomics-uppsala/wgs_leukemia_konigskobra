@@ -477,7 +477,6 @@ module qc:
 use rule * from qc as qc_*
 
 
-
 use rule mosdepth from qc as qc_mosdepth with:
     input:
         bam=lambda wildcards: get_bam_input(wildcards)[0],
