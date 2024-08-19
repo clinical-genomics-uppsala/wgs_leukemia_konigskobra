@@ -6,7 +6,7 @@ __license__ = "GPL-3"
 
 rule mutectcaller_tn_to_tsv:
     input:
-        vcf="parabricks/pbrun_mutectcaller_{analysis}/{sample}.vep.include.{bed}.vcf",
+        vcf="parabricks/pbrun_mutectcaller_{analysis}/{sample}.normalized.vep.include.{bed}.vcf",
     output:
         tsv=temp("tsv_files/{sample}_mutectcaller_{analysis}.{bed}.tsv"),
     params:

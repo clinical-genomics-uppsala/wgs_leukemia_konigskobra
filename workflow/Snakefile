@@ -96,21 +96,21 @@ use rule * from annotation as annotation_*
 
 use rule vep from annotation as annotation_vep with:
     input:
-        vcf="parabricks/pbrun_mutectcaller_tn/{sample}.vcf.gz",
-        tabix="parabricks/pbrun_mutectcaller_tn/{sample}.vcf.gz.tbi",
+        vcf="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vcf.gz",
+        tabix="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vcf.gz.tbi",
         cache=config["vep"]["vep_cache"],
         fasta=config["reference"]["fasta"],
     output:
-        vcf=temp("parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf"),
+        vcf=temp("parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.vcf"),
     log:
-        "parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.log",
+        "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.vcf.log",
     benchmark:
         repeat(
-            "parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.benchmark.tsv",
+            "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.vcf.benchmark.tsv",
             config.get("vep", {}).get("benchmark_repeats", 1),
         )
     message:
-        "{rule}: Annotate {wildcards.sample}.vcf"
+        "{rule}: Annotate {input.vcf} with vep"
 
 
 use rule vep from annotation as annotation_vep_t with:
@@ -344,18 +344,18 @@ use rule bcftools_filter_include_region from filtering as filtering_bcftools_fil
 
 use rule bcftools_filter_include_region from filtering as filtering_bcftools_filter_include_region_snv_tn with:
     input:
-        vcf="parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.gz",
-        tabix="parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.gz.tbi",
+        vcf="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.vcf.gz",
+        tabix="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.vcf.gz.tbi",
     output:
-        vcf=temp("parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.{bed}.vcf"),
+        vcf=temp("parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.include.{bed}.vcf"),
     params:
         filter=lambda wildcards: "-R %s" % config["bcftools_SNV"][wildcards.bed],
         extra=config.get("bcftools_SNV", {}).get("extra", ""),
     log:
-        "parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.{bed}.vcf.log",
+        "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.include.{bed}.vcf.log",
     benchmark:
         repeat(
-            "parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.{bed}.vcf.benchmark.tsv",
+            "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.include.{bed}.vcf.benchmark.tsv",
             config.get("bcftools_SNV", {}).get("benchmark_repeats", 1),
         )
     message:
@@ -725,30 +725,30 @@ module snv_indels:
 
 use rule vt_decompose from snv_indels as snv_indels_vt_decompose with:
     input:
-        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.vcf.gz",
-        tbi="parabricks/pbrun_mutectcaller_t/{sample}_T.vcf.gz.tbi",
+        vcf="parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.vcf.gz",
+        tbi="parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.vcf.gz.tbi",
     output:
-        vcf=temp("parabricks/pbrun_mutectcaller_t/{sample}_T.decomposed.vcf.gz"),
+        vcf=temp("parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.decomposed.vcf.gz"),
     log:
-        "parabricks/pbrun_mutectcaller_t/{sample}_T.decomposed.vcf.gz.log",
+        "parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.decomposed.vcf.gz.log",
     benchmark:
         repeat(
-            "parabricks/pbrun_mutectcaller_t/{sample}_T.decomposed.vcf.gz.benchmark.tsv",
+            "parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.decomposed.vcf.gz.benchmark.tsv",
             config.get("vt_decompose", {}).get("benchmark_repeats", 1),
         )
 
 
 use rule vt_normalize from snv_indels as snv_indels_vt_normalize with:
     input:
-        vcf="parabricks/pbrun_mutectcaller_t/{sample}_{type}.decomposed.vcf.gz",
+        vcf="parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.decomposed.vcf.gz",
         ref=config["reference"]["fasta"],
     output:
-        vcf="parabricks/pbrun_mutectcaller_t/{sample}_{type}.normalized.vcf.gz",
+        vcf="parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.normalized.vcf.gz",
     log:
-        "parabricks/pbrun_mutectcaller_t/{sample}_{type}.normalized.vcf.gz.log",
+        "parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.normalized.vcf.gz.log",
     benchmark:
         repeat(
-            "parabricks/pbrun_mutectcaller_t/{sample}_{type}.normalized.vcf.gz.benchmark.tsv",
+            "parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.normalized.vcf.gz.benchmark.tsv",
             config.get("vt_normalize", {}).get("benchmark_repeats", 1),
         )
 
