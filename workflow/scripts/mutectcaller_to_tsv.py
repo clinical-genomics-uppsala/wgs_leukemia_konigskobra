@@ -36,6 +36,7 @@ if len(list(input_file.header.samples)) == 1:
             "ALLELEFREQUENCY",
             "DEPTH",
             "GENE",
+            "FILTERFLAG",
             "TRANSCRIPT",
             "NUCLEOTIDESEQ",
             "PROTEIN",
@@ -58,6 +59,7 @@ elif len(list(input_file.header.samples)) == 2:
             "DEPTH",
             "NORMAL_DP",
             "GENE",
+            "FILTERFLAG",
             "TRANSCRIPT",
             "NUCLEOTIDESEQ",
             "PROTEIN",
@@ -90,6 +92,7 @@ for row in input_file.fetch():
     tumor_sample = [x for x in row.samples if x.endswith("_T")][0]
     af = row.samples[tumor_sample]["AF"][0]
     dp = row.samples[tumor_sample]["DP"][0]
+    flag = ",".join(row.filter.keys())
     outline = [
         tumor_sample.split("_")[0],
         row.chrom,
@@ -99,6 +102,7 @@ for row in input_file.fetch():
         af,
         dp,
         gene,
+        flag,
         transcript_name,
         transcript_change,
         protein_name,
@@ -121,6 +125,7 @@ for row in input_file.fetch():
             dp,
             dp_normal,
             gene,
+            flag,
             transcript_name,
             transcript_change,
             protein_name,

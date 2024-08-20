@@ -120,6 +120,7 @@ fastqc:
 filter_vcf:
   germline: "config/config_germline_filter.yaml"
   cnv_hardfilter: "config/config_cnv_hardfilter.yaml"
+  somatic: "config/config_snv_softfilter.yaml"
 
 fusioncatcher:
   container: "docker://hydragenetics/fusioncatcher:1.33"
@@ -344,4 +345,3 @@ vt_decompose:
 
 vt_normalize:
   container: "docker://hydragenetics/vt:2015.11.10"
-  

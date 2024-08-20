@@ -324,18 +324,18 @@ use rule filter_vcf from filtering as filtering_filter_vcf
 
 use rule bcftools_filter_include_region from filtering as filtering_bcftools_filter_include_region_snv_t with:
     input:
-        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.vcf.gz",
-        tabix="parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.vcf.gz.tbi",
+        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.vcf.gz",
+        tabix="parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.vcf.gz.tbi",
     output:
-        vcf=temp("parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.include.{bed}.vcf"),
+        vcf=temp("parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.include.{bed}.vcf"),
     params:
         filter=lambda wildcards: "-R %s" % config["bcftools_SNV"][wildcards.bed],
         extra=config.get("bcftools_SNV", {}).get("extra", ""),
     log:
-        "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.include.{bed}.vcf.log",
+        "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.include.{bed}.vcf.log",
     benchmark:
         repeat(
-            "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.include.{bed}.vcf.benchmark.tsv",
+            "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.include.{bed}.vcf.benchmark.tsv",
             config.get("bcftools_SNV", {}).get("benchmark_repeats", 1),
         )
     message:
@@ -344,18 +344,18 @@ use rule bcftools_filter_include_region from filtering as filtering_bcftools_fil
 
 use rule bcftools_filter_include_region from filtering as filtering_bcftools_filter_include_region_snv_tn with:
     input:
-        vcf="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.vcf.gz",
-        tabix="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.vcf.gz.tbi",
+        vcf="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.filter.somatic.vcf.gz",
+        tabix="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.filter.somatic.vcf.gz.tbi",
     output:
-        vcf=temp("parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.include.{bed}.vcf"),
+        vcf=temp("parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.filter.somatic.include.{bed}.vcf"),
     params:
         filter=lambda wildcards: "-R %s" % config["bcftools_SNV"][wildcards.bed],
         extra=config.get("bcftools_SNV", {}).get("extra", ""),
     log:
-        "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.include.{bed}.vcf.log",
+        "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.filter.somatic.include.{bed}.vcf.log",
     benchmark:
         repeat(
-            "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.include.{bed}.vcf.benchmark.tsv",
+            "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.filter.somatic.include.{bed}.vcf.benchmark.tsv",
             config.get("bcftools_SNV", {}).get("benchmark_repeats", 1),
         )
     message:
