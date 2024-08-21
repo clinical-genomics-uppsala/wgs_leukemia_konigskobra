@@ -118,6 +118,7 @@ fastqc:
   container: "docker://hydragenetics/fastqc:0.11.9"
 
 filter_vcf:
+  sample_name_regex: "^([A-Za-z0-9-]+_[RT])$"
   germline: "config/config_germline_filter.yaml"
   cnv_hardfilter: "config/config_cnv_hardfilter.yaml"
   somatic: "config/config_snv_softfilter.yaml"

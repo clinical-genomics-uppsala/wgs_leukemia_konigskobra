@@ -84,7 +84,7 @@ for subsection in subsections:
                 af,
                 af_normal,
                 int(record.info["DP"]),
-                int(dp_normal),
+                dp_normal,
                 transcript,
                 exon,
                 coding_name,

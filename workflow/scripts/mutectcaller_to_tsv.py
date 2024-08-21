@@ -91,7 +91,7 @@ for row in input_file.fetch():
 
     tumor_sample = [x for x in row.samples if x.endswith("_T")][0]
     af = row.samples[tumor_sample]["AF"][0]
-    dp = row.samples[tumor_sample]["DP"][0]
+    dp = row.samples[tumor_sample]["DP"]
     flag = ",".join(row.filter.keys())
     outline = [
         tumor_sample.split("_")[0],
@@ -113,7 +113,7 @@ for row in input_file.fetch():
     if len(list(input_file.header.samples)) == 2:
         normal_sample = [x for x in row.samples if x.endswith("_N")][0]
         af_normal = row.samples[normal_sample]["AF"][0]
-        dp_normal = row.samples[normal_sample]["DP"][0]
+        dp_normal = row.samples[normal_sample]["DP"]
         outline = [
             tumor_sample.split("_")[0],
             row.chrom,
@@ -135,7 +135,7 @@ for row in input_file.fetch():
 
     outlines.append(outline)
 
-logging.info("Writing results to " + snakmake.output.tsv)
+logging.info("Writing results to " + output_file)
 with open(output_file, "wt") as tsv:
     tsv_writer = csv.writer(tsv, delimiter="\t")
     tsv_writer.writerows(outlines)
