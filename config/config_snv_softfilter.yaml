@@ -10,10 +10,10 @@ filters:
     soft_filter: "True"
     soft_filter_flag: "AD_lt_3"
   dp:
-    description: "Softfilter variants where dp is lower than 20x?"
-    expression: "FORMAT:DP < 20"
+    description: "Softfilter variants where dp is lower than 10x"
+    expression: "FORMAT:DP < 10"
     soft_filter: "True"
-    soft_filter_flag: "DP_lt_20"
+    soft_filter_flag: "DP_lt_10"
   germline:
     description: "Soft filter germline if >2% in any population from 1000 genomes, ESP or gnomADe"
     expression: "(VEP:MAX_AF > 0.02)"
