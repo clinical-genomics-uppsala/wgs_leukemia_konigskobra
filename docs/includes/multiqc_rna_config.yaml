@@ -1,0 +1,75 @@
+decimalPoint_format: ','
+extra_fn_clean_exts: ##from this until end
+    - '.duplication_metrics'
+    - type: regex
+      pattern: '_fastq[12]'
+extra_fn_clean_trim:
+  - 'Sample_WA-3560_'
+
+report_header_info:
+  - Contact E-mail: "igp-klinsek-bioinfo@lists.uu.se"
+  - Application Type: "Whole Transcriptome Sequencing"
+  - Project Type: "WTS"
+
+custom content:
+  order:
+    - mosdepth
+    - rseqc
+    - sortmerna
+    - fastp
+    - fastqc
+
+custom_data:
+  rna_number_table:
+    file_format: "tsv"
+    section_name: "RNA number"
+    description: "File for connecting Pedegree ID with RNA number in general stats"
+    plot_type: "generalstats"
+    pconfig:
+      - rna_number:
+          title: "RNA number"
+          description: "RNA number based on SampleSheet"
+          placement: 300
+
+sp:
+  rna_number_table:
+    fn: "*RNA_number.table.tsv"
+
+
+table_columns_visible:
+  FastQC:
+    percent_duplicates: False
+    percent_gc: False
+    avg_sequence_length: False
+    percent_fails: False
+    total_sequences: False
+  fastp:
+    pct_adapter: False
+    pct_surviving: False
+    after_filtering_gc_content: False
+    filtering_result_passed_filter_reads: False
+    after_filtering_q30_bases: False
+    after_filtering_q30_rate: False
+    pct_duplication: False
+  mosdepth:
+    median_coverage: True
+    mean_coverage: False
+    1_x_pc: False
+    5_x_pc: False
+    10_x_pc: True
+    20_x_pc: False
+    30_x_pc: False
+    50_x_pc: False
+  SortMeRNA:
+    rRNA_pct: True
+  Picard:
+    PCT_PF_READS_ALIGNED: True
+    PERCENT_DUPLICATION: True
+  Samtools:
+    error_rate: False
+    non-primary_alignments: False
+    reads_mapped: True
+    reads_mapped_percent: True
+    reads_properly_paired_percent: True
+    reads_MQ0_percent: False
+    raw_total_sequences: True

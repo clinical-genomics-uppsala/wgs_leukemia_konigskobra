@@ -1,0 +1,448 @@
+digraph snakemake_dag {
+    graph[bgcolor=white, margin=0];
+    node[shape=box, style=rounded, fontname=sans,                 fontsize=10, penwidth=2];
+    edge[penwidth=2, color=grey];
+	0[label = "all", color = "0.33 0.6 0.85", style="rounded"];
+	1[label = "_results_tbi_t", color = "0.43 0.6 0.85", style="rounded"];
+	2[label = "misc_tabix", color = "0.13 0.6 0.85", style="rounded"];
+	3[label = "misc_bgzip", color = "0.19 0.6 0.85", style="rounded"];
+	4[label = "annotation_vep_t", color = "0.34 0.6 0.85", style="rounded"];
+	5[label = "parabricks_pbrun_mutectcaller_t", color = "0.66 0.6 0.85", style="rounded"];
+	6[label = "parabricks_pbrun_fq2bam", color = "0.25 0.6 0.85", style="rounded"];
+	7[label = "prealignment_fastp_pe", color = "0.50 0.6 0.85", style="rounded"];
+	8[label = "_results_cnvkit_scatter", color = "0.28 0.6 0.85", style="rounded"];
+	9[label = "cnvkit_scatter", color = "0.15 0.6 0.85", style="rounded"];
+	10[label = "cnvkit_call_no_custom_purity", color = "0.14 0.6 0.85", style="rounded"];
+	11[label = "cnv_sv_cnvkit_batch", color = "0.18 0.6 0.85", style="rounded"];
+	12[label = "filtering_filter_vcf", color = "0.07 0.6 0.85", style="rounded"];
+	13[label = "_results_tbi_tm", color = "0.62 0.6 0.85", style="rounded"];
+	14[label = "filtering_bcftools_filter_include_region_snv_tn", color = "0.38 0.6 0.85", style="rounded"];
+	15[label = "annotation_vep", color = "0.02 0.6 0.85", style="rounded"];
+	16[label = "parabricks_pbrun_mutectcaller_tn", color = "0.01 0.6 0.85", style="rounded"];
+	17[label = "_results_cnv_html_report_chr", color = "0.05 0.6 0.85", style="rounded"];
+	18[label = "reports_cnv_html_report", color = "0.48 0.6 0.85", style="rounded"];
+	19[label = "merge_cnv_json_chr", color = "0.51 0.6 0.85", style="rounded"];
+	20[label = "reports_cnv_json_chr", color = "0.10 0.6 0.85", style="rounded"];
+	21[label = "gatk_cnv_denoise_read_counts_by_sex", color = "0.61 0.6 0.85", style="rounded"];
+	22[label = "cnv_sv_gatk_collect_read_counts", color = "0.12 0.6 0.85", style="rounded"];
+	23[label = "qc_peddy", color = "0.58 0.6 0.85", style="rounded"];
+	24[label = "peddy_create_ped", color = "0.17 0.6 0.85", style="rounded"];
+	25[label = "gatk_model_segments", color = "0.14 0.6 0.85", style="rounded"];
+	26[label = "gatk_cnv_collect_allelic_counts", color = "0.02 0.6 0.85", style="rounded"];
+	27[label = "fix_af", color = "0.12 0.6 0.85", style="rounded"];
+	28[label = "annotation_annotate_cnv", color = "0.46 0.6 0.85", style="rounded"];
+	29[label = "cnv_sv_svdb_query", color = "0.31 0.6 0.85", style="rounded"];
+	30[label = "cnv_sv_svdb_merge", color = "0.38 0.6 0.85", style="rounded"];
+	31[label = "cnv_sv_cnvkit_vcf", color = "0.65 0.6 0.85", style="rounded"];
+	32[label = "cnv_sv_gatk_to_vcf", color = "0.32 0.6 0.85", style="rounded"];
+	33[label = "_results_cnvkit_scatter_whole", color = "0.47 0.6 0.85", style="rounded"];
+	34[label = "cnv_sv_cnvkit_scatter_whole", color = "0.58 0.6 0.85", style="rounded"];
+	35[label = "_results_tbi_tn", color = "0.57 0.6 0.85", style="rounded"];
+	36[label = "_results_star_fusion", color = "0.38 0.6 0.85", style="rounded"];
+	37[label = "fusions_star_fusion", color = "0.57 0.6 0.85", style="rounded"];
+	38[label = "prealignment_merged", color = "0.30 0.6 0.85", style="rounded"];
+	39[label = "_results_manta_t_tsv_bnd_aml", color = "0.65 0.6 0.85", style="rounded"];
+	40[label = "manta_to_tsv", color = "0.20 0.6 0.85", style="rounded"];
+	41[label = "filtering_bcftools_filter_include_region_sv", color = "0.17 0.6 0.85", style="rounded"];
+	42[label = "annotation_simple_sv_annotation_t", color = "0.60 0.6 0.85", style="rounded"];
+	43[label = "annotation_snpeff", color = "0.01 0.6 0.85", style="rounded"];
+	44[label = "cnv_sv_manta_run_workflow_t", color = "0.23 0.6 0.85", style="rounded"];
+	45[label = "cnv_sv_manta_config_t", color = "0.29 0.6 0.85", style="rounded"];
+	46[label = "_results_manta_tn_tbi_aml", color = "0.00 0.6 0.85", style="rounded"];
+	47[label = "annotation_simple_sv_annotation_tn", color = "0.27 0.6 0.85", style="rounded"];
+	48[label = "cnv_sv_manta_run_workflow_tn", color = "0.55 0.6 0.85", style="rounded"];
+	49[label = "cnv_sv_manta_config_tn", color = "0.21 0.6 0.85", style="rounded"];
+	50[label = "_results_svdb_tbi", color = "0.02 0.6 0.85", style="rounded"];
+	51[label = "_results_manta_t_tbi_all", color = "0.26 0.6 0.85", style="rounded"];
+	52[label = "_results_vcf_tm", color = "0.30 0.6 0.85", style="rounded"];
+	53[label = "_results_manta_tn_vcf_aml", color = "0.20 0.6 0.85", style="rounded"];
+	54[label = "_results_fusioncatcher_dux4_igh_hits", color = "0.37 0.6 0.85", style="rounded"];
+	55[label = "dux4_igh_fusioncatcher_count", color = "0.06 0.6 0.85", style="rounded"];
+	56[label = "fusions_fusioncatcher", color = "0.49 0.6 0.85", style="rounded"];
+	57[label = "_results_cram", color = "0.60 0.6 0.85", style="rounded"];
+	58[label = "compression_crumble", color = "0.60 0.6 0.85", style="rounded"];
+	59[label = "compression_samtools_view", color = "0.08 0.6 0.85", style="rounded"];
+	60[label = "_results_manta_t_tsv", color = "0.04 0.6 0.85", style="rounded"];
+	61[label = "manta_to_tsv_no_diagnostic_filtering", color = "0.51 0.6 0.85", style="rounded"];
+	62[label = "_results_manta_t_vcf", color = "0.22 0.6 0.85", style="rounded"];
+	63[label = "_results_star_crai", color = "0.35 0.6 0.85", style="rounded"];
+	64[label = "alignment_samtools_index", color = "0.59 0.6 0.85", style="rounded"];
+	65[label = "alignment_star", color = "0.21 0.6 0.85", style="rounded"];
+	66[label = "_results_vcf_tn", color = "0.31 0.6 0.85", style="rounded"];
+	67[label = "_results_tbi_all_t", color = "0.51 0.6 0.85", style="rounded"];
+	68[label = "filtering_bcftools_filter_include_region_snv_t", color = "0.42 0.6 0.85", style="rounded"];
+	69[label = "_results_xlsx_t", color = "0.41 0.6 0.85", style="rounded"];
+	70[label = "export_to_xlsx", color = "0.10 0.6 0.85", style="rounded"];
+	71[label = "_results_manta_tsv_ins", color = "0.22 0.6 0.85", style="rounded"];
+	72[label = "manta_to_tsv_indeldup", color = "0.50 0.6 0.85", style="rounded"];
+	73[label = "_results_cnvkit_table", color = "0.45 0.6 0.85", style="rounded"];
+	74[label = "cnvkit_table", color = "0.12 0.6 0.85", style="rounded"];
+	75[label = "_results_vcf_tm_t", color = "0.31 0.6 0.85", style="rounded"];
+	76[label = "_results_manta_tn_tbi", color = "0.54 0.6 0.85", style="rounded"];
+	77[label = "_results_star_cram", color = "0.40 0.6 0.85", style="rounded"];
+	78[label = "_archives_spring", color = "0.39 0.6 0.85", style="rounded"];
+	79[label = "compression_spring", color = "0.62 0.6 0.85", style="rounded"];
+	80[label = "_results_manta_tsv_del", color = "0.64 0.6 0.85", style="rounded"];
+	81[label = "_results_manta_t_tsv_ins", color = "0.11 0.6 0.85", style="rounded"];
+	82[label = "_results_tbi_aml", color = "0.64 0.6 0.85", style="rounded"];
+	83[label = "_results_vcf_aml", color = "0.05 0.6 0.85", style="rounded"];
+	84[label = "_results_multiqc_rna", color = "0.61 0.6 0.85", style="rounded"];
+	85[label = "qc_multiqc", color = "0.61 0.6 0.85", style="rounded"];
+	86[label = "qc_mosdepth_bed_rna", color = "0.57 0.6 0.85", style="rounded"];
+	87[label = "prealignment_sortmerna", color = "0.46 0.6 0.85", style="rounded"];
+	88[label = "qc_fastqc", color = "0.36 0.6 0.85", style="rounded"];
+	89[label = "sample_order_multiqc", color = "0.29 0.6 0.85", style="rounded"];
+	90[label = "qc_rseqc_inner_distance", color = "0.11 0.6 0.85", style="rounded"];
+	91[label = "qc_rseqc_gene_body_coverage", color = "0.56 0.6 0.85", style="rounded"];
+	92[label = "qc_picard_alignment_summary_metrics_rna", color = "0.35 0.6 0.85", style="rounded"];
+	93[label = "_results_dux4_igh", color = "0.15 0.6 0.85", style="rounded"];
+	94[label = "dux4_igh_read_count", color = "0.15 0.6 0.85", style="rounded"];
+	95[label = "_results_tsv_all_t", color = "0.63 0.6 0.85", style="rounded"];
+	96[label = "mutectcaller_t_to_tsv", color = "0.09 0.6 0.85", style="rounded"];
+	97[label = "_results_arriba", color = "0.44 0.6 0.85", style="rounded"];
+	98[label = "fusions_arriba", color = "0.07 0.6 0.85", style="rounded"];
+	99[label = "_results_tbi_all", color = "0.52 0.6 0.85", style="rounded"];
+	100[label = "_results_tbi_tm_t", color = "0.33 0.6 0.85", style="rounded"];
+	101[label = "_results_fusioncatcher", color = "0.07 0.6 0.85", style="rounded"];
+	102[label = "_results_manta_tsv_bnd_aml", color = "0.18 0.6 0.85", style="rounded"];
+	103[label = "_results_manta_tsv_bnd_all", color = "0.06 0.6 0.85", style="rounded"];
+	104[label = "_results_xlsx_tn", color = "0.66 0.6 0.85", style="rounded"];
+	105[label = "_results_manta_t_vcf_all", color = "0.47 0.6 0.85", style="rounded"];
+	106[label = "_results_fusioncatcher_dux4_igh_counts", color = "0.26 0.6 0.85", style="rounded"];
+	107[label = "_results_manta_t_tsv_dup", color = "0.55 0.6 0.85", style="rounded"];
+	108[label = "_results_tsv_aml", color = "0.35 0.6 0.85", style="rounded"];
+	109[label = "mutectcaller_tn_to_tsv", color = "0.20 0.6 0.85", style="rounded"];
+	110[label = "_results_manta_t_tbi", color = "0.10 0.6 0.85", style="rounded"];
+	111[label = "_results_gatk_vcf_tbi", color = "0.55 0.6 0.85", style="rounded"];
+	112[label = "_results_cnvkit_vcf", color = "0.64 0.6 0.85", style="rounded"];
+	113[label = "_results_manta_tn_vcf", color = "0.43 0.6 0.85", style="rounded"];
+	114[label = "_results_dux4_erg", color = "0.58 0.6 0.85", style="rounded"];
+	115[label = "dux4_erg_read_count", color = "0.31 0.6 0.85", style="rounded"];
+	116[label = "_results_crai", color = "0.32 0.6 0.85", style="rounded"];
+	117[label = "misc_samtools_index", color = "0.59 0.6 0.85", style="rounded"];
+	118[label = "_results_vcf_all_t", color = "0.27 0.6 0.85", style="rounded"];
+	119[label = "_results_arriba_draw_fusion", color = "0.06 0.6 0.85", style="rounded"];
+	120[label = "fusions_arriba_draw_fusion", color = "0.13 0.6 0.85", style="rounded"];
+	121[label = "_results_manta_t_tsv_bnd", color = "0.59 0.6 0.85", style="rounded"];
+	122[label = "_results_manta_tsv_dup", color = "0.28 0.6 0.85", style="rounded"];
+	123[label = "_results_tsv_aml_t", color = "0.11 0.6 0.85", style="rounded"];
+	124[label = "_results_vcf_aml_t", color = "0.45 0.6 0.85", style="rounded"];
+	125[label = "_results_multiqc_dna", color = "0.47 0.6 0.85", style="rounded"];
+	126[label = "qc_picard_collect_multiple_metrics", color = "0.24 0.6 0.85", style="rounded"];
+	127[label = "qc_mosdepth", color = "0.44 0.6 0.85", style="rounded"];
+	128[label = "qc_picard_alignment_summary_metrics", color = "0.30 0.6 0.85", style="rounded"];
+	129[label = "qc_picard_duplication_metrics", color = "0.24 0.6 0.85", style="rounded"];
+	130[label = "qc_picard_collect_gc_bias_metrics", color = "0.62 0.6 0.85", style="rounded"];
+	131[label = "qc_picard_collect_wgs_metrics", color = "0.03 0.6 0.85", style="rounded"];
+	132[label = "combine_peddy_results", color = "0.41 0.6 0.85", style="rounded"];
+	133[label = "qc_picard_collect_hs_metrics", color = "0.25 0.6 0.85", style="rounded"];
+	134[label = "qc_samtools_stats", color = "0.54 0.6 0.85", style="rounded"];
+	135[label = "create_peddy_mqc_tsv", color = "0.23 0.6 0.85", style="rounded"];
+	136[label = "_results_svdb_vcf", color = "0.03 0.6 0.85", style="rounded"];
+	137[label = "_results_tbi_aml_t", color = "0.53 0.6 0.85", style="rounded"];
+	138[label = "_results_manta_tsv_bnd", color = "0.22 0.6 0.85", style="rounded"];
+	139[label = "_results_tsv_all", color = "0.39 0.6 0.85", style="rounded"];
+	140[label = "_results_manta_tn_vcf_all", color = "0.19 0.6 0.85", style="rounded"];
+	141[label = "_results_vcf_all", color = "0.36 0.6 0.85", style="rounded"];
+	142[label = "_results_cnvkit_tbi", color = "0.05 0.6 0.85", style="rounded"];
+	143[label = "_results_pindel_vcf", color = "0.42 0.6 0.85", style="rounded"];
+	144[label = "cnv_sv_pindel_update_vcf_sequence_dictionary", color = "0.41 0.6 0.85", style="rounded"];
+	145[label = "cnv_sv_pindel2vcf", color = "0.08 0.6 0.85", style="rounded"];
+	146[label = "cnv_sv_pindel_call", color = "0.16 0.6 0.85", style="rounded"];
+	147[label = "cnv_sv_pindel_generate_config", color = "0.49 0.6 0.85", style="rounded"];
+	148[label = "_results_manta_t_tsv_del", color = "0.65 0.6 0.85", style="rounded"];
+	149[label = "_results_gatk_vcf", color = "0.32 0.6 0.85", style="rounded"];
+	150[label = "_results_vcf_t", color = "0.55 0.6 0.85", style="rounded"];
+	151[label = "_results_manta_t_tsv_bnd_all", color = "0.46 0.6 0.85", style="rounded"];
+	152[label = "_results_manta_t_vcf_aml", color = "0.13 0.6 0.85", style="rounded"];
+	153[label = "_results_manta_tn_tbi_all", color = "0.26 0.6 0.85", style="rounded"];
+	154[label = "_results_manta_t_tbi_aml", color = "0.40 0.6 0.85", style="rounded"];
+	99 -> 0
+	63 -> 0
+	46 -> 0
+	102 -> 0
+	108 -> 0
+	137 -> 0
+	140 -> 0
+	149 -> 0
+	76 -> 0
+	53 -> 0
+	111 -> 0
+	141 -> 0
+	107 -> 0
+	54 -> 0
+	150 -> 0
+	50 -> 0
+	62 -> 0
+	71 -> 0
+	138 -> 0
+	136 -> 0
+	36 -> 0
+	78 -> 0
+	139 -> 0
+	35 -> 0
+	60 -> 0
+	142 -> 0
+	154 -> 0
+	77 -> 0
+	153 -> 0
+	17 -> 0
+	69 -> 0
+	114 -> 0
+	51 -> 0
+	100 -> 0
+	143 -> 0
+	83 -> 0
+	121 -> 0
+	1 -> 0
+	57 -> 0
+	103 -> 0
+	106 -> 0
+	118 -> 0
+	113 -> 0
+	8 -> 0
+	119 -> 0
+	97 -> 0
+	122 -> 0
+	84 -> 0
+	124 -> 0
+	101 -> 0
+	73 -> 0
+	151 -> 0
+	13 -> 0
+	105 -> 0
+	52 -> 0
+	95 -> 0
+	33 -> 0
+	66 -> 0
+	110 -> 0
+	104 -> 0
+	81 -> 0
+	125 -> 0
+	82 -> 0
+	80 -> 0
+	112 -> 0
+	123 -> 0
+	75 -> 0
+	148 -> 0
+	39 -> 0
+	152 -> 0
+	116 -> 0
+	93 -> 0
+	67 -> 0
+	2 -> 1
+	3 -> 2
+	14 -> 3
+	41 -> 3
+	47 -> 3
+	42 -> 3
+	16 -> 3
+	28 -> 3
+	12 -> 3
+	31 -> 3
+	5 -> 3
+	29 -> 3
+	32 -> 3
+	68 -> 3
+	15 -> 3
+	4 -> 3
+	2 -> 4
+	3 -> 4
+	6 -> 5
+	7 -> 6
+	9 -> 8
+	10 -> 9
+	12 -> 9
+	11 -> 9
+	12 -> 10
+	11 -> 10
+	6 -> 11
+	2 -> 12
+	3 -> 12
+	2 -> 13
+	2 -> 14
+	3 -> 14
+	2 -> 15
+	3 -> 15
+	6 -> 16
+	18 -> 17
+	19 -> 18
+	20 -> 19
+	2 -> 19
+	3 -> 19
+	27 -> 19
+	21 -> 20
+	11 -> 20
+	25 -> 20
+	23 -> 21
+	22 -> 21
+	6 -> 22
+	2 -> 23
+	24 -> 23
+	3 -> 23
+	21 -> 25
+	26 -> 25
+	6 -> 26
+	12 -> 27
+	29 -> 28
+	30 -> 29
+	32 -> 30
+	31 -> 30
+	10 -> 31
+	25 -> 32
+	34 -> 33
+	10 -> 34
+	12 -> 34
+	11 -> 34
+	2 -> 35
+	37 -> 36
+	38 -> 37
+	7 -> 38
+	40 -> 39
+	41 -> 40
+	2 -> 41
+	3 -> 41
+	43 -> 42
+	48 -> 43
+	44 -> 43
+	45 -> 44
+	6 -> 44
+	6 -> 45
+	2 -> 46
+	43 -> 47
+	49 -> 48
+	6 -> 48
+	6 -> 49
+	2 -> 50
+	2 -> 51
+	3 -> 52
+	3 -> 53
+	55 -> 54
+	56 -> 55
+	38 -> 56
+	58 -> 57
+	59 -> 58
+	6 -> 59
+	61 -> 60
+	47 -> 61
+	42 -> 61
+	3 -> 62
+	64 -> 63
+	65 -> 64
+	38 -> 65
+	3 -> 66
+	2 -> 67
+	2 -> 68
+	3 -> 68
+	70 -> 69
+	3 -> 70
+	72 -> 71
+	47 -> 72
+	42 -> 72
+	74 -> 73
+	10 -> 74
+	9 -> 74
+	34 -> 74
+	3 -> 75
+	2 -> 76
+	65 -> 77
+	79 -> 78
+	72 -> 80
+	72 -> 81
+	2 -> 82
+	3 -> 83
+	85 -> 84
+	91 -> 85
+	128 -> 85
+	131 -> 85
+	126 -> 85
+	135 -> 85
+	90 -> 85
+	129 -> 85
+	127 -> 85
+	88 -> 85
+	133 -> 85
+	134 -> 85
+	86 -> 85
+	7 -> 85
+	89 -> 85
+	87 -> 85
+	132 -> 85
+	130 -> 85
+	92 -> 85
+	64 -> 86
+	65 -> 86
+	38 -> 87
+	64 -> 90
+	65 -> 90
+	64 -> 91
+	65 -> 91
+	65 -> 92
+	94 -> 93
+	6 -> 94
+	96 -> 95
+	68 -> 96
+	98 -> 97
+	64 -> 98
+	65 -> 98
+	2 -> 99
+	2 -> 100
+	56 -> 101
+	40 -> 102
+	40 -> 103
+	70 -> 104
+	3 -> 105
+	55 -> 106
+	72 -> 107
+	109 -> 108
+	14 -> 109
+	2 -> 110
+	2 -> 111
+	3 -> 112
+	3 -> 113
+	115 -> 114
+	6 -> 115
+	117 -> 116
+	58 -> 117
+	3 -> 118
+	120 -> 119
+	65 -> 120
+	98 -> 120
+	61 -> 121
+	72 -> 122
+	96 -> 123
+	3 -> 124
+	85 -> 125
+	6 -> 126
+	6 -> 127
+	6 -> 128
+	6 -> 129
+	6 -> 130
+	6 -> 131
+	23 -> 132
+	24 -> 132
+	6 -> 133
+	6 -> 134
+	132 -> 135
+	3 -> 136
+	2 -> 137
+	61 -> 138
+	109 -> 139
+	3 -> 140
+	3 -> 141
+	2 -> 142
+	144 -> 143
+	145 -> 144
+	146 -> 145
+	147 -> 146
+	6 -> 146
+	126 -> 147
+	6 -> 147
+	72 -> 148
+	3 -> 149
+	3 -> 150
+	40 -> 151
+	3 -> 152
+	2 -> 153
+	2 -> 154
+}            

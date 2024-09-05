@@ -1,0 +1,65 @@
+site_name: Fluffy - hematology WGS and WTS pipeline
+nav:
+  - Overview:
+    - Introduction: index.md
+    - Pipeline overview: overview.md
+    - Result files: results.md
+    - Pipeline setup and configuration: setup.md
+  - DNA pipeline:
+    - Prealignment: dna_prealignment.md
+    - Alignment: dna_alignment.md
+    - SNV indels: dna_snv.md
+    - CNV: dna_cnv.md
+    - SV: dna_sv.md
+    - Fusions: dna_fusions.md
+    - QC: dna_qc.md
+    - Compression: compression.md
+  - RNA pipeline:
+    - Prealignment: rna_prealignment.md
+    - Alignment: rna_alignment.md
+    - Fusions: rna_fusions.md
+    - QC: rna_qc.md
+  - Pipeline specific rules:
+    - Rule list: softwares.md
+  - Project Info:
+    - Changelog: changelog.md
+    - Credits: credits.md
+    - Frequently Asked Questions: faq.md
+    - License: license.md
+
+theme: readthedocs
+extra_css: [extra.css]
+markdown_extensions:
+  - abbr
+  - attr_list
+  - pymdownx.details
+  - pymdownx.snippets:
+      auto_append:
+        - includes/abbreviations.md
+      base_path: ["docs/"]
+      url_download: "True"
+  - mdx_spanner
+  - admonition
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.blocks.details
+
+
+plugins:
+  - search
+  - include-markdown
+  # - yaml-schema:
+  #     yaml_files:
+  #       - file: "workflow/schemas/config.schema.yaml"
+  #         tag: "CONFIGSCHEMA"
+  #       - file: "workflow/schemas/resources.schema.yaml"
+  #         tag: "RESOURCESSCHEMA"
+  - snakemake-rule:
+      rule_folders:
+        - 'workflow/rules'
+      schemas:
+        - 'workflow/schemas/rules.schema.yaml'
+  - mkdocs-simple-hooks:
+      hooks:
+        on_pre_build: "docs.hooks:copy_changelog_and_license"

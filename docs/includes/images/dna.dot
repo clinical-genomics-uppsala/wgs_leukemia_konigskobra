@@ -1,0 +1,139 @@
+digraph snakemake_dag {
+    graph[bgcolor=white, margin=0];
+    node[shape=box, style=rounded, fontname=sans,                 fontsize=10, penwidth=2];
+    edge[penwidth=2, color=grey];
+	0[label = "raw fastq-files", color = "0.0, 0.0, 0.0", style = "dotted"]
+	1[label = "snv_panel.tsv T(N)", color = "0.0 0.0 0.0", style="dotted"];
+	2[label = "mutectcaller_to_tsv", color = "0.65 0.6 0.85", style="rounded"];
+	3[label = "filtering_bcftools_filter_include_region_snv", color = "0.19 0.6 0.85", style="rounded"];
+	5[label = "annotation_vep", color = "0.00 0.6 0.85", style="rounded"];
+	6[label = "parabricks_pbrun_mutectcaller", color = "0.34 0.6 0.85", style="rounded"];
+	7[label = "parabricks_pbrun_fq2bam", color = "0.56 0.6 0.85", style="rounded"];
+	8[label = "prealignment_fastp_pe", color = "0.10 0.6 0.85", style="rounded"];
+	10[label = "CNV html-report", color = "0.0 0.0 0.0", style="dotted"];
+	11[label = "reports_cnv_html_report", color = "0.40 0.6 0.85", style="rounded"];
+	14[label = "cnv_sv_cnvkit_batch", color = "0.48 0.6 0.85", style="rounded"];
+	15[label = "gatk_cnv_denoise_read_counts_by_sex", color = "0.44 0.6 0.85", style="rounded"];
+	16[label = "cnv_sv_gatk_collect_read_counts", color = "0.62 0.6 0.85", style="rounded"];
+	17[label = "qc_peddy", color = "0.14 0.6 0.85", style="rounded"];
+	19[label = "peddy_create_ped", color = "0.01 0.6 0.85", style="rounded"];
+	20[label = "gatk_model_segments", color = "0.35 0.6 0.85", style="rounded"];
+	21[label = "gatk_cnv_collect_allelic_counts", color = "0.66 0.6 0.85", style="rounded"];
+	23[label = "filtering_filter_vcf_germline", color = "0.59 0.6 0.85", style="rounded"];
+	25[label = "annotation_annotate_cnv", color = "0.45 0.6 0.85", style="rounded"];
+	27[label = "cnv_sv_svdb_merge and query", color = "0.21 0.6 0.85", style="rounded"];
+	28[label = "cnv_sv_cnvkit_vcf", color = "0.32 0.6 0.85", style="rounded"];
+	29[label = "cnvkit_call", color = "0.13 0.6 0.85", style="rounded"];
+	30[label = "cnv_sv_gatk_to_vcf", color = "0.09 0.6 0.85", style="rounded"];
+	32[label = "pindel vcf", color = "0.0 0.0 0.0", style="dotted"];
+	34[label = "cnv_sv_pindel2vcf", color = "0.33 0.6 0.85", style="rounded"];
+	35[label = "cnv_sv_pindel_call", color = "0.35 0.6 0.85", style="rounded"];
+	36[label = "cnv_sv_pindel_generate_config", color = "0.64 0.6 0.85", style="rounded"];
+	37[label = "qc_picard_collect_multiple_metrics", color = "0.27 0.6 0.85", style="rounded"];
+	44[label = "cnvkit scatter plots", color = "0.0 0.0 0.0", style="dotted"];
+	45[label = "cnvkit_scatter", color = "0.63 0.6 0.85", style="rounded"];
+	46[label = ".cram", color = "0.0 0.0 0.0", style="dotted"];
+	47[label = "compression_crumble", color = "0.02 0.6 0.85", style="rounded"];
+	58[label = "snv_panel.vcf T(N)", color = "0.0 0.0 0.0", style="dotted"];
+	62[label = "cnv_sv_manta_run_workflow", color = "0.32 0.6 0.85", style="rounded"];
+	63[label = "cnv_sv_manta_config", color = "0.59 0.6 0.85", style="rounded"];
+	64[label = "annotation_manta", color = "0.17 0.6 0.85", style="rounded"];
+	66[label = "export_to_xlsx", color = "0.53 0.6 0.85", style="rounded"];
+	74[label = "manta_to_tsv", color = "0.07 0.6 0.85", style="rounded"];
+	75[label = "Manta_T(N).vcf panels/raw", color = "0.0 0.0 0.0", style="dotted"];
+	76[label = "Manta_T(N).tsv panels", color = "0.0 0.0 0.0", style="dotted"];
+	79[label = "MultiQC_dna.html", color = "0.0 0.0 0.0", style="dotted"];
+	multiqc[label = "qc_multiqc", color = "0.50 0.6 0.85", style="rounded"];
+	81[label = "qc_samtools_stats", color = "0.16 0.6 0.85", style="rounded"];
+	82[label = "qc_mosdepth", color = "0.43 0.6 0.85", style="rounded"];
+	83[label = "qc_picard_collect_gc_bias_metrics", color = "0.00 0.6 0.85", style="rounded"];
+	84[label = "qc_picard_collect_hs_metrics", color = "0.24 0.6 0.85", style="rounded"];
+	85[label = "qc_picard_alignment_summary_metrics", color = "0.60 0.6 0.85", style="rounded"];
+	88[label = "qc_fastqc", color = "0.17 0.6 0.85", style="rounded"];
+	89[label = "qc_picard_collect_wgs_metrics", color = "0.18 0.6 0.85", style="rounded"];
+	90[label = "qc_picard_duplication_metrics", color = "0.39 0.6 0.85", style="rounded"];
+	102[label = ".spring archive", color = "0.0 0.0 0.0", style="dotted"];
+	103[label = "compression_spring", color = "0.05 0.6 0.85", style="rounded"];
+	108[label = "snv.vcf T(N)", color = "0.0 0.0 0.0", style="dotted"];
+	110[label = "snv_panels.xlsx", color = "0.0 0.0 0.0", style="dotted"];
+	112[label = "cnvkit.xlsx", color = "0.0 0.0 0.0", style="dotted"];
+	113[label = "cnvkit_table", color = "0.22 0.6 0.85", style="rounded"];
+	
+	129[label = "dux4_count.tsv", color = "0.0 0.0 0.0", style="dotted"];
+	130[label = "dux4_read_count", color = "0.10 0.6 0.85", style="rounded"];
+	0 -> 8
+	0 -> 88
+	0 -> 103
+	2 -> 1
+	3 -> 2
+	5  -> 3
+	6  -> 5
+	25 -> 11
+	64 -> 75
+	5 -> 23
+	3 -> 66
+	7 -> 6
+	8 -> 7
+	11 -> 10
+	7 -> 14
+	16 -> 15
+	17 -> 15
+	7 -> 16
+	6 -> 17
+	19 -> 17
+	21 -> 20
+	15 -> 20
+	7 -> 21
+	27 -> 25
+	30 -> 27
+	28 -> 27
+	29 -> 28
+	23 -> 29
+	14 -> 29
+	20 -> 30
+	34 -> 32
+	35 -> 34
+	7 -> 35
+	36 -> 35
+	37 -> 36
+	7 -> 36
+	7 -> 37
+	62 -> 64
+	45 -> 44
+	14 -> 45
+	29 -> 45
+	47 -> 46
+	7 -> 47
+	74 -> 76
+	3 -> 58
+	63 -> 62
+	7 -> 62
+	7 -> 63
+	66 -> 110
+	64 -> 74
+	multiqc -> 79
+	17 -> multiqc
+	88 -> multiqc
+	83 -> multiqc
+	37 -> multiqc
+	90 -> multiqc
+	82 -> multiqc
+	81 -> multiqc
+	85 -> multiqc
+	84 -> multiqc
+	89 -> multiqc
+	7 -> 81
+	7 -> 82
+	7 -> 83
+	7 -> 84
+	7 -> 85
+	7 -> 89
+	7 -> 90
+	103 -> 102
+	5 -> 108
+	113 -> 112
+	45 -> 113
+	29 -> 113
+	130 -> 129
+	7 -> 130
+}            

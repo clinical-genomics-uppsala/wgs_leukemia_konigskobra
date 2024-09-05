@@ -1,0 +1,61 @@
+digraph snakemake_dag {
+    graph[bgcolor=white, margin=0];
+    node[shape=box, style=rounded, fontname=sans,                 fontsize=10, penwidth=2];
+    edge[penwidth=2, color=grey];
+	0[label = "raw fastq-files", color = "0.0 0.0 0.0", style="dotted"];
+	1[label = ".spring", color = "0.0 0.0 0.0", style="dotted"];
+	2[label = "compression_spring", color = "0.30 0.6 0.85", style="rounded"];
+	3[label = "MultiQC_rna.html", color = "0.0 0.0 0.0", style="dotted"];
+	4[label = "qc_multiqc", color = "0.65 0.6 0.85", style="rounded"];
+	5[label = "qc_mosdepth_bed_rna", color = "0.25 0.6 0.85", style="rounded"];
+	6[label = "alignment_star", color = "0.45 0.6 0.85", style="rounded"];
+	8[label = "prealignment_fastp_pe", color = "0.64 0.6 0.85", style="rounded"];
+	10[label = "qc_rseqc_inner_distance", color = "0.01 0.6 0.85", style="rounded"];
+	12[label = "qc_rseqc_gene_body_coverage", color = "0.51 0.6 0.85", style="rounded"];
+	13[label = "qc_fastqc", color = "0.43 0.6 0.85", style="rounded"];
+	14[label = "prealignment_sortmerna", color = "0.18 0.6 0.85", style="rounded"];
+	15[label = "qc_picard_alignment_summary_metrics_rna", color = "0.14 0.6 0.85", style="rounded"];
+	16[label = ".tsv arriba", color = "0.0 0.0 0.0", style="dotted"];
+	17[label = "fusions_arriba", color = "0.07 0.6 0.85", style="rounded"];
+	18[label = ".bam", color = "0.0 0.0 0.0", style="dotted"];
+	19[label = ".pdf arriba", color = "0.0 0.0 0.0", style="dotted"];
+	20[label = "fusions_arriba_draw_fusion", color = "0.23 0.6 0.85", style="rounded"];
+	21[label = "dux4_igh_filtered.tsv fusioncatcher", color = "0.0 0.0 0.0", style="dotted"];
+	22[label = "dux4_igh_fusioncatcher_count", color = "0.58 0.6 0.85", style="rounded"];
+	23[label = "fusions_fusioncatcher", color = "0.02 0.6 0.85", style="rounded"];
+	24[label = "dux4_igh_counts.tsv fusioncather", color = "0.0 0.0 0.0", style="dotted"];
+	26[label = ".tsv starfusion", color = "0.0 0.0 0.0", style="dotted"];
+	27[label = "fusions_star_fusion", color = "0.11 0.6 0.85", style="rounded"];
+	28[label = ".tsv fusioncatcher", color = "0.0 0.0 0.0", style="dotted"];
+	0 -> 8
+	0 -> 2
+	0 -> 13
+	2 -> 1
+	4 -> 3
+	13 -> 4
+	10 -> 4
+	8 -> 4
+	14 -> 4
+	5 -> 4
+	15 -> 4
+	12 -> 4
+	6 -> 5
+	8 -> 6
+	6 -> 10
+	6 -> 12
+	8 -> 14
+	6 -> 15
+	17 -> 16
+	6 -> 17
+	6 -> 18
+	20 -> 19
+	6 -> 20
+	17 -> 20
+	22 -> 21
+	23 -> 22
+	8 -> 23
+	22 -> 24
+	27 -> 26
+	8 -> 27
+	23 -> 28
+}            
