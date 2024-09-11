@@ -20,9 +20,9 @@ bedfiles["aml"] = snakemake.input.aml_bed
 bedfiles["tm"] = snakemake.input.tm_bed
 
 vcfs = {}
-vcfs["all"] = snakemake.input.all
-vcfs["aml"] = snakemake.input.aml
-vcfs["tm"] = snakemake.input.tm
+vcfs["all"] = [x for x in snakemake.input.vcfs if "include.all" in x][0]
+vcfs["aml"] = [x for x in snakemake.input.vcfs if "include.aml" in x][0]
+vcfs["tm"] = [x for x in snakemake.input.vcfs if "include.tm" in x][0]
 subsections = ["all", "aml", "tm"]
 vcf_tables = {}
 for subsection in subsections:
