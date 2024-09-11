@@ -8,7 +8,7 @@ rule annotate_normal_ratio:
     input:
         vcf="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.vcf",
     output:
-        vcf="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.vcf.gz",
+        vcf="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.vcf",
     log:
         "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.vcf.gz.log",
     benchmark:

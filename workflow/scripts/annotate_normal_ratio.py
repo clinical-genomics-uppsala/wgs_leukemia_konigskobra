@@ -15,9 +15,9 @@ logging.info("Starting to process " + snakemake.input.vcf)
 vcf_in = VariantFile(snakemake.input.vcf)
 
 new_header = vcf_in.header
-new_header.info.add("N_ratio", "A", "Float", "Number of times larger normal AF is than tumour sample.")
+new_header.info.add("N_ratio", "1", "Float", "Number of times larger normal AF is than tumour sample.")
 logging.debug("Creating header for " + snakemake.output.vcf)
-vcf_out = VariantFile(snakemake.output.vcf, "wb", header=new_header)
+vcf_out = VariantFile(snakemake.output.vcf, "w", header=new_header)
 
 sample_tumor = [x for x in list(vcf_in.header.samples) if x.endswith("_T")][0]
 sample_normal = [x for x in list(vcf_in.header.samples) if x.endswith("_N")][0]

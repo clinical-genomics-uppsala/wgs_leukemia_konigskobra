@@ -46,6 +46,6 @@ filters:
     soft_filter: "True"
   n_ratio:
     description: "Soft filter variants where normal freq is atleast 5 times bigger than tumour freq"
-    expression: "INFO:NA_FALSE:N_ratio >= 5"
+    expression: "INFO:NA_FALSE:N_ratio > 5"
     soft_filter_flag: "N_ratio_lgt_5"
     soft_filter: "True"
