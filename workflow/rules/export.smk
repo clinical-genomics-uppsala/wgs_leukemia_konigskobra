@@ -27,6 +27,7 @@ rule export_to_xlsx:
     output:
         xlsx=temp("export_to_xlsx/{analysis}/{sample_type}.snvs.xlsx"),
     params:
+        filterfile = config["filters"]["somatic"],
         extra=config.get("export_to_xlsx", {}).get("extra", ""),
     log:
         "export_to_xlsx/{analysis}/{sample_type}.snvs.xslx.log",
