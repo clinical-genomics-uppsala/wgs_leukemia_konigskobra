@@ -96,40 +96,21 @@ use rule * from annotation as annotation_*
 
 use rule vep from annotation as annotation_vep with:
     input:
-        vcf="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vcf.gz",
-        tabix="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vcf.gz.tbi",
+        vcf="parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.normalized.vcf.gz",
+        tabix="parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.normalized.vcf.gz.tbi",
         cache=config["vep"]["vep_cache"],
         fasta=config["reference"]["fasta"],
     output:
-        vcf=temp("parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.vcf"),
+        vcf=temp("parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.normalized.vep.vcf"),
     log:
-        "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.vcf.log",
+        "parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.normalized.vep.vcf.log",
     benchmark:
         repeat(
-            "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.vcf.benchmark.tsv",
+            "parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.normalized.vep.vcf.benchmark.tsv",
             config.get("vep", {}).get("benchmark_repeats", 1),
         )
     message:
         "{rule}: Annotate {input.vcf} with vep"
-
-
-use rule vep from annotation as annotation_vep_t with:
-    input:
-        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vcf.gz",
-        tabix="parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vcf.gz.tbi",
-        cache=config["vep"]["vep_cache"],
-        fasta=config["reference"]["fasta"],
-    output:
-        vcf=temp("parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.vcf"),
-    log:
-        "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.vcf.log",
-    benchmark:
-        repeat(
-            "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.vcf.benchmark.tsv",
-            config.get("vep", {}).get("benchmark_repeats", 1),
-        )
-    message:
-        "{rule}: Annotate {input.vcf} with vep."
 
 
 use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation_tn with:
@@ -147,7 +128,7 @@ use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation
             config.get("snpeff", {}).get("benchmark_repeats", 1),
         )
     message:
-        "{rule}: Annotate cnv_sv/manta_run_workflow_tn/{wildcards.sample}/results/variants/somaticSV.snpeff.vcf.gz"
+        "{rule}: Annotate {input.vcf}"
 
 
 use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation_t with:
