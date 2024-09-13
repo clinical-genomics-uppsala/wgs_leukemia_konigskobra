@@ -27,7 +27,7 @@ vcfs["aml"] = [x for x in snakemake.input.vcfs if "include.aml" in x][0]
 vcfs["tm"] = [x for x in snakemake.input.vcfs if "include.tm" in x][0]
 subsections = ["all", "aml", "tm"]
 
-sample_name = snakemake.output.xlsx.split("/")[-1].split(".snv.xlsx")[0]
+sample_name = snakemake.output.xlsx.split("/")[-1].split(".snvs.xlsx")[0]
 
 snv_tables = {}
 for subsection in subsections:
@@ -52,6 +52,7 @@ with open(snakemake.params.filterfile, "r") as filter_file:
 
 for key, items in filters_dict["filters"].items():
     filters.append(items["soft_filter_flag"] + ": " + items["description"])
+
 
 """ Creating xlsx file """
 workbook = xlsxwriter.Workbook(snakemake.output.xlsx)
@@ -89,7 +90,7 @@ for sheet in subsections:
     worksheet = workbook.add_worksheet(sheet.upper())
     worksheet.set_column("B:B", 12)
     worksheet.set_column("E:E", 10)
-    worksheet.set_column("L:L", 15)
+    worksheet.set_column("K:K", 15)
     worksheet.write("A1", "Variants in " + sheet.upper() + " regions", format_heading)
     worksheet.write("A3", "Sample: " + str(sample_name))
     worksheet.write("A4", "Databases used: " + data_table["vep_line"])
@@ -109,10 +110,15 @@ for sheet in subsections:
     )
 
     i += 2
-    table_area = "A" + str(i) + ":T" + str(len(data_table["data"]) + i)
+    if len(data_table["data"]) > 0:
+        table_area = "A" + str(i) + ":T" + str(len(data_table["data"]) + i)
+        table_area_data = "A" + str(i + 1) + ":T" + str(len(data_table["data"]) + i)
+    else:
+        table_area = "A" + str(i) + ":T" + str(i + 1)
+        table_area_data = "A" + str(i + 1) + ":T" + str(i + 1)
 
     worksheet.add_table(table_area, {"columns": data_table["headers"], "style": "Table Style Light 1"})
-    table_area_data = "A" + str(i + 1) + ":T" + str(len(data_table["data"]) + i + 1)
+
     cond_formula = "=LEFT($A" + str(i + 1) + ', 4)<>"PASS"'
     worksheet.conditional_format(table_area_data, {"type": "formula", "criteria": cond_formula, "format": format_orange})
 
