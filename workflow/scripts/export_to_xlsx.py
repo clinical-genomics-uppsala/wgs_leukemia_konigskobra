@@ -20,6 +20,7 @@ bedfiles = {}
 bedfiles["all"] = snakemake.input.all_bed
 bedfiles["aml"] = snakemake.input.aml_bed
 bedfiles["tm"] = snakemake.input.tm_bed
+bedfiles["pindel"] = snakemake.input.pindel_bed
 
 vcfs = {}
 vcfs["all"] = [x for x in snakemake.input.vcfs if "include.all" in x][0]
@@ -32,12 +33,12 @@ sample_name = snakemake.output.xlsx.split("/")[-1].split(".snvs.xlsx")[0]
 snv_tables = {}
 for subsection in subsections:
     snv_tables[subsection] = create_snv_table(vcfs[subsection])
-    # pindel_table = create_pindel_table(pindel)
+pindel_table = create_pindel_table(snakemake.input.pindel_vcf)
 
 
 # Adding bedfiles
 bed_tables = {}
-for subsection in subsections:
+for subsection in subsections + ["pindel"]:
     bed_table = []
     with open(bedfiles[subsection], "r") as file:
         for line in file:
@@ -76,13 +77,15 @@ worksheet_overview.write(7, 0, "Sheets:", format_bold)
 worksheet_overview.write_url(8, 0, "internal:'ALL'!A1", string="Variants in ALL genes")
 worksheet_overview.write_url(9, 0, "internal:'AML'!A1", string="Variants in AML genes")
 worksheet_overview.write_url(10, 0, "internal:'TM'!A1", string="Variants in TM exons")
-worksheet_overview.write_url(11, 0, "internal:'ALL bedfile'!A1", string="Gene regions included in ALL bedfile")
-worksheet_overview.write_url(12, 0, "internal:'AML bedfile'!A1", string="Gene regions included in AML bedfile")
-worksheet_overview.write_url(13, 0, "internal:'TM bedfile'!A1", string="Gene regions included in TM bedfile")
+worksheet_overview.write_url(11,0, "internal: 'Pindel'!A1", string="Variants found by pindel in FLT3 or UBTF")
+worksheet_overview.write_url(12, 0, "internal:'ALL bedfile'!A1", string="Gene regions included in ALL bedfile")
+worksheet_overview.write_url(13, 0, "internal:'AML bedfile'!A1", string="Gene regions included in AML bedfile")
+worksheet_overview.write_url(14, 0, "internal:'TM bedfile'!A1", string="Gene regions included in TM bedfile")
 
-worksheet_overview.write(16, 0, "ALL bedfile: " + bedfiles["all"])
-worksheet_overview.write(17, 0, "AML bedfile: " + bedfiles["aml"])
-worksheet_overview.write(18, 0, "TM exons bedfile: " + bedfiles["tm"])
+worksheet_overview.write(17, 0, "Pindel bedfile: " + bedfiles["pindel"])
+worksheet_overview.write(18, 0, "ALL bedfile: " + bedfiles["all"])
+worksheet_overview.write(19, 0, "AML bedfile: " + bedfiles["aml"])
+worksheet_overview.write(20, 0, "TM exons bedfile: " + bedfiles["tm"])
 
 # Add snv variants sheets
 for sheet in subsections:
@@ -133,9 +136,54 @@ for sheet in subsections:
         worksheet.write_row(i, 0, row_data)
         i += 1
 
+worksheet = workbook.add_worksheet("Pindel")
+worksheet.set_column("B:B", 12)
+#worksheet_pindel.set_column(5, 5, 10)
+#worksheet_pindel.set_column(11, 13, 10)
+worksheet.write("A1", "Variants found", format_heading)
+worksheet.write("A3", "Sample: " + str(sample))
+worksheet.write("A5", "To limit runtime pindel were used with a specific designfile: " + bedfiles["pindel"])
+worksheet.write("A6", "Which includes the following regions: ")
+i = 7
+for gene in pindel_genes:
+    worksheet.write("C" + str(i), gene)
+    i += 1
+
+# worksheet.write("A" + str(i + 1), "Filters: ", format_orange)
+# for j, filter_txt in enumerate(filters):
+#     j += i + 1
+#     worksheet.write("B" + str(j), filter_txt, format_orange)
+# i += 2 + len(filters)
+
+worksheet.write_rich_string("A" + str(i), "Only variants with filter-flag ", format_bold, "PASS", " shown by default.")
+worksheet.write(
+    "A" + str(i + 1),
+    "To see all variants; put marker on header row, then click on 'Standard Filter' and remove any values. "
+    + "You can then use the drop-downs in the header row to filter to your liking.",
+)
+i += 3
+
+table_area = "A" + str(i) + ":V" + str(len(pindel_table["data"]) + i) #lagga till om tom
+worksheet.add_table(table_area, {"columns": pindel_table["headers"], "style": "Table Style Light 1"})
+
+table_area_data = "A" + str(i + 1) + ":V" + str(len(pindel_table["data"]) + i)
+cond_formula = "=LEFT($A" + str(i + 1) + ', 4)<>"PASS"'
+worksheet.conditional_format(table_area_data, {"type": "formula", "criteria": cond_formula, "format": format_orange})
+
+worksheet.autofilter(table_area)
+worksheet.filter_column("A", "Filter != PASS")
+for row_data in pindel_table["data"]:
+    if row_data[0] == "PASS":
+        pass
+    else:
+        worksheet.set_row(i, options={"hidden": True})
+    worksheet.write_row(i, 0, row_data)
+    i += 1
+
+
 
 # Add bedfile sheets
-for sheet in subsections:
+for sheet in subsections + ["pindel"]:
     bed_data = bed_tables[sheet]
     worksheet = workbook.add_worksheet(sheet.upper() + " bedfile")
     worksheet.set_column("B:C", 10)

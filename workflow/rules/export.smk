@@ -21,9 +21,11 @@ def check_if_tn(wildcards):
 rule export_to_xlsx:
     input:
         vcfs=check_if_tn,
+        pindel_vcf="cnv_sv/pindel_vcf/{sample}_T.no_tc.vep_annotated.vcf",
         all_bed=config["bcftools_SNV"]["all"],
         aml_bed=config["bcftools_SNV"]["aml"],
         tm_bed=config["bcftools_SNV"]["tm"],
+        pindel_bed=config["pindel_call"]["include_bed"],
     output:
         xlsx=temp("export_to_xlsx/{analysis}/{sample_type}.snvs.xlsx"),
     params:

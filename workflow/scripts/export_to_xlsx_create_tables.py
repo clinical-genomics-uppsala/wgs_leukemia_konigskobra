@@ -14,7 +14,7 @@ def index_vep(variantfile):
 
 
 # Extract table columns from vcf records
-def extract_vcf_values(record, csq_index, sample_tumor, sample_normal):
+def extract_vcf_values(record, csq_index, sample_tumor, sample_normal = ""):
     return_dict = {}
     csq = record.info["CSQ"][0].split("|")
 
@@ -25,16 +25,18 @@ def extract_vcf_values(record, csq_index, sample_tumor, sample_normal):
     
     if sample_normal != "":
         return_dict["n_af"] = float(record.samples[sample_normal]["AF"][0])
+    else:
+        return_dict["n_af"] = ""
 
     try:
         return_dict["dp"] = int(record.info["DP"])
     except KeyError:
         return_dict["dp"] = sum(record.samples[sample_tumor].get("AD"))
 
-    # try:
-    #     return_dict["svlen"] = int(record.info["SVLEN"])
-    # except KeyError:
-    #     pass
+    try:
+        return_dict["svlen"] = int(record.info["SVLEN"])
+    except KeyError:
+        pass
 
     # try:
     #     return_dict["artifact_callers"] = (
@@ -105,9 +107,8 @@ def create_snv_table(vcf_input):
     else:
         sample_normal = ""
     csq_index = index_vep(vcf_file)
-    for x in vcf_file.header.records:
-        if x.key == "VEP":
-            vep_line = x.value
+    vep_line = [x.value for x in vcf_file.header.records if x.key == "VEP"][0]
+
     snv_table = {"data": [], "headers": [], "vep_line": vep_line}
     snv_table["headers"] = [
         {"header": "FilterFlag"},
@@ -162,10 +163,60 @@ def create_snv_table(vcf_input):
 
 
 
-def create_pindel_table(vcf_input, sequenceid):
+def create_pindel_table(vcf_input):
     pindel_file = VariantFile(vcf_input)
-    pindel_table = ""
+    sample = list(pindel_file.header.samples)[0]
+    csq_index = index_vep(pindel_file)
+    vep_line = [x.value for x in pindel_file.header.records if x.key == "VEP"][0]
 
+    pindel_table = {"data": [], "headers": [], "vep_line": vep_line}
+    pindel_table["headers"] = [
+        {"header": "Filter"},
+        {"header": "DNAnr"},
+        {"header": "Gene"},
+        {"header": "Chr"},
+        {"header": "Pos"},
+        {"header": "Ref"},
+        {"header": "Alt"},
+        {"header": "SV length"},
+        {"header": "AF"},
+        {"header": "DP"},
+        {"header": "Transcript"},
+        {"header": "Mutation cds"},
+        {"header": "ENSP"},
+        {"header": "Consequence"},
+        {"header": "COSMIC ids on pos"},
+        {"header": "Clinical Significance"},
+        {"header": "dbSNP"},
+        {"header": "Max Pop AF"},
+        {"header": "Max Pop"},
+    ]
+    for record in pindel_file.fetch():
+        record_values = extract_vcf_values(record, csq_index, sample)
+        if record_values["af"] > 0.01:
+            outline = [
+                record_values["filter_flag"],
+                sample,
+                record_values["gene"],
+                record.contig,
+                int(record.pos),
+                record.ref,
+                record.alts[0],
+                record_values["svlen"],
+                record_values["af"],
+                record_values["dp"],
+                record_values["transcript"],
+                record_values["coding_name"],
+                record_values["ensp"],
+                record_values["consequence"],
+                record_values["cosmic"],
+                record_values["clinical"],
+                record_values["rs"],
+                record_values["max_pop_af"],
+                record_values["max_pops"],
+            ]
+            pindel_table["data"].append(outline)
     return pindel_table
+
 
 
