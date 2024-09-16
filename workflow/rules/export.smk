@@ -9,19 +9,18 @@ def check_if_tn(wildcards):
         vcfs = expand(
             "parabricks/pbrun_mutectcaller_{{analysis}}/{{sample_type}}.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.gz",
             bed=["all", "aml", "tm"],
-        )
+        )+ ["cnv_sv/pindel_vcf/{sample_type}_T.no_tc.vep_annotated.vcf"]
     else:
         vcfs = expand(
             "parabricks/pbrun_mutectcaller_{{analysis}}/{{sample_type}}.normalized.vep.filter.somatic.include.{bed}.vcf.gz",
             bed=["all", "aml", "tm"],
-        )
+        ) + ["cnv_sv/pindel_vcf/{sample_type}.no_tc.vep_annotated.vcf"]
     return vcfs
 
 
 rule export_to_xlsx:
     input:
         vcfs=check_if_tn,
-        pindel_vcf="cnv_sv/pindel_vcf/{sample}_T.no_tc.vep_annotated.vcf",
         all_bed=config["bcftools_SNV"]["all"],
         aml_bed=config["bcftools_SNV"]["aml"],
         tm_bed=config["bcftools_SNV"]["tm"],

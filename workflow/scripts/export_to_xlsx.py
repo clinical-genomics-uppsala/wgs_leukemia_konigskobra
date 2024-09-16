@@ -26,6 +26,7 @@ vcfs = {}
 vcfs["all"] = [x for x in snakemake.input.vcfs if "include.all" in x][0]
 vcfs["aml"] = [x for x in snakemake.input.vcfs if "include.aml" in x][0]
 vcfs["tm"] = [x for x in snakemake.input.vcfs if "include.tm" in x][0]
+vcfs["pindel"] = [x for x in snakemake.input.vcfs if "pindel" in x][0]
 subsections = ["all", "aml", "tm"]
 
 sample_name = snakemake.output.xlsx.split("/")[-1].split(".snvs.xlsx")[0]
@@ -33,7 +34,7 @@ sample_name = snakemake.output.xlsx.split("/")[-1].split(".snvs.xlsx")[0]
 snv_tables = {}
 for subsection in subsections:
     snv_tables[subsection] = create_snv_table(vcfs[subsection])
-pindel_table = create_pindel_table(snakemake.input.pindel_vcf)
+pindel_table = create_pindel_table(vcfs["pindel"])
 
 
 # Adding bedfiles
@@ -141,13 +142,13 @@ worksheet.set_column("B:B", 12)
 #worksheet_pindel.set_column(5, 5, 10)
 #worksheet_pindel.set_column(11, 13, 10)
 worksheet.write("A1", "Variants found", format_heading)
-worksheet.write("A3", "Sample: " + str(sample))
+worksheet.write("A3", "Sample: " + str(sample_name))
 worksheet.write("A5", "To limit runtime pindel were used with a specific designfile: " + bedfiles["pindel"])
 worksheet.write("A6", "Which includes the following regions: ")
 i = 7
-for gene in pindel_genes:
-    worksheet.write("C" + str(i), gene)
-    i += 1
+#for gene in pindel_genes:
+#    worksheet.write("C" + str(i), gene)
+#    i += 1
 
 # worksheet.write("A" + str(i + 1), "Filters: ", format_orange)
 # for j, filter_txt in enumerate(filters):
@@ -163,10 +164,15 @@ worksheet.write(
 )
 i += 3
 
-table_area = "A" + str(i) + ":V" + str(len(pindel_table["data"]) + i) #lagga till om tom
+if len(pindel_table["data"]) > 0:
+    table_area = "A" + str(i) + ":T" + str(len(pindel_table["data"]) + i)
+    table_area_data = "A" + str(i + 1) + ":T" + str(len(pindel_table["data"]) + i)
+else:
+    table_area = "A" + str(i) + ":T" + str(i + 1)
+    table_area_data = "A" + str(i + 1) + ":T" + str(i + 1)
+
 worksheet.add_table(table_area, {"columns": pindel_table["headers"], "style": "Table Style Light 1"})
 
-table_area_data = "A" + str(i + 1) + ":V" + str(len(pindel_table["data"]) + i)
 cond_formula = "=LEFT($A" + str(i + 1) + ', 4)<>"PASS"'
 worksheet.conditional_format(table_area_data, {"type": "formula", "criteria": cond_formula, "format": format_orange})
 
