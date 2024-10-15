@@ -179,7 +179,13 @@ module alignment:
         config
 
 
-use rule star from alignment as alignment_star
+use rule star from alignment as alignment_star with:
+    output:
+        bam=temp("alignment/star/{sample}_{type}.bam"),
+        sj=temp("alignment/star/{sample}_{type}.SJ.out.tab"),
+        reads_per_gene=temp("alignment/star/{sample}_{type}.ReadsPerGene.out.tab"),
+        log_final=temp("alignment/star/{sample}_{type}.Log.final.out"),
+
 
 
 use rule samtools_index from alignment as alignment_samtools_index

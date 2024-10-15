@@ -10,7 +10,7 @@ sample_order_duplicates = []
 sample_order_index = ["sample", "s_index", "lab_id", "type"]
 for sample, type, fastq_path in snakemake.params.filelist:
     fastq = fastq_path.split("/")[-1]
-    lab_id = fastq.split("_")[0]
+    lab_id = fastq.split("_")[1]
     s_pattern = re.compile("_S([0-9]+)_")
     # In case of missing S-index in fastq1-filename set s_index to 99 (last)
     try:
