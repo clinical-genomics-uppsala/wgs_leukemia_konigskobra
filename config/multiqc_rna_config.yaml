@@ -9,11 +9,9 @@ extra_fn_clean_exts: ##from this until end
 table_sample_merge:
   "R1": "_R1_001"
   "R2": "_R2_001"
-  "L008":
+  "L008": # to remove SX_L00X from ending to enable grouping 
     - type: "regex"
       pattern: "S[0-9]{1,2}_L008"
-
-
 
 report_header_info:
   - Contact E-mail: "igp-klinsek-bioinfo@lists.uu.se"
@@ -36,13 +34,20 @@ custom_data:
           description: "RNA number based on SampleSheet"
           placement: 300
 
+# mosdepth custom thresholds
+mosdepth_config:
+  general_stats_coverage:
+    - 1
+    - 5
+    - 10
+    - 15
+    - 20
+    - 30
+    - 50
+
+# Remove suffix from General stats columns
 custom_table_header_config:
   general_stats_table:
-    reads_mapped:
-      suffix: ""
-      title: "Reads mapped M"
-    reads_mapped_percent:
-      suffix: ""
     reads_properly_paired_percent:
       suffix: ""
     median_coverage:
@@ -62,21 +67,37 @@ custom_table_header_config:
       suffix: ""
     ZERO_CVG_TARGETS_PCT:
       suffix: ""
+    star-total_reads:
+      suffix: ""
+      title: "Total readpairs [M]"
+    star-mapped_percent:
+      suffix: ""
+      title: "Aligned [%]"
+    star-uniquely_mapped_percent:
+      suffix: ""
+      title: "Uniq aligned [%]"
+    star-multimapped:
+      suffix: ""
+      title: "Multimapped [M]"
+    sortmerna-rRNA_pct:
+      suffix: ""
+      title: "rRNA [%]"
 
+# General stats column visibility
 table_columns_visible:
   FastQC:
     percent_duplicates: False
     percent_gc: False
     avg_sequence_length: False
     percent_fails: False
-    total_sequences: True
+    total_sequences: False
   fastp:
     pct_adapter: False
     pct_surviving: False
     after_filtering_gc_content: False
     filtering_result_passed_filter_reads: False
-    after_filtering_q30_bases: True
-    after_filtering_q30_rate: True
+    after_filtering_q30_bases: False
+    after_filtering_q30_rate: False
     pct_duplication: False
   mosdepth:
     median_coverage: True
@@ -92,8 +113,8 @@ table_columns_visible:
     star-mapped: False
     star-mapped_percent: True
     star-uniquely_mapped: False
-    star-uniquely_mapped_percent: False
-    star-multimapped: False
+    star-uniquely_mapped_percent: True
+    star-multimapped: True
   SortMeRNA:
     rRNA_pct: True
   # Picard:
@@ -101,17 +122,6 @@ table_columns_visible:
   "Picard: Mark Duplicates":
     PERCENT_DUPLICATION: True
 
-
-# mosdepth custom thresholds
-mosdepth_config:
-  general_stats_coverage:
-    - 1
-    - 5
-    - 10
-    - 15
-    - 20
-    - 30
-    - 50
 
 # multiqc_cgs:
 #   "Picard: Alignment Summary":
