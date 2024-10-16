@@ -6,7 +6,7 @@ digraph snakemake_dag {
 	1[label = ".spring", color = "0.0 0.0 0.0", style="dotted"];
 	2[label = "compression_spring", color = "0.30 0.6 0.85", style="rounded"];
 	3[label = "MultiQC_rna.html", color = "0.0 0.0 0.0", style="dotted"];
-	4[label = "qc_multiqc", color = "0.65 0.6 0.85", style="rounded"];
+	multiqc[label = "qc_multiqc", color = "0.65 0.6 0.85", style="rounded"];
 	5[label = "qc_mosdepth_bed_rna", color = "0.25 0.6 0.85", style="rounded"];
 	6[label = "alignment_star", color = "0.45 0.6 0.85", style="rounded"];
 	8[label = "prealignment_fastp_pe", color = "0.64 0.6 0.85", style="rounded"];
@@ -31,15 +31,16 @@ digraph snakemake_dag {
 	0 -> 2
 	0 -> 13
 	2 -> 1
-	4 -> 3
-	13 -> 4
-	10 -> 4
-	8 -> 4
-	14 -> 4
-	5 -> 4
-	15 -> 4
-	12 -> 4
+	multiqc -> 3
+	13 -> multiqc
+	10 -> multiqc
+	8 -> multiqc
+	14 -> multiqc
+	5 -> multiqc
+	15 -> multiqc
+	12 -> multiqc
 	6 -> 5
+	6 -> multiqc
 	8 -> 6
 	6 -> 10
 	6 -> 12

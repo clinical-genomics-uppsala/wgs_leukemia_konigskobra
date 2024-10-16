@@ -1,0 +1,17 @@
+digraph snakemake_dag {
+    rankdir=LR;
+    graph[bgcolor=white, margin=0];
+    node[shape=box, style=rounded, fontname=sans, fontsize=10, penwidth=2];
+    edge[penwidth=2, color=grey];
+    0[label = "fastq", color = "0.0 0.0 0.0", style="dotted"];
+	1[label = "prealignment_fastp_pe", color = "0.52 0.6 0.85", style="rounded"];
+    2[label = "prealignment_merged", color="0.30 0.6 0.85", style="rounded"];
+    3[label = "prealignment_sortmerna", color="0.65 0.6 0.85", style="rounded"];
+    4[label = "fastq: trimmed", color = "0.0 0.0 0.0", style="dotted"];
+    5[label = "rrna.log", color = "0.0 0.0 0.0", style="dotted"];
+	0 -> 1
+    1 -> 2
+    2 -> 3
+    2 -> 4
+    3 -> 5
+}
