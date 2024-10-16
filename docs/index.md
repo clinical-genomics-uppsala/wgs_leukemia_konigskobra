@@ -4,7 +4,7 @@
 <a href="https://github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/">https://github.com/clinical-genomics-uppsala/fluffy_hematology_wgs/</a>
 </p>
 
-This pipeline is created to run on short-read whole genome and/or whole transcriptome Illumina data, designed at [Clinical Genomics Uppsala](https://www.scilifelab.se/units/clinical-genomics-uppsala/#https://www.cgu.igp.uu.se).
+This pipeline is created to run on short-read whole genome and/or whole transcriptome Illumina data, designed at [Clinical Genomics Uppsala](https://www.scilifelab.se/units/clinical-genomics-uppsala/#https://www.cgu.igp.uu.se). Just like the three-headed dog Fluffy, the pipeline can run on either **T**umor only, matched **T**umor-**N**ormal and/or **R**NA data.
 
 This snakemake pipeline uses the module system from [Hydra Genetics](https://github.com/hydra-genetics/) to process `.fastq.gz` files. The pipeline produces several output files such as a MultiQC `.html` report with QC-data, `.bam`/`.cram` alignment files, annotated `.vcf.gz` for SNVs and smaller indels, as well as `.txt`-files with RNA fusion results. For more indepth lists see [Result files](/results)
 
@@ -16,11 +16,11 @@ Fluffy :dog: :dog: :dog: :notes: uses the following hydra genetics modules:
 - [CNV](https://github.com/hydra-genetics/cnv_sv/tree/v0.4.1)
 - [Compression](https://github.com/hydra-genetics/compression/tree/v1.1.0)
 - [Filtering](https://github.com/hydra-genetics/filtering/tree/v0.3.0)
+- [Fusions](https://github.com/hydra-genetics/fusions/tree/12f8354)
 - [Misc](https://github.com/hydra-genetics/misc/tree/v0.1.0)
 - [Prealignment](https://github.com/hydra-genetics/prealignment/tree/v1.1.0)
 - [QC](https://github.com/hydra-genetics/qc/tree/v0.3.0)
 - [Reports](https://github.com/hydra-genetics/reports/tree/7c8b8c5)
-- [SNV indels](https://github.com/hydra-genetics/snv_indels/tree/v0.6.0)
 
 Together with either the [Parabricks](https://github.com/hydra-genetics/parabricks/tree/v1.1.0) or [Sentieon](https://github.com/hydra-genetics/sentieon/tree/b002d39) modules.
 
@@ -35,7 +35,7 @@ Together with either the [Parabricks](https://github.com/hydra-genetics/parabric
 ---
 # Hydra-genetics
 
-[Hydra Genetics](https://github.com/hydra-genetics/) is an organization/community with the goal of making [snakemake](https://snakemake.readthedocs.io/en/stable/index.html) pipeline development easier, faster, a bit more structured and of higher quality.
+[Hydra Genetics](https://hydra-genetics.readthedocs.io/en/latest/) is an organization/community with the goal of making [snakemake](https://snakemake.readthedocs.io/en/stable/index.html) pipeline development easier, faster, a bit more structured and of higher quality.
 
 We do this by providing [snakemake modules](https://snakemake.readthedocs.io/en/stable/snakefiles/modularization.html#modules) that can be combined to create a complete analysis or included in already existing pipelines. All modules are subjected to extensive testing to make sure that new releases doesn't unexpectedly break existing pipeline or deviate from guidelines and best practices on how to write code.
 

@@ -10,6 +10,20 @@ The DNA-part of the pipeline allows for both tumor only analysis and tumor with 
 ![dag plot](includes/images/dna.svg){: style="height:100%;width:100%"}
 
 ## RNA
-Fluffy can also process whole transcriptome data to identify potential fusions. It uses three different fusion callers 
+Fluffy can also process whole transcriptome data to identify potential fusions. It starts with unmapped short-read sequences which is then process through several different steps which includes three different fusion callers to optimize chance to find the fusions. It runs several different QC-programs which then are aggregated in a MultiQC-report.
+
+ - [STAR-fusion](https://github.com/STAR-Fusion/STAR-Fusion/tree/v1.10.0)
+ - [Arriba](https://arriba.readthedocs.io/en/v2.3.0/)
+ - [Fusioncatcher](https://github.com/ndaniel/fusioncatcher/tree/1.33)
+
+The pipeline uses several different [Hydra Genetics](https://hydra-genetics.readthedocs.io/en/latest/) modules together with some small in-house developed scripts to summarize results.
+
+[Hydra Genetics](https://hydra-genetics.readthedocs.io/en/latest/) modules used:
+ - [Prealignment](https://github.com/hydra-genetics/prealignment/tree/v1.1.0)
+ - [Alignment](https://github.com/hydra-genetics/alignment/tree/v0.4.0)
+ - [Fusions](https://github.com/hydra-genetics/fusions/tree/12f8354)
+ - [QC](https://github.com/hydra-genetics/qc/tree/v0.3.0)
+ - [Compression](https://github.com/hydra-genetics/compression/tree/v1.1.0)
+
 
 ![dag plot](includes/images/rna.svg){: style="height:100%;width:100%"}
