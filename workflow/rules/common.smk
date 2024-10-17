@@ -3,15 +3,33 @@ __copyright__ = "Copyright 2022, Martin Rippin"
 __email__ = "arielle.munters@scilifelab.uu.se, nina.hollfelder@scilifelab.uu.se"
 __license__ = "GPL-3"
 
+
+import itertools
+import numpy as np
 import pandas as pd
-from snakemake.io import Wildcards
-from typing import List, Union
+import pathlib
+import re
 from snakemake.utils import validate
 from snakemake.utils import min_version
+import yaml
+from datetime import datetime
 
 from hydra_genetics.utils.resources import load_resources
 from hydra_genetics.utils.samples import *
 from hydra_genetics.utils.units import *
+from hydra_genetics import min_version as hydra_min_version
+
+from hydra_genetics.utils.misc import replace_dict_variables
+from hydra_genetics.utils.misc import export_config_as_file
+from hydra_genetics.utils.software_versions import add_version_files_to_multiqc
+from hydra_genetics.utils.software_versions import add_software_version_to_config
+from hydra_genetics.utils.software_versions import export_pipeline_version_as_file
+from hydra_genetics.utils.software_versions import export_software_version_as_file
+from hydra_genetics.utils.software_versions import get_pipeline_version
+from hydra_genetics.utils.software_versions import use_container
+from hydra_genetics.utils.software_versions import touch_software_version_file
+from hydra_genetics.utils.software_versions import touch_pipeline_version_file_name
+
 
 min_version("7.8.0")
 
@@ -38,6 +56,26 @@ except WorkflowError as we:
         sys.exit(f"{error_msg} in {schema_section}")
 config = load_resources(config, config["resources"])
 validate(config, schema="../schemas/resources.schema.yaml")
+
+
+## get version information on pipeline, containers and software
+pipeline_name = "fluffy_hematology_wgs"
+pipeline_version = get_pipeline_version(workflow, pipeline_name=pipeline_name)
+version_files = touch_pipeline_version_file_name(
+    pipeline_version, date_string=pipeline_name, directory="Results/versions/software"
+)
+if use_container(workflow):
+    version_files.append(touch_software_version_file(config, date_string=pipeline_name, directory="Results/versions/software"))
+add_version_files_to_multiqc(config, version_files)
+
+
+onstart:
+    export_pipeline_version_as_file(pipeline_version, date_string=pipeline_name, directory="Results/versions/software")
+    if use_container(workflow):
+        update_config, software_info = add_software_version_to_config(config, workflow, False)
+        export_software_version_as_file(software_info, date_string=pipeline_name, directory="Results/versions/software")
+    date_string = datetime.now().strftime("%Y%m%d")
+    export_config_as_file(update_config, date_string=date_string, directory="Results/versions")
 
 
 ### Read and validate samples file
