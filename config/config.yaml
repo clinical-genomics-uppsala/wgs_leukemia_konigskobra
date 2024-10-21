@@ -1,7 +1,7 @@
 resources: "resources.yaml"
 samples: "samples.tsv"
 units: "units.tsv"
-output: "config/output_files.json"
+output: "config/output_files.yaml"
 
 aligner: "bwa_gpu" # bwa_gpu or bwa_sentieon
 
