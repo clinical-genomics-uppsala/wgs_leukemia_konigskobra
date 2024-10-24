@@ -15,7 +15,7 @@ for sample, type, fastq_path in snakemake.params.filelist:
     # In case of missing S-index in fastq1-filename set s_index to 99 (last)
     try:
         s_index = int(s_pattern.search(fastq).group(1))
-    except:
+    except AttributeError:
         s_index = 99
     # If same sample sequenced twice use latest runs s_index
     for old_sample, old_s, old_lab, old_type in sample_order_duplicates:
