@@ -67,19 +67,19 @@ custom_table_header_config:
       suffix: ""
     ZERO_CVG_TARGETS_PCT:
       suffix: ""
-    star-total_reads:
+    total_reads:
       suffix: ""
       title: "Total readpairs [M]"
-    star-mapped_percent:
+    mapped_percent:
       suffix: ""
       title: "Aligned [%]"
-    star-uniquely_mapped_percent:
+    uniquely_mapped_percent:
       suffix: ""
       title: "Uniq aligned [%]"
-    star-multimapped:
+    multimapped:
       suffix: ""
       title: "Multimapped [M]"
-    sortmerna-rRNA_pct:
+    rRNA_pct:
       suffix: ""
       title: "rRNA [%]"
 

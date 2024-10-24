@@ -21,6 +21,7 @@ ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_bgzip
 ruleorder: cnv_sv_manta_run_workflow_t > misc_tabix
 ruleorder: cnv_sv_manta_run_workflow_t > misc_bgzip
+ruleorder: fix_af > filtering_filter_vcf 
 ruleorder: gatk_model_segments > cnv_sv_gatk_model_segments
 
 ruleorder: copy_parabricks_tn_vcf > misc_bgzip
