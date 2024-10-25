@@ -379,9 +379,9 @@ properties:
     required:
       - region
 
-  export_to_xlsx:
+  export_to_xlsx_snvs:
     type: object
-    description: parameters for export_to_xlsx
+    description: parameters for export_to_xlsx_snvs
     properties:
       benchmark_repeats:
         type: integer

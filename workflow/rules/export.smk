@@ -1,5 +1,5 @@
 __author__ = "Arielle R. Munters"
-__copyright__ = "Copyright 2023, Arielle R. Munters"
+__copyright__ = "Copyright 2024, Arielle R. Munters"
 __email__ = "arielle.munters@scilifelab.uu.se"
 __license__ = "GPL-3"
 
@@ -18,7 +18,7 @@ def check_if_tn(wildcards):
     return vcfs
 
 
-rule export_to_xlsx:
+rule export_to_xlsx_snvs:
     input:
         vcfs=check_if_tn,
         all_bed=config["bcftools_SNV"]["all"],
@@ -29,24 +29,24 @@ rule export_to_xlsx:
         xlsx=temp("export_to_xlsx/{analysis}/{sample_type}.snvs.xlsx"),
     params:
         filterfile = config["filter_vcf"]["somatic"],
-        extra=config.get("export_to_xlsx", {}).get("extra", ""),
+        extra=config.get("export_to_xlsx_snvs", {}).get("extra", ""),
     log:
         "export_to_xlsx/{analysis}/{sample_type}.snvs.xslx.log",
     benchmark:
         repeat(
             "export_to_xlsx/{analysis}/{sample_type}.snvs.xslx.benchmark.tsv",
-            config.get("export_to_xlsx", {}).get("benchmark_repeats", 1),
+            config.get("export_to_xlsx_snvs", {}).get("benchmark_repeats", 1),
         )
-    threads: config.get("export_to_xlsx", {}).get("threads", config["default_resources"]["threads"])
+    threads: config.get("export_to_xlsx_snvs", {}).get("threads", config["default_resources"]["threads"])
     resources:
-        mem_mb=config.get("export_to_xlsx", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
-        mem_per_cpu=config.get("export_to_xlsx", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
-        partition=config.get("export_to_xlsx", {}).get("partition", config["default_resources"]["partition"]),
-        threads=config.get("export_to_xlsx", {}).get("threads", config["default_resources"]["threads"]),
-        time=config.get("export_to_xlsx", {}).get("time", config["default_resources"]["time"]),
+        mem_mb=config.get("export_to_xlsx_snvs", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
+        mem_per_cpu=config.get("export_to_xlsx_snvs", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
+        partition=config.get("export_to_xlsx_snvs", {}).get("partition", config["default_resources"]["partition"]),
+        threads=config.get("export_to_xlsx_snvs", {}).get("threads", config["default_resources"]["threads"]),
+        time=config.get("export_to_xlsx_snvs", {}).get("time", config["default_resources"]["time"]),
     container:
-        config.get("export_to_xlsx", {}).get("container", config["default_container"])
+        config.get("export_to_xlsx_snvs", {}).get("container", config["default_container"])
     message:
         "{rule}: merge {input.vcfs} into {output.xlsx}"
     script:
-        "../scripts/export_to_xlsx.py"
+        "../scripts/export_to_xlsx_snvs.py"

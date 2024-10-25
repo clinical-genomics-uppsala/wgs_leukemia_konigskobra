@@ -6,6 +6,7 @@ files:
     output: Archive/{sample}_{flowcell}_{lane}_{barcode}_{type}.spring
     types: ["T", "N", "R"]
 
+  # DNA
   - name: MultiQC DNA
     input: "qc/multiqc/multiqc_DNA.html"
     output: multiqc_TN.html
@@ -24,48 +25,48 @@ files:
   # Tumor
     # SNV indels
   - name: Parabricks T vcf
-    input: "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf.gz"
+    input: "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.vcf.gz"
     output: "{sample}/SNV_indels/{sample}_T.vep.vcf.gz"
     types: ["T"]
   
   - name: Parabricks T tbi
-    input: "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.vcf.gz.tbi"
+    input: "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.vcf.gz.tbi"
     output: "{sample}/SNV_indels/{sample}_T.vep.vcf.gz.tbi"
     types: ["T"]
 
   - name: Parabricks T vcf ALL subsample
-    input: "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.all.vcf.gz"
+    input: "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.include.all.vcf.gz"
     output: "{sample}/SNV_indels/{sample}_T.vep.all.vcf.gz" 
     types: ["T"]
   
   - name: Parabricks T tbi ALL subsample
-    input: "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.all.vcf.gz.tbi"
+    input: "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.include.all.vcf.gz.tbi"
     output: "{sample}/SNV_indels/{sample}_T.vep.all.vcf.gz.tbi"
     types: ["T"]
 
   - name: Parabricks T vcf AML subsample
-    input: "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.aml.vcf.gz"
+    input: "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.include.aml.vcf.gz"
     output: "{sample}/SNV_indels/{sample}_T.vep.aml.vcf.gz"
     types: ["T"]
 
   - name: Parabricks T tbi AML subsample
-    input: "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.aml.vcf.gz.tbi"
+    input: "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.include.aml.vcf.gz.tbi"
     output: "{sample}/SNV_indels/{sample}_T.vep.aml.vcf.gz.tbi"
     types: ["T"]
 
   - name: Parabricks T vcf TM subsample
-    input: "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.tm.vcf.gz"
+    input: "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.include.tm.vcf.gz"
     output: "{sample}/SNV_indels/{sample}_T.vep.tm.vcf.gz"
     types: ["T"]  
 
   - name: Parabricks T tbi TM subsample
-    input: "parabricks/pbrun_mutectcaller_t/{sample}_T.vep.include.tm.vcf.gz.tbi"
+    input: "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.include.tm.vcf.gz.tbi"
     output: "{sample}/SNV_indels/{sample}_T.vep.tm.vcf.gz.tbi"
     types: ["T"]
 
   - name: Parabricks T xlsx
     input: "export_to_xlsx/t/{sample}_T.snvs.xlsx"
-    output: "{sample}/SNV_indels/{sample}_T.xlsx"
+    output: "{sample}/SNV_indels/{sample}_T.snvs.xlsx"
     types: ["T"]
 
   - name: Pindel vcf
@@ -199,48 +200,48 @@ files:
   # Matched samples TN
     # SNV indels
   - name: Parabricks TN vcf
-    input: "parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.gz"
+    input: "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.vcf.gz"
     output: "{sample}/SNV_indels/{sample}_TN.vep.vcf.gz"
     types:  ["TN"]
   
   - name: Parabricks TN tbi
-    input: "parabricks/pbrun_mutectcaller_tn/{sample}.vep.vcf.gz.tbi"
+    input: "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.vcf.gz.tbi"
     output: "{sample}/SNV_indels/{sample}_TN.vep.vcf.gz.tbi"
     types:  ["TN"]
 
   - name: Parabricks TN vcf ALL subsample
-    input: "parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.all.vcf.gz"
+    input: "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.include.all.vcf.gz"
     output: "{sample}/SNV_indels/{sample}_TN.vep.all.vcf.gz"
     types: ["TN"]
   
   - name: Parabricks TN tbi ALL subsample
-    input: "parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.all.vcf.gz.tbi"
+    input: "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.include.all.vcf.gz.tbi"
     output: "{sample}/SNV_indels/{sample}_TN.vep.all.vcf.gz.tbi"
     types: ["TN"]
 
   - name: Parabricks TN vcf AML subsample
-    input: parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.aml.vcf.gz
+    input: parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.include.aml.vcf.gz
     output: "{sample}/SNV_indels/{sample}_TN.vep.aml.vcf.gz"
     types: ["TN"]
 
   - name: Parabricks TN tbi AML subsample
-    input: parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.aml.vcf.gz.tbi
+    input: parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.include.aml.vcf.gz.tbi
     output: "{sample}/SNV_indels/{sample}_TN.vep.aml.vcf.gz.tbi"
     types: ["TN"]
 
   - name: Parabricks TN vcf TM subsample
-    input: parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.tm.vcf.gz
+    input: parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.include.tm.vcf.gz
     output: "{sample}/SNV_indels/{sample}_TN.vep.tm.vcf.gz"
     types: ["TN"]
 
   - name: Parabricks TN tbi TM subsample
-    input: parabricks/pbrun_mutectcaller_tn/{sample}.vep.include.tm.vcf.gz.tbi
+    input: parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.include.tm.vcf.gz.tbi
     output: "{sample}/SNV_indels/{sample}_TN.vep.tm.vcf.gz.tbi"
     types: ["TN"]
 
   - name: Parabricks TN xlsx
     input: "export_to_xlsx/tn/{sample}.snvs.xlsx"
-    output: "{sample}/SNV_indels/{sample}_TN.xlsx"
+    output: "{sample}/SNV_indels/{sample}_TN.snvs.xlsx"
     types: ["TN"]
 
     # SVs
