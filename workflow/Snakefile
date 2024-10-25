@@ -22,9 +22,8 @@ ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
 ruleorder: cnv_sv_manta_run_workflow_tn > misc_bgzip
 ruleorder: cnv_sv_manta_run_workflow_t > misc_tabix
 ruleorder: cnv_sv_manta_run_workflow_t > misc_bgzip
-ruleorder: fix_af > filtering_filter_vcf 
+ruleorder: fix_af > filtering_filter_vcf
 ruleorder: gatk_model_segments > cnv_sv_gatk_model_segments
-
 ruleorder: copy_parabricks_tn_vcf > misc_bgzip
 ruleorder: copy_manta_tn_tbi > misc_tabix
 ruleorder: copy_manta_t_tbi > misc_tabix
@@ -49,7 +48,6 @@ elif aligner == "bwa_gpu":
     ruleorder: parabricks_pbrun_fq2bam > alignment_samtools_index
     ruleorder: copy_crai_t_and_n > misc_samtools_index
     ruleorder: copy_rna_bai > alignment_samtools_index
-
     ruleorder: copy_parabricks_tn_tbi > misc_tabix
     ruleorder: copy_parabricks_tn_vcf_all_subsample > misc_bgzip
     ruleorder: copy_parabricks_tn_tbi_all_subsample > misc_tabix
@@ -59,7 +57,6 @@ elif aligner == "bwa_gpu":
     ruleorder: copy_parabricks_tn_tbi_tm_subsample > misc_tabix
     ruleorder: copy_manta_tn_tbi_all_subsample > misc_tabix
     ruleorder: copy_manta_tn_tbi_aml_subsample > misc_tabix
-
     ruleorder: copy_parabricks_t_vcf > misc_bgzip
     ruleorder: copy_parabricks_t_tbi > misc_tabix
     ruleorder: copy_parabricks_t_vcf_all_subsample > misc_bgzip
@@ -307,7 +304,9 @@ module filtering:
         config
 
 
-use rule filter_vcf from filtering as filtering_filter_vcf
+use rule filter_vcf from filtering as filtering_filter_vcf with:
+    wildcard_constraints:
+        tag="[^.]+",
 
 
 use rule bcftools_filter_include_region from filtering as filtering_bcftools_filter_include_region_snv_t with:
