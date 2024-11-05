@@ -12,7 +12,7 @@ def check_if_tn(wildcards):
         )+ ["cnv_sv/pindel_vcf/{sample_type}_T.no_tc.vep_annotated.vcf"]
     else:
         vcfs = expand(
-            "parabricks/pbrun_mutectcaller_{{analysis}}/{{sample_type}}.normalized.vep.filter.somatic.include.{bed}.vcf.gz",
+            "parabricks/pbrun_mutectcaller_{{analysis}}/{{sample_type}}.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.gz",
             bed=["all", "aml", "tm"],
         ) + ["cnv_sv/pindel_vcf/{sample_type}.no_tc.vep_annotated.vcf"]
     return vcfs

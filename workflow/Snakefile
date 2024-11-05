@@ -275,23 +275,25 @@ module filtering:
         config
 
 
-use rule filter_vcf from filtering as filtering_filter_vcf
+use rule filter_vcf from filtering as filtering_filter_vcf with:
+    wildcard_constraints:
+        tag="[^.]+",
 
 
 use rule bcftools_filter_include_region from filtering as filtering_bcftools_filter_include_region_snv_t with:
     input:
-        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.vcf.gz",
-        tabix="parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.vcf.gz.tbi",
+        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.ratio.filter.somatic.vcf.gz",
+        tabix="parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.ratio.filter.somatic.vcf.gz.tbi",
     output:
-        vcf=temp("parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.include.{bed}.vcf"),
+        vcf=temp("parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.gz"),
     params:
         filter=lambda wildcards: "-R %s" % config["bcftools_SNV"][wildcards.bed],
         extra=config.get("bcftools_SNV", {}).get("extra", ""),
     log:
-        "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.include.{bed}.vcf.log",
+        "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.gz.log",
     benchmark:
         repeat(
-            "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.include.{bed}.vcf.benchmark.tsv",
+            "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.gz.benchmark.tsv",
             config.get("bcftools_SNV", {}).get("benchmark_repeats", 1),
         )
     message:
@@ -303,15 +305,15 @@ use rule bcftools_filter_include_region from filtering as filtering_bcftools_fil
         vcf="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.vcf.gz",
         tabix="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.vcf.gz.tbi",
     output:
-        vcf=temp("parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.include.{bed}.vcf"),
+        vcf=temp("parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.gz"),
     params:
         filter=lambda wildcards: "-R %s" % config["bcftools_SNV"][wildcards.bed],
         extra=config.get("bcftools_SNV", {}).get("extra", ""),
     log:
-        "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.log",
+        "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.gz.log",
     benchmark:
         repeat(
-            "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.benchmark.tsv",
+            "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.gz.benchmark.tsv",
             config.get("bcftools_SNV", {}).get("benchmark_repeats", 1),
         )
     message:
@@ -323,15 +325,15 @@ use rule bcftools_filter_include_region from filtering as filtering_bcftools_fil
         vcf="cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.vcf.gz",
         tabix="cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.vcf.gz.tbi",
     output:
-        vcf=temp("cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf"),
+        vcf=temp("cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.gz"),
     params:
         filter=lambda wildcards: "-R %s" % config["bcftools_SV"][wildcards.bed],
         extra=config.get("bcftools_SV", {}).get("extra", ""),
     log:
-        "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.log",
+        "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.gz.log",
     benchmark:
         repeat(
-            "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.benchmark.tsv",
+            "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.gz.benchmark.tsv",
             config.get("bcftools_SV", {}).get("benchmark_repeats", 1),
         )
     message:
