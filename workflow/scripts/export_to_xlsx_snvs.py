@@ -26,7 +26,7 @@ vcfs = {}
 vcfs["all"] = [x for x in snakemake.input.vcfs if "include.all" in x][0]
 vcfs["aml"] = [x for x in snakemake.input.vcfs if "include.aml" in x][0]
 vcfs["tm"] = [x for x in snakemake.input.vcfs if "include.tm" in x][0]
-vcfs["pindel"] = [x for x in snakemake.input.vcfs if "pindel" in x][0]
+vcfs["pindel"] = snakemake.input.vcf_pindel
 subsections = ["all", "aml", "tm"]
 
 sample_name = snakemake.output.xlsx.split("/")[-1].split(".snvs.xlsx")[0]
