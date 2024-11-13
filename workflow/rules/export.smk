@@ -45,7 +45,7 @@ rule export_to_xlsx_snvs:
 rule export_to_xlsx_manta:
     input:
         vcf="cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.vcf",
-        vcfs_bed=expand("cnv_sv/manta_run_workflow_{{analysis}}/{{sample}}.ssa.include.{bed}.vcf", bed=["all", "aml"]), #ska tm med?
+        vcfs_bed=expand("cnv_sv/manta_run_workflow_{{analysis}}/{{sample}}.ssa.include.{bed}.vcf.gz", bed=["all", "aml"]), #ska tm med?
         all_bed=config["bcftools_SV"]["all"],
         aml_bed=config["bcftools_SV"]["aml"],
     output:

@@ -17,22 +17,13 @@ include: "rules/manta_to_tsv.smk"
 include: "rules/peddy_create_ped.smk"
 
 
-ruleorder: annotation_simple_sv_annotation_tn > misc_bgzip
-ruleorder: cnv_sv_manta_run_workflow_tn > misc_tabix
-ruleorder: cnv_sv_manta_run_workflow_tn > misc_bgzip
-ruleorder: cnv_sv_manta_run_workflow_t > misc_tabix
-ruleorder: cnv_sv_manta_run_workflow_t > misc_bgzip
 ruleorder: fix_af > filtering_filter_vcf
 ruleorder: gatk_model_segments > cnv_sv_gatk_model_segments
-ruleorder: copy_parabricks_tn_vcf > misc_bgzip
-ruleorder: copy_manta_tn_tbi > misc_tabix
-ruleorder: copy_manta_t_tbi > misc_tabix
-ruleorder: copy_cnvkit_tbi > misc_tabix
-ruleorder: copy_gatk_vcf > misc_bgzip
-ruleorder: copy_gatk_tbi > misc_tabix
-ruleorder: copy_pindel_vcf > misc_bgzip
-ruleorder: copy_cnv_svdb_vcf > misc_bgzip
-ruleorder: copy_cnv_svdb_tbi > misc_tabix
+ruleorder: filtering_bcftools_filter_include_region_snv_tn > bgzip_mutect
+ruleorder: filtering_bcftools_filter_include_region_snv_t > bgzip_mutect
+ruleorder: cnv_sv_manta_run_workflow_t > tabix_cnv
+ruleorder: cnv_sv_manta_run_workflow_tn > tabix_cnv
+ruleorder: filtering_bcftools_filter_include_region_sv > bgzip_cnv
 
 
 aligner = config.get("aligner", None)
@@ -48,25 +39,6 @@ elif aligner == "bwa_gpu":
     ruleorder: parabricks_pbrun_fq2bam > alignment_samtools_index
     ruleorder: copy_crai_t_and_n > misc_samtools_index
     ruleorder: copy_rna_bai > alignment_samtools_index
-    ruleorder: copy_parabricks_tn_tbi > misc_tabix
-    ruleorder: copy_parabricks_tn_vcf_all_subsample > misc_bgzip
-    ruleorder: copy_parabricks_tn_tbi_all_subsample > misc_tabix
-    ruleorder: copy_parabricks_tn_vcf_aml_subsample > misc_bgzip
-    ruleorder: copy_parabricks_tn_tbi_aml_subsample > misc_tabix
-    ruleorder: copy_parabricks_tn_vcf_tm_subsample > misc_bgzip
-    ruleorder: copy_parabricks_tn_tbi_tm_subsample > misc_tabix
-    ruleorder: copy_manta_tn_tbi_all_subsample > misc_tabix
-    ruleorder: copy_manta_tn_tbi_aml_subsample > misc_tabix
-    ruleorder: copy_parabricks_t_vcf > misc_bgzip
-    ruleorder: copy_parabricks_t_tbi > misc_tabix
-    ruleorder: copy_parabricks_t_vcf_all_subsample > misc_bgzip
-    ruleorder: copy_parabricks_t_tbi_all_subsample > misc_tabix
-    ruleorder: copy_parabricks_t_vcf_aml_subsample > misc_bgzip
-    ruleorder: copy_parabricks_t_tbi_aml_subsample > misc_tabix
-    ruleorder: copy_parabricks_t_vcf_tm_subsample > misc_bgzip
-    ruleorder: copy_parabricks_t_tbi_tm_subsample > misc_tabix
-    ruleorder: copy_manta_t_tbi_all_subsample > misc_tabix
-    ruleorder: copy_manta_t_tbi_aml_subsample > misc_tabix
 
 elif aligner == "bwa_sentieon":
 
@@ -311,18 +283,18 @@ use rule filter_vcf from filtering as filtering_filter_vcf with:
 
 use rule bcftools_filter_include_region from filtering as filtering_bcftools_filter_include_region_snv_t with:
     input:
-        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.vcf.gz",
-        tabix="parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.vcf.gz.tbi",
+        vcf="parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.ratio.filter.somatic.vcf.gz",
+        tabix="parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.ratio.filter.somatic.vcf.gz.tbi",
     output:
-        vcf=temp("parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.include.{bed}.vcf"),
+        vcf=temp("parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.gz"),
     params:
         filter=lambda wildcards: "-R %s" % config["bcftools_SNV"][wildcards.bed],
         extra=config.get("bcftools_SNV", {}).get("extra", ""),
     log:
-        "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.include.{bed}.vcf.log",
+        "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.gz.log",
     benchmark:
         repeat(
-            "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.filter.somatic.include.{bed}.vcf.benchmark.tsv",
+            "parabricks/pbrun_mutectcaller_t/{sample}_T.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.gz.benchmark.tsv",
             config.get("bcftools_SNV", {}).get("benchmark_repeats", 1),
         )
     message:
@@ -334,15 +306,15 @@ use rule bcftools_filter_include_region from filtering as filtering_bcftools_fil
         vcf="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.vcf.gz",
         tabix="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.vcf.gz.tbi",
     output:
-        vcf=temp("parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.include.{bed}.vcf"),
+        vcf=temp("parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.gz"),
     params:
         filter=lambda wildcards: "-R %s" % config["bcftools_SNV"][wildcards.bed],
         extra=config.get("bcftools_SNV", {}).get("extra", ""),
     log:
-        "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.log",
+        "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.gz.log",
     benchmark:
         repeat(
-            "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.benchmark.tsv",
+            "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.gz.benchmark.tsv",
             config.get("bcftools_SNV", {}).get("benchmark_repeats", 1),
         )
     message:
@@ -354,15 +326,15 @@ use rule bcftools_filter_include_region from filtering as filtering_bcftools_fil
         vcf="cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.vcf.gz",
         tabix="cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.vcf.gz.tbi",
     output:
-        vcf=temp("cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf"),
+        vcf=temp("cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.gz"),
     params:
         filter=lambda wildcards: "-R %s" % config["bcftools_SV"][wildcards.bed],
         extra=config.get("bcftools_SV", {}).get("extra", ""),
     log:
-        "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.log",
+        "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.gz.log",
     benchmark:
         repeat(
-            "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.benchmark.tsv",
+            "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.gz.benchmark.tsv",
             config.get("bcftools_SV", {}).get("benchmark_repeats", 1),
         )
     message:
@@ -747,10 +719,39 @@ module misc:
         config
 
 
-use rule bgzip from misc as misc_bgzip
+use rule bgzip from misc as bgzip_mutect with:
+    wildcard_constraints:
+        file="parabricks/pbrun_mutectcaller_[A-Za-z0-9-_./]+.vcf",
 
 
-use rule tabix from misc as misc_tabix
+use rule bgzip from misc as bgzip_cnv with:
+    wildcard_constraints:
+        file="cnv_sv/[A-Za-z0-9-_./]+.vcf",
+
+
+use rule tabix from misc as tabix_mutect with:
+    wildcard_constraints:
+        file="parabricks/pbrun_mutectcaller_[A-Za-z0-9-_./]+.vcf",
+
+
+use rule tabix from misc as tabix_cnv with:
+    wildcard_constraints:
+        file="cnv_sv/[A-Za-z0-9-_./]+.vcf",
+
+
+use rule bgzip from misc as decompress_manta with:
+    input:
+        "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.gz",
+    output:
+        "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf",
+    params:
+         extra="-d"
+    log:
+        "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.log",
+    benchmark:
+        repeat("cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.benchmark.tsv", config.get("bgzip", {}).get("benchmark_repeats", 1))
+    message:
+        "{rule}: decompress {input}"
 
 
 use rule samtools_index from misc as misc_samtools_index with:
