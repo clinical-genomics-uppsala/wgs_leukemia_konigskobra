@@ -23,9 +23,9 @@ properties:
             type: string
             description: vcf file with N_ratio annotation in INFO field
 
-  export_to_xlsx:
+  export_to_xlsx_snvs:
     type: object
-    description: input and output parameters for export_to_xlsx
+    description: input and output parameters for export_to_xlsx_snvs
     properties:
       input:
         type: object

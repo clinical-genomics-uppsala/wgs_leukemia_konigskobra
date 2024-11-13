@@ -16,8 +16,7 @@ def index_vep(variantfile):
 # Extract table columns from vcf records
 def extract_vcf_values(record, csq_index, sample_tumor, sample_normal = ""):
     return_dict = {}
-    csq = record.info["CSQ"][0].split("|")
-
+    return_dict["filter_flag"] = ",".join(record.filter.keys())
     try:
         return_dict["af"] = float(record.samples[sample_tumor]["AF"][0])
     except KeyError:
@@ -38,65 +37,120 @@ def extract_vcf_values(record, csq_index, sample_tumor, sample_normal = ""):
     except KeyError:
         pass
 
-    # try:
-    #     return_dict["artifact_callers"] = (
-    #         str(record.info["Artifact"]).replace("(", "").replace(")", "").replace(", ", ";").replace("'", "")
-    #     )
-    #     if type(record.info["ArtifactMedian"]) == str:
-    #         return_dict["artifact_median"] = str(round(float(record.info["ArtifactMedian"]), 3))
-    #     else:
-    #         return_dict["artifact_median"] = ";".join([str(round(float(x), 3)) for x in record.info["ArtifactMedian"]])
-    #     return_dict["artifact_nr_sd"] = str(record.info["ArtifactNrSD"]).replace("(", "").replace(")", "").replace(", ", ";")
-    # except KeyError:
-    #     pass
-
-    # try:
-    #     return_dict["background_median"] = record.info["PanelMedian"]
-    #     return_dict["background_nr_sd"] = record.info["PositionNrSD"]
-    # except KeyError:
-    #     return_dict["background_median"] = ""
-    #     return_dict["background_nr_sd"] = ""
-
-    # try:
-    #     return_dict["callers"] = ";".join(record.info["CALLERS"])
-    # except KeyError:
-    #     pass
-
-    return_dict["gene"] = csq[csq_index.index("SYMBOL")]
-    return_dict["transcript"] = csq[csq_index.index("HGVSc")].split(":")[0]
-
     try:
-        return_dict["exon_nr"] = csq[csq_index.index("EXON")]
+        csq = record.info["CSQ"][0].split("|")
     except KeyError:
-        return_dict["exon_nr"] = ""
+        csq = None
 
-    if len(csq[csq_index.index("HGVSc")].split(":")) > 1:
-        return_dict["coding_name"] = csq[csq_index.index("HGVSc")].split(":")[1]
+    # vep annotation
+    if csq:
+        return_dict["gene"] = csq[csq_index.index("SYMBOL")]
+        return_dict["transcript"] = csq[csq_index.index("HGVSc")].split(":")[0]
+
+        try:
+            return_dict["exon_nr"] = csq[csq_index.index("EXON")]
+        except KeyError:
+            return_dict["exon_nr"] = ""
+
+        if len(csq[csq_index.index("HGVSc")].split(":")) > 1:
+            return_dict["coding_name"] = csq[csq_index.index("HGVSc")].split(":")[1]
+        else:
+            return_dict["coding_name"] = ""
+        return_dict["ensp"] = csq[csq_index.index("HGVSp")]
+        return_dict["consequence"] = csq[csq_index.index("Consequence")]
+
+        existing = csq[csq_index.index("Existing_variation")].split("&")
+        cosmic_list = [cosmic for cosmic in existing if cosmic.startswith("CO")]
+        if len(cosmic_list) == 0:
+            return_dict["cosmic"] = ""
+        else:
+            return_dict["cosmic"] = ", ".join(cosmic_list)
+
+        return_dict["clinical"] = csq[csq_index.index("CLIN_SIG")]
+
+        rs_list = [rs for rs in existing if rs.startswith("rs")]
+        if len(rs_list) == 0:
+            return_dict["rs"] = ""
+        else:
+            return_dict["rs"] = ", ".join(rs_list)
+        return_dict["max_pop_af"] = csq[csq_index.index("MAX_AF")]
+        return_dict["max_pops"] = csq[csq_index.index("MAX_AF_POPS")]
     else:
-        return_dict["coding_name"] = ""
-    return_dict["ensp"] = csq[csq_index.index("HGVSp")]
-    return_dict["consequence"] = csq[csq_index.index("Consequence")]
-
-    existing = csq[csq_index.index("Existing_variation")].split("&")
-    cosmic_list = [cosmic for cosmic in existing if cosmic.startswith("CO")]
-    if len(cosmic_list) == 0:
-        return_dict["cosmic"] = ""
-    else:
-        return_dict["cosmic"] = ", ".join(cosmic_list)
-
-    return_dict["clinical"] = csq[csq_index.index("CLIN_SIG")]
-
-    rs_list = [rs for rs in existing if rs.startswith("rs")]
-    if len(rs_list) == 0:
-        return_dict["rs"] = ""
-    else:
-        return_dict["rs"] = ", ".join(rs_list)
-    return_dict["max_pop_af"] = csq[csq_index.index("MAX_AF")]
-    return_dict["max_pops"] = csq[csq_index.index("MAX_AF_POPS")]
-    return_dict["filter_flag"] = ",".join(record.filter.keys())
+        return_dict = dict.fromkeys(["gene", "transcript", "exon_nr", "coding_name", "ensp", "consequence", "cosmic", "clinical", "rs", "max_pop_af", "max_pops"], "")
 
     return return_dict
 
+
+def extract_manta_vcf_values(record, annotation_index, sample_tumor, sample_normal=""):
+    return_dict = {}
+    try:
+        return_dict["id"] = ":".join(record.id.split(":")[0:2])
+    except KeyError:
+        return_dict["id"] = ""
+
+    genes = []
+    for annotation in record.info["ANN"]:
+        annotation_values = annotation.split("|")
+        gene_name_id = annotation_values[annotation_index.index("Gene_Name")] + "(" + annotation_values[annotation_index.index("Gene_ID")] + ")"
+        if gene_name_id not in genes:
+            genes.append(gene_name_id)
+
+    return_dict["genes"] = ",".join(genes)
+    return_dict["depth"] = record.info["BND_DEPTH"]
+    return_dict["filt_ann"] = ",".join(record.filter.keys())
+    try:
+        pr_values = record.samples[sample_tumor]["PR"]
+    except KeyError:
+        return_dict["pr_freq"] = ""
+    else:
+        pr_denominator, pr_numerator = pr_values
+        return_dict["pr_freq"] = pr_numerator / (pr_denominator + pr_numerator) if pr_denominator + pr_numerator != 0 else None
+
+    try:
+        sr_values = record.samples[sample_tumor]["SR"]
+    except KeyError:
+        return_dict["sr_freq"] = ""
+    else:
+        sr_denominator, sr_numerator = sr_values
+        return_dict["sr_freq"] = sr_numerator / (sr_denominator + sr_numerator) if sr_denominator + sr_numerator != 0 else None
+
+    try:
+        pr_values_n = record.samples[sample_normal]["PR"]
+    except KeyError:
+        return_dict["pr_freq_n"] = ""
+    else:
+        pr_denominator, pr_numerator = pr_values_n
+        return_dict["pr_freq_n"] = pr_numerator / (pr_denominator + pr_numerator) if pr_denominator + pr_numerator != 0 else None
+
+    try:
+        sr_values_n = record.samples[sample_normal]["SR"]
+    except KeyError:
+        return_dict["sr_freq_n"] = ""
+    else:
+        sr_denominator, sr_numerator = sr_values_n
+        return_dict["sr_freq_n"] = sr_numerator / (sr_denominator + sr_numerator) if sr_denominator + sr_numerator != 0 else None
+
+    try:
+        return_dict["end"] = record.info["END"]
+    except KeyError:
+        return_dict["end"] = None
+
+    try:
+        return_dict["svlength"] = record.info["SVLEN"] # ett eller flera varden? [0]?
+    except KeyError:
+        return_dict["svlength"] = ""
+
+    try:
+        return_dict["hom_len"] = record.info["HOMLEN"] #[1:-1] ?
+    except KeyError:
+        return_dict["hom_len"] = ""
+
+    try:
+        return_dict["hom_seq"] = record.info["HOMSEQ"] #[1:-1] ?
+    except KeyError:
+        return_dict["hom_seq"] = ""
+
+    return return_dict
 
 
 def create_snv_table(vcf_input):
@@ -219,4 +273,140 @@ def create_pindel_table(vcf_input):
     return pindel_table
 
 
+def create_manta_tables(vcf_input, avoid_filterflags=["MinQUAL", "MinGQ", "MinSomaticScore", "Ploidy", "MaxDepth", "MaxMQ0Frac", "NoPairSupport", "SampleFT", "HomRef"]):
+    vcf_file = VariantFile(vcf_input)
+    sample_tumor = [x for x in list(vcf_file.header.samples) if x.endswith("_T")][0]
+    if len(list(vcf_file.header.samples)) > 1:
+        sample_normal = [x for x in list(vcf_file.header.samples) if x.endswith("_N")][0]
+    else:
+        sample_normal = None
 
+    for header_row in vcf_file.header.records:
+        if "ANN" in str(header_row):
+            annotation_index = str(header_row).split("'")[1].strip().split("|")
+
+
+    manta_tables =  {"bnd":{"data": [], "headers": []}, "del":{"data":[], "headers": []}, "dup":{"data":[], "headers": []}, "ins":{"data": [], "headers": []}}
+    manta_tables["bnd"]["headers"] = [
+        {"header": "Chr"},
+        {"header": "Pos"},
+        {"header": "MantaID"},
+        {"header": "BreakEnd"},
+        {"header": "Genes"},
+        {"header": "Depth"},
+        {"header": "Annotation"},
+        {"header": "Paired-read freq"},
+        {"header": "Spanning-read freq"},
+    ]
+    manta_tables["del"]["headers"] = [
+        {"header": "Chr"},
+        {"header": "Pos"},
+        {"header": "EndPos"},
+        {"header": "SV Length"},
+        {"header": "MantaID"},
+        {"header": "Genes"},
+        {"header": "Annotation"},
+        {"header": "Paired-read freq"},
+        {"header": "Spanning-read freq"},
+    ]
+    manta_tables["dup"]["headers"] = [
+        {"header": "Chr"},
+        {"header": "Pos"},
+        {"header": "EndPos"},
+        {"header": "SV Length"},
+        {"header": "MantaID"},
+        {"header": "Genes"},
+        {"header": "Hom Length"},
+        {"header": "Hom Sequence"},
+        {"header": "Annotation"},
+        {"header": "Paired-read freq"},
+        {"header": "Spanning-read freq"},
+    ]
+    manta_tables["ins"]["headers"] = [
+        {"header": "Chr"},
+        {"header": "Pos"},
+        {"header": "Ref"},
+        {"header": "Alt"},
+        {"header": "SV Length"},
+        {"header": "MantaID"},
+        {"header": "Genes"},
+        {"header": "Hom Length"},
+        {"header": "Hom Sequence"},
+        {"header": "Annotation"},
+        {"header": "Paired-read freq"},
+        {"header": "Spanning-read freq"},
+    ]
+    if sample_normal:
+        manta_tables["bnd"]["headers"] = manta_tables["bnd"]["headers"] + [{"header": "Paired-read Normal Freq"}, {"header": "spanning-read Normal Freq"}]
+        manta_tables["del"]["headers"] = manta_tables["del"]["headers"] + [{"header": "Paired-read Normal Freq"}, {"header": "spanning-read Normal Freq"}]
+        manta_tables["dup"]["headers"] = manta_tables["dup"]["headers"] + [{"header": "Paired-read Normal Freq"}, {"header": "spanning-read Normal Freq"}]
+        manta_tables["ins"]["headers"] = manta_tables["ins"]["headers"] + [{"header": "Paired-read Normal Freq"}, {"header": "spanning-read Normal Freq"}]
+    for record in vcf_file.fetch():
+        record_values = extract_manta_vcf_values(record, annotation_index, sample_tumor, sample_normal)
+        if not any(x in avoid_filterflags for x in record_values["filt_ann"].split(",")):
+            if "MantaBND" in record_values["id"]:
+                outline = [
+                    str(record.contig),
+                    int(record.pos),
+                    record_values["id"],
+                    str(record.alts[0])[1:-1],
+                    record_values["genes"],
+                    record_values["depth"],
+                    record_values["filt_ann"],
+                    record_values["pr_freq"],
+                    record_values["sr_freq"],
+                ]
+                if sample_normal:
+                    outline = outline + [record_values["pr_freq_n"], record_values["sr_freq_n"]]
+                manta_tables["bnd"]["data"].append(outline)
+            elif "MantaDEL" in record_values["id"] and record_values["svlength"] <= -100:
+                outline = [
+                    str(record.contig),
+                    int(record.pos),
+                    record_values["end"],
+                    record_values["svlength"],
+                    record_values["id"],
+                    record_values["genes"],
+                    record_values["filt_ann"],
+                    record_values["pr_freq"],
+                    record_values["sr_freq"],
+                ]
+                if sample_normal:
+                    outline = outline + [record_values["pr_freq_n"], record_values["sr_freq_n"]]
+                manta_tables["del"]["data"].append(outline)
+            elif "MantaDUP" in record_values["id"]:
+                outline = [
+                    str(record.contig),
+                    int(record.pos),
+                    record_values["end"],
+                    record_values["svlength"],
+                    record_values["id"],
+                    record_values["genes"],
+                    record_values["hom_len"],
+                    record_values["hom_seq"],
+                    record_values["filt_ann"],
+                    record_values["pr_freq"],
+                    record_values["sr_freq"],
+                ]
+                if sample_normal:
+                    outline = outline + [record_values["pr_freq_n"], record_values["sr_freq_n"]]
+                manta_tables["dup"]["data"].append(outline)
+        elif "MantaINS" in record_values["id"]:
+                outline = [
+                    str(record.contig),
+                    int(record.pos),
+                    record.ref,
+                    record.alts[0],
+                    record_values["svlength"],
+                    record_values["id"],
+                    record_values["genes"],
+                    record_values["hom_len"],
+                    record_values["hom_seq"],
+                    record_values["filt_ann"],
+                    record_values["pr_freq"],
+                    record_values["sr_freq"],
+                ]
+                if sample_normal:
+                    outline = outline + [record_values["pr_freq_n"], record_values["sr_freq_n"]]
+                manta_tables["ins"]["data"].append(outline)
+    return manta_tables
