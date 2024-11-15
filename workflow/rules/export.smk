@@ -4,27 +4,39 @@ __email__ = "arielle.munters@scilifelab.uu.se"
 __license__ = "GPL-3"
 
 
+def get_vcfs(wildcards):
+    if wildcards.analysis == "tn":
+        vcfs = expand(
+            "parabricks/pbrun_mutectcaller_{{analysis}}/{{sample}}.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.gz",
+            bed=["all", "aml", "tm"],
+        )
+    elif wildcards.analysis == "t":
+        vcfs = expand(
+            "parabricks/pbrun_mutectcaller_{{analysis}}/{{sample}}_T.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.gz",
+            bed=["all", "aml", "tm"],
+        )
+    print(vcfs)
+    return vcfs
+
+
 rule export_to_xlsx_snvs:
     input:
-        vcfs=expand(
-            "parabricks/pbrun_mutectcaller_{{analysis}}/{{sample_type}}.normalized.vep.ratio.filter.somatic.include.{bed}.vcf.gz",
-            bed=["all", "aml", "tm"],
-        ),
-        vcf_pindel="cnv_sv/pindel_vcf/{sample_type}_T.no_tc.vep_annotated.vcf",
+        vcfs=lambda wildcards: get_vcfs(wildcards),
+        vcf_pindel="cnv_sv/pindel_vcf/{sample}_T.no_tc.vep_annotated.vcf",
         all_bed=config["bcftools_SNV"]["all"],
         aml_bed=config["bcftools_SNV"]["aml"],
         tm_bed=config["bcftools_SNV"]["tm"],
         pindel_bed=config["pindel_call"]["include_bed"],
     output:
-        xlsx=temp("export_to_xlsx/{analysis}/{sample_type}.snvs.xlsx"),
+        xlsx=temp("export_to_xlsx/{analysis}/{sample}.snvs.xlsx"),
     params:
         filterfile = config["filter_vcf"]["somatic"],
         extra=config.get("export_to_xlsx_snvs", {}).get("extra", ""),
     log:
-        "export_to_xlsx/{analysis}/{sample_type}.snvs.xslx.log",
+        "export_to_xlsx/{analysis}/{sample}.snvs.xslx.log",
     benchmark:
         repeat(
-            "export_to_xlsx/{analysis}/{sample_type}.snvs.xslx.benchmark.tsv",
+            "export_to_xlsx/{analysis}/{sample}.snvs.xslx.benchmark.tsv",
             config.get("export_to_xlsx_snvs", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("export_to_xlsx_snvs", {}).get("threads", config["default_resources"]["threads"])
@@ -46,12 +58,14 @@ rule export_to_xlsx_manta:
     input:
         vcf="cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.vcf",
         vcfs_bed=expand("cnv_sv/manta_run_workflow_{{analysis}}/{{sample}}.ssa.include.{bed}.vcf.gz", bed=["all", "aml"]), #ska tm med?
+        tbi_vcfs_bed=expand("cnv_sv/manta_run_workflow_{{analysis}}/{{sample}}.ssa.include.{bed}.vcf.gz.tbi", bed=["all", "aml"]),
         all_bed=config["bcftools_SV"]["all"],
         aml_bed=config["bcftools_SV"]["aml"],
     output:
-        temp("export_to_xlsx/{analysis}/{sample}.manta.xlsx"),
+        xlsx=temp("export_to_xlsx/{analysis}/{sample}.manta.xlsx"),
     params:
         extra=config.get("export_to_xlsx_manta", {}).get("extra", ""),
+    localrule: True
     log:
         "export_to_xlsx/{analysis}/{sample}.manta.xlsx.log",
     benchmark:

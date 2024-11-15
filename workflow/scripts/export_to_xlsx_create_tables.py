@@ -81,23 +81,52 @@ def extract_vcf_values(record, csq_index, sample_tumor, sample_normal = ""):
     return return_dict
 
 
-def extract_manta_vcf_values(record, annotation_index, sample_tumor, sample_normal=""):
+def extract_manta_vcf_values(record, ann_index, simple_ann_index, sample_tumor, sample_normal=""):
     return_dict = {}
+    return_dict["filt_ann"] = ",".join(record.filter.keys())
+
     try:
         return_dict["id"] = ":".join(record.id.split(":")[0:2])
     except KeyError:
         return_dict["id"] = ""
 
     genes = []
-    for annotation in record.info["ANN"]:
-        annotation_values = annotation.split("|")
-        gene_name_id = annotation_values[annotation_index.index("Gene_Name")] + "(" + annotation_values[annotation_index.index("Gene_ID")] + ")"
-        if gene_name_id not in genes:
-            genes.append(gene_name_id)
+    details = []
+    try:
+        record.info["SIMPLE_ANN"]
+    except KeyError:
+        try:
+            record.info["ANN"]
+        except KeyError:
+            return_dict["genes"] = "NA"
+            return_dict["detail"] = "NA"
+        else:
+            for annotation in record.info["ANN"]:
+                annotation_values = annotation.split("|")
+                gene_name_id = annotation_values[ann_index.index("Gene_Name")] + "(" + annotation_values[ann_index.index("Gene_ID")] + ")"
+                if gene_name_id not in genes:
+                    genes.append(gene_name_id)
 
-    return_dict["genes"] = ",".join(genes)
-    return_dict["depth"] = record.info["BND_DEPTH"]
-    return_dict["filt_ann"] = ",".join(record.filter.keys())
+            return_dict["genes"] = ", ".join(genes)
+            return_dict["detail"] = ""
+    else:
+        for annotation in record.info["SIMPLE_ANN"]:
+            annotation_values = annotation.split("|")
+            gene_name_id = annotation_values[simple_ann_index.index("GENE(s)")] + "(" + annotation_values[simple_ann_index.index("TRANSCRIPT")] + ")"
+            if gene_name_id not in genes:
+                genes.append(gene_name_id)
+            detail = annotation_values[simple_ann_index.index("DETAIL (exon losses, KNOWN_FUSION, ON_PRIORITY_LIST, NOT_PRIORITISED)")]
+            if detail not in details:
+                details.append(detail)
+
+        return_dict["genes"] = ", ".join(genes)
+        return_dict["detail"] = ", ".join(details)
+
+    try:
+        return_dict["depth"] = record.info["BND_DEPTH"]
+    except KeyError:
+        return_dict["depth"] = ""
+    
     try:
         pr_values = record.samples[sample_tumor]["PR"]
     except KeyError:
@@ -114,39 +143,35 @@ def extract_manta_vcf_values(record, annotation_index, sample_tumor, sample_norm
         sr_denominator, sr_numerator = sr_values
         return_dict["sr_freq"] = sr_numerator / (sr_denominator + sr_numerator) if sr_denominator + sr_numerator != 0 else None
 
-    try:
-        pr_values_n = record.samples[sample_normal]["PR"]
-    except KeyError:
-        return_dict["pr_freq_n"] = ""
-    else:
-        pr_denominator, pr_numerator = pr_values_n
-        return_dict["pr_freq_n"] = pr_numerator / (pr_denominator + pr_numerator) if pr_denominator + pr_numerator != 0 else None
+    if sample_normal:
+        try:
+            pr_values_n = record.samples[sample_normal]["PR"]
+        except KeyError:
+            return_dict["pr_freq_n"] = ""
+        else:
+            pr_denominator, pr_numerator = pr_values_n
+            return_dict["pr_freq_n"] = pr_numerator / (pr_denominator + pr_numerator) if pr_denominator + pr_numerator != 0 else None
+
+        try:
+            sr_values_n = record.samples[sample_normal]["SR"]
+        except KeyError:
+            return_dict["sr_freq_n"] = ""
+        else:
+            sr_denominator, sr_numerator = sr_values_n
+            return_dict["sr_freq_n"] = sr_numerator / (sr_denominator + sr_numerator) if sr_denominator + sr_numerator != 0 else None
 
     try:
-        sr_values_n = record.samples[sample_normal]["SR"]
-    except KeyError:
-        return_dict["sr_freq_n"] = ""
-    else:
-        sr_denominator, sr_numerator = sr_values_n
-        return_dict["sr_freq_n"] = sr_numerator / (sr_denominator + sr_numerator) if sr_denominator + sr_numerator != 0 else None
-
-    try:
-        return_dict["end"] = record.info["END"]
-    except KeyError:
-        return_dict["end"] = None
-
-    try:
-        return_dict["svlength"] = record.info["SVLEN"] # ett eller flera varden? [0]?
+        return_dict["svlength"] = record.info["SVLEN"][0]
     except KeyError:
         return_dict["svlength"] = ""
 
     try:
-        return_dict["hom_len"] = record.info["HOMLEN"] #[1:-1] ?
+        return_dict["hom_len"] = record.info["HOMLEN"][0]
     except KeyError:
         return_dict["hom_len"] = ""
 
     try:
-        return_dict["hom_seq"] = record.info["HOMSEQ"] #[1:-1] ?
+        return_dict["hom_seq"] = record.info["HOMSEQ"][0]
     except KeyError:
         return_dict["hom_seq"] = ""
 
@@ -282,8 +307,10 @@ def create_manta_tables(vcf_input, avoid_filterflags=["MinQUAL", "MinGQ", "MinSo
         sample_normal = None
 
     for header_row in vcf_file.header.records:
-        if "ANN" in str(header_row):
-            annotation_index = str(header_row).split("'")[1].strip().split("|")
+        if "ID=ANN," in str(header_row):
+            ann_index = str(header_row).split("'")[1].strip().split(" | ")
+        elif "ID=SIMPLE_ANN," in str(header_row):
+            simple_ann_index = str(header_row).split("'")[1].strip().split(" | ")
 
 
     manta_tables =  {"bnd":{"data": [], "headers": []}, "del":{"data":[], "headers": []}, "dup":{"data":[], "headers": []}, "ins":{"data": [], "headers": []}}
@@ -293,6 +320,7 @@ def create_manta_tables(vcf_input, avoid_filterflags=["MinQUAL", "MinGQ", "MinSo
         {"header": "MantaID"},
         {"header": "BreakEnd"},
         {"header": "Genes"},
+        {"header": "Details"},
         {"header": "Depth"},
         {"header": "Annotation"},
         {"header": "Paired-read freq"},
@@ -305,6 +333,7 @@ def create_manta_tables(vcf_input, avoid_filterflags=["MinQUAL", "MinGQ", "MinSo
         {"header": "SV Length"},
         {"header": "MantaID"},
         {"header": "Genes"},
+        {"header": "Details"},
         {"header": "Annotation"},
         {"header": "Paired-read freq"},
         {"header": "Spanning-read freq"},
@@ -316,6 +345,7 @@ def create_manta_tables(vcf_input, avoid_filterflags=["MinQUAL", "MinGQ", "MinSo
         {"header": "SV Length"},
         {"header": "MantaID"},
         {"header": "Genes"},
+        {"header": "Details"},
         {"header": "Hom Length"},
         {"header": "Hom Sequence"},
         {"header": "Annotation"},
@@ -330,6 +360,7 @@ def create_manta_tables(vcf_input, avoid_filterflags=["MinQUAL", "MinGQ", "MinSo
         {"header": "SV Length"},
         {"header": "MantaID"},
         {"header": "Genes"},
+        {"header": "Details"},
         {"header": "Hom Length"},
         {"header": "Hom Sequence"},
         {"header": "Annotation"},
@@ -337,12 +368,12 @@ def create_manta_tables(vcf_input, avoid_filterflags=["MinQUAL", "MinGQ", "MinSo
         {"header": "Spanning-read freq"},
     ]
     if sample_normal:
-        manta_tables["bnd"]["headers"] = manta_tables["bnd"]["headers"] + [{"header": "Paired-read Normal Freq"}, {"header": "spanning-read Normal Freq"}]
-        manta_tables["del"]["headers"] = manta_tables["del"]["headers"] + [{"header": "Paired-read Normal Freq"}, {"header": "spanning-read Normal Freq"}]
-        manta_tables["dup"]["headers"] = manta_tables["dup"]["headers"] + [{"header": "Paired-read Normal Freq"}, {"header": "spanning-read Normal Freq"}]
-        manta_tables["ins"]["headers"] = manta_tables["ins"]["headers"] + [{"header": "Paired-read Normal Freq"}, {"header": "spanning-read Normal Freq"}]
+        manta_tables["bnd"]["headers"] = manta_tables["bnd"]["headers"] + [{"header": "Paired-read Normal Freq"}, {"header": "Spanning-read Normal Freq"}]
+        manta_tables["del"]["headers"] = manta_tables["del"]["headers"] + [{"header": "Paired-read Normal Freq"}, {"header": "Spanning-read Normal Freq"}]
+        manta_tables["dup"]["headers"] = manta_tables["dup"]["headers"] + [{"header": "Paired-read Normal Freq"}, {"header": "Spanning-read Normal Freq"}]
+        manta_tables["ins"]["headers"] = manta_tables["ins"]["headers"] + [{"header": "Paired-read Normal Freq"}, {"header": "Spanning-read Normal Freq"}]
     for record in vcf_file.fetch():
-        record_values = extract_manta_vcf_values(record, annotation_index, sample_tumor, sample_normal)
+        record_values = extract_manta_vcf_values(record, ann_index, simple_ann_index, sample_tumor, sample_normal)
         if not any(x in avoid_filterflags for x in record_values["filt_ann"].split(",")):
             if "MantaBND" in record_values["id"]:
                 outline = [
@@ -351,6 +382,7 @@ def create_manta_tables(vcf_input, avoid_filterflags=["MinQUAL", "MinGQ", "MinSo
                     record_values["id"],
                     str(record.alts[0])[1:-1],
                     record_values["genes"],
+                    record_values["detail"],
                     record_values["depth"],
                     record_values["filt_ann"],
                     record_values["pr_freq"],
@@ -363,10 +395,11 @@ def create_manta_tables(vcf_input, avoid_filterflags=["MinQUAL", "MinGQ", "MinSo
                 outline = [
                     str(record.contig),
                     int(record.pos),
-                    record_values["end"],
+                    record.stop,
                     record_values["svlength"],
                     record_values["id"],
                     record_values["genes"],
+                    record_values["detail"],
                     record_values["filt_ann"],
                     record_values["pr_freq"],
                     record_values["sr_freq"],
@@ -378,10 +411,11 @@ def create_manta_tables(vcf_input, avoid_filterflags=["MinQUAL", "MinGQ", "MinSo
                 outline = [
                     str(record.contig),
                     int(record.pos),
-                    record_values["end"],
+                    record.stop,
                     record_values["svlength"],
                     record_values["id"],
                     record_values["genes"],
+                    record_values["detail"],
                     record_values["hom_len"],
                     record_values["hom_seq"],
                     record_values["filt_ann"],
@@ -400,6 +434,7 @@ def create_manta_tables(vcf_input, avoid_filterflags=["MinQUAL", "MinGQ", "MinSo
                     record_values["svlength"],
                     record_values["id"],
                     record_values["genes"],
+                    record_values["detail"],
                     record_values["hom_len"],
                     record_values["hom_seq"],
                     record_values["filt_ann"],
