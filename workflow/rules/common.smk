@@ -31,12 +31,12 @@ from hydra_genetics.utils.software_versions import touch_software_version_file
 from hydra_genetics.utils.software_versions import touch_pipeline_version_file_name
 
 
-min_version("7.8.0")
+hydra_min_version("3.0.0")
+min_version("7.32.0")
 
 
 ### Set and validate config file
-configfile: "config.yaml"
-
+config = replace_dict_variables(config)
 
 try:
     validate(config, schema="../schemas/config.schema.yaml")

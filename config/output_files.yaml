@@ -64,19 +64,14 @@ files:
     output: "{sample}/SNV_indels/{sample}_T.normalized.vep.ratio.filter.somatic.tm.vcf.gz.tbi"
     types: ["T"]
 
-  - name: Parabricks T xlsx
-    input: "export_to_xlsx/t/{sample}_T.snvs.xlsx"
-    output: "{sample}/SNV_indels/{sample}_T.snvs.xlsx"
-    types: ["T"]
-
   - name: Pindel vcf
     input: "cnv_sv/pindel_vcf/{sample}_T.no_tc.vep_annotated.vcf"
     output: "{sample}/SNV_indels/{sample}.pindel.vcf"
     types: ["T"]
 
   - name: Parabricks T xlsx
-    input: "export_to_xlsx/t/{sample}_T.snvs.xlsx"
-    output: "{sample}/SNV_indels/{sample}_T.xlsx"
+    input: "export_to_xlsx/t/{sample}.snvs.xlsx"
+    output: "{sample}/SNV_indels/{sample}_T.snvs.xlsx"
     types: ["T"]
  
     # CNV
@@ -172,36 +167,11 @@ files:
     output: "{sample}/SV/{sample}_manta_T.ssa.aml.vcf.gz.tbi"
     types: ["T"]
 
-  - name: Manta T tsv del subsample
-    input: "tsv_files/{sample}_manta_t.del.tsv"
-    output: "{sample}/SV/{sample}_manta_T.del.tsv"
+  - name: Manta T xlsx
+    input: "export_to_xlsx/t/{sample}.manta.xlsx"
+    output: "{sample}/SV/{sample}_T.manta.xlsx"
     types: ["T"]
-
-  - name: Manta T tsv ins subsample
-    input: "tsv_files/{sample}_manta_t.ins.tsv"
-    output: "{sample}/SV/{sample}_manta_T.ins.tsv"
-    types: ["T"]
-
-  - name: Manta T tsv dup subsample
-    input: "tsv_files/{sample}_manta_t.dup.tsv"
-    output: "{sample}/SV/{sample}_manta_T.dup.tsv"
-    types: ["T"]
-
-  - name: Manta T tsv bnd subsample
-    input: "tsv_files/{sample}_manta_t.tsv"
-    output: "{sample}/SV/{sample}_manta_T.bnd.tsv"
-    types: ["T"]
-
-  - name: Manta T tsv bnd-all subsample
-    input: "tsv_files/{sample}_manta_t.all.tsv"
-    output: "{sample}/SV/{sample}_manta_T.bnd.all.tsv"
-    types: ["T"]
-
-  - name: Manta T tsv bnd-aml subsample
-    input: "tsv_files/{sample}_manta_t.aml.tsv"
-    output: "{sample}/SV/{sample}_manta_T.bnd.aml.tsv"
-    types: ["T"]
-
+  
   # Matched samples TN
     # SNV indels
   - name: Parabricks TN vcf
@@ -280,36 +250,10 @@ files:
     output: "{sample}/SV/{sample}_manta_TN.ssa.aml.vcf.gz.tbi"
     types: ["TN"]
 
-  - name: Manta TN tsv del subsample
-    input: "tsv_files/{sample}_manta_tn.del.tsv"
-    output: "{sample}/SV/{sample}_manta_TN.del.tsv"
+  - name: Manta TN xlsx
+    input: "export_to_xlsx/tn/{sample}.manta.xlsx"
+    output: "{sample}/SV/{sample}_TN.manta.xlsx"
     types: ["TN"]
-
-  - name: Manta TN tsv ins subsample
-    input: "tsv_files/{sample}_manta_tn.ins.tsv"
-    output: "{sample}/SV/{sample}_manta_TN.ins.tsv"
-    types: ["TN"]
-
-  - name: Manta TN tsv dup subsample
-    input: "tsv_files/{sample}_manta_tn.dup.tsv"
-    output: "{sample}/SV/{sample}_manta_TN.dup.tsv"
-    types: ["TN"]
-
-  - name: Manta TN tsv bnd subsample
-    input: "tsv_files/{sample}_manta_tn.tsv"
-    output: "{sample}/SV/{sample}_manta_TN.bnd.tsv"
-    types: ["TN"]
-
-  - name: Manta TN tsv bnd-all subsample
-    input: "tsv_files/{sample}_manta_tn.all.tsv"
-    output: "{sample}/SV/{sample}_manta_TN.bnd.all.tsv"
-    types: ["TN"]
-
-  - name: Manta TN tsv bnd-aml subsample
-    input: "tsv_files/{sample}_manta_tn.aml.tsv"
-    output: "{sample}/SV/{sample}_manta_TN.bnd.aml.tsv"
-    types: ["TN"]
-
 
   # RNA
   - name: MultiQC RNA

@@ -13,7 +13,6 @@ include: "rules/export.smk"
 include: "rules/fix_af.smk"
 include: "rules/gatk_cnv_denoise_read_counts_by_sex.smk"
 include: "rules/html_output.smk"
-include: "rules/manta_to_tsv.smk"
 include: "rules/peddy_create_ped.smk"
 
 
