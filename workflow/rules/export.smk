@@ -30,7 +30,7 @@ rule export_to_xlsx_snvs:
     output:
         xlsx=temp("export_to_xlsx/{analysis}/{sample}.snvs.xlsx"),
     params:
-        filterfile = config["filter_vcf"]["somatic"],
+        filterfile=config["filter_vcf"]["somatic"],
         extra=config.get("export_to_xlsx_snvs", {}).get("extra", ""),
     log:
         "export_to_xlsx/{analysis}/{sample}.snvs.xslx.log",
@@ -57,7 +57,7 @@ rule export_to_xlsx_snvs:
 rule export_to_xlsx_manta:
     input:
         vcf="cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.vcf",
-        vcfs_bed=expand("cnv_sv/manta_run_workflow_{{analysis}}/{{sample}}.ssa.include.{bed}.vcf.gz", bed=["all", "aml"]), #ska tm med?
+        vcfs_bed=expand("cnv_sv/manta_run_workflow_{{analysis}}/{{sample}}.ssa.include.{bed}.vcf.gz", bed=["all", "aml"]),  #ska tm med?
         tbi_vcfs_bed=expand("cnv_sv/manta_run_workflow_{{analysis}}/{{sample}}.ssa.include.{bed}.vcf.gz.tbi", bed=["all", "aml"]),
         all_bed=config["bcftools_SV"]["all"],
         aml_bed=config["bcftools_SV"]["aml"],
@@ -65,13 +65,12 @@ rule export_to_xlsx_manta:
         xlsx=temp("export_to_xlsx/{analysis}/{sample}.manta.xlsx"),
     params:
         extra=config.get("export_to_xlsx_manta", {}).get("extra", ""),
-    localrule: True
     log:
         "export_to_xlsx/{analysis}/{sample}.manta.xlsx.log",
     benchmark:
         repeat(
             "export_to_xlsx/{analysis}/{sample}.manta.xlsx.benchmark.tsv",
-            config.get("export_to_xlsx_manta", {}).get("benchmark_repeats", 1)
+            config.get("export_to_xlsx_manta", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("export_to_xlsx_manta", {}).get("threads", config["default_resources"]["threads"])
     resources:
@@ -86,3 +85,37 @@ rule export_to_xlsx_manta:
         "{rule}: merge {input.vcfs_bed} and {input.vcf} into {output.xlsx}"
     script:
         "../scripts/export_to_xlsx_manta.py"
+
+
+rule export_to_xlsx_rna_fusions:
+    input:
+        arriba="fusions/arriba/{sample}_R.fusions.tsv",
+        fusioncatcher="fusions/fusioncatcher/{sample}_R/final-list_candidate-fusion-genes.txt",
+        star_fusion="fusions/star_fusion/{sample}_R/star-fusion.fusion_predictions.tsv",
+        dux4_igh_counts="fusions/fusioncatcher/{sample}_R/dux4-igh_counts.txt",
+        dux4_igh_calls="fusions/fusioncatcher/{sample}_R/dux4-igh_hits.txt",
+    output:
+        xlsx=temp("export_to_xlsx/rna/{sample}.rna_fusions.xlsx"),
+    params:
+        extra=config.get("export_to_xlsx_rna_fusions", {}).get("extra", ""),
+    localrule: True
+    log:
+        "export_to_xlsx/rna/{sample}.rna_fusions.xlsx.log",
+    benchmark:
+        repeat(
+            "export_to_xlsx/rna/{sample}.rna_fusions.xlsx.benchmark.tsv",
+            config.get("export_to_xlsx_rna_fusions", {}).get("benchmark_repeats", 1),
+        )
+    threads: config.get("export_to_xlsx_rna_fusions", {}).get("threads", config["default_resources"]["threads"])
+    resources:
+        mem_mb=config.get("export_to_xlsx_rna_fusions", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
+        mem_per_cpu=config.get("export_to_xlsx_rna_fusions", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
+        partition=config.get("export_to_xlsx_rna_fusions", {}).get("partition", config["default_resources"]["partition"]),
+        threads=config.get("export_to_xlsx_rna_fusions", {}).get("threads", config["default_resources"]["threads"]),
+        time=config.get("export_to_xlsx_rna_fusions", {}).get("time", config["default_resources"]["time"]),
+    container:
+        config.get("export_to_xlsx_rna_fusions", {}).get("container", config["default_container"])
+    message:
+        "{rule}: merge RNA fusions for {wildcards.sample} into {output.xlsx}"
+    script:
+        "../scripts/export_to_xlsx_rna_fusions.py"
