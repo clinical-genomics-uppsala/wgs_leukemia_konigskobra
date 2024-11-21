@@ -84,7 +84,7 @@ use rule vep from annotation as annotation_vep_snvs with:
 
 use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation_tn with:
     input:
-        vcf="cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.snpeff.vcf.gz",
+        vcf="cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.snpeff_annotated.vcf.gz",
         panel=config["simple_sv_annotation"]["panel"],
         fusion_pairs=config["simple_sv_annotation"]["fusion_pairs"],
     output:
@@ -102,7 +102,7 @@ use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation
 
 use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation_t with:
     input:
-        vcf="cnv_sv/manta_run_workflow_t/{sample}/results/variants/tumorSV.snpeff.vcf.gz",
+        vcf="cnv_sv/manta_run_workflow_t/{sample}/results/variants/tumorSV.snpeff_annotated.vcf.gz",
         panel=config["simple_sv_annotation"]["panel"],
         fusion_pairs=config["simple_sv_annotation"]["fusion_pairs"],
     output:
@@ -218,9 +218,6 @@ use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
         bai_n=lambda wildcards: get_bam_input(wildcards, t_n="N")[1],
         ref=config["reference"]["fasta"],
         scrpt="cnv_sv/manta_run_workflow_tn/{sample}/runWorkflow.py",
-    output:
-        som_sv_vcf=temp("cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.vcf.gz"),
-        som_sv_tbi=temp("cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.vcf.gz.tbi"),
     priority: 4
 
 
