@@ -5,6 +5,7 @@ __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
+include: "rules/fix_svdb_header.smk"
 include: "rules/annotate.smk"
 include: "rules/cnvkit.smk"
 include: "rules/cnvkit_table.smk"
@@ -112,7 +113,7 @@ use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation
     benchmark:
         repeat(
             "cnv_sv/manta_run_workflow_t/{sample}.ssa.vcf.benchmark.tsv",
-            config.get("snpeff", {}).get("benchmark_repeats", 1),
+            config.get("ssa", {}).get("benchmark_repeats", 1),
         )
     message:
         "{rule}: Annotate {input.vcf}"
@@ -237,6 +238,11 @@ use rule pindel_call from cnv_sv as cnv_sv_pindel_call with:
         config="cnv_sv/pindel/{sample}_T.cfg",
         ref=config["reference"]["fasta"],
         include_bed=config.get("pindel_call", {}).get("include_bed", []),
+
+
+use rule svdb_query from cnv_sv as cnv_sv_svdb_query with:
+    output:
+        vcf=temp("cnv_sv/svdb_query/{sample}_{type}.{tc_method}.svdb_query.wrong_header.vcf"),
 
 
 module compression:
