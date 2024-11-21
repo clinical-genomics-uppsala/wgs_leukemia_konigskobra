@@ -32,7 +32,6 @@ if aligner is None or (aligner != "bwa_gpu" and aligner != "bwa_sentieon"):
 
 elif aligner == "bwa_gpu":
 
-    include: "rules/mutectcaller_to_tsv.smk"
     include: "rules/sample_order_multiqc.smk"
 
     ruleorder: parabricks_pbrun_fq2bam > alignment_samtools_index
@@ -61,7 +60,7 @@ module annotation:
         config
 
 
-use rule * from annotation as annotation_*
+use rule * from annotation exclude bgzip_vcf, tabix_vcf as annotation_*
 
 
 use rule vep from annotation as annotation_vep_snvs with:

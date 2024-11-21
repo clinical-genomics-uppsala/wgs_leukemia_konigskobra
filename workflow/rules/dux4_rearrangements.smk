@@ -18,7 +18,7 @@ if aligner == "bwa_gpu":
             "reports/dux_read_counts/{sample}_{type}.dux4_igh.txt.log",
         benchmark:
             repeat(
-                "reports/dux_read_counts/{sample}_{type}.dux4_igh.txt.tsv",
+                "reports/dux_read_counts/{sample}_{type}.dux4_igh.txt.benchmark.tsv",
                 config.get("fix_af", {}).get("benchmark_repeats", 1),
             )
         params:
@@ -54,7 +54,7 @@ if aligner == "bwa_gpu":
             "reports/dux_read_counts/{sample}_{type}.dux4_erg.txt.log",
         benchmark:
             repeat(
-                "reports/dux_read_counts/{sample}_{type}.dux4_erg.txt.tsv",
+                "reports/dux_read_counts/{sample}_{type}.dux4_erg.txt.benchmark.tsv",
                 config.get("fix_af", {}).get("benchmark_repeats", 1),
             )
         params:
@@ -89,7 +89,7 @@ rule dux4_igh_fusioncatcher_count:
         "fusions/fusioncatcher/{sample}_{type}/dux4-igh.log",
     benchmark:
         repeat(
-            "fusions/fusioncatcher/{sample}_{type}/dux4-igh.tsv",
+            "fusions/fusioncatcher/{sample}_{type}/dux4-igh.benchmark.tsv",
             config.get("dux4-igh_fusioncatcher", {}).get("benchmark_repeats", 1),
         )
     params:
