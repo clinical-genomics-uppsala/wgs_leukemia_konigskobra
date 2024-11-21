@@ -98,7 +98,6 @@ rule export_to_xlsx_rna_fusions:
         xlsx=temp("export_to_xlsx/rna/{sample}.rna_fusions.xlsx"),
     params:
         extra=config.get("export_to_xlsx_rna_fusions", {}).get("extra", ""),
-    localrule: True
     log:
         "export_to_xlsx/rna/{sample}.rna_fusions.xlsx.log",
     benchmark:
