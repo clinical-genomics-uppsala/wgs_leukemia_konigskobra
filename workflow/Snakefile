@@ -5,7 +5,6 @@ __license__ = "GPL-3"
 
 
 include: "rules/common.smk"
-include: "rules/fix_svdb_header.smk"
 include: "rules/annotate.smk"
 include: "rules/cnvkit.smk"
 include: "rules/cnvkit_table.smk"
@@ -238,11 +237,6 @@ use rule pindel_call from cnv_sv as cnv_sv_pindel_call with:
         config="cnv_sv/pindel/{sample}_T.cfg",
         ref=config["reference"]["fasta"],
         include_bed=config.get("pindel_call", {}).get("include_bed", []),
-
-
-use rule svdb_query from cnv_sv as cnv_sv_svdb_query with:
-    output:
-        vcf=temp("cnv_sv/svdb_query/{sample}_{type}.{tc_method}.svdb_query.wrong_header.vcf"),
 
 
 module compression:

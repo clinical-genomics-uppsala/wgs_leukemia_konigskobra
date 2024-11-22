@@ -57,22 +57,3 @@ properties:
             type: string
             description: name of xlsx file for summarizing snv results based on different genelists
 
-  fix_svdb_header:
-    type: object
-    description: input and output parameters for fix_svdb_header
-    properties:
-      input:
-        type: object
-        description: list of inputs
-        properties:
-          vcf:
-            type: string
-            description: original vcf with SAMPLE in header and SAMPLES in variants
-
-      output:
-        type: object
-        description: list of outputs
-        properties:
-          vcf:
-            type: string
-            description: resulting vcf where SAMPLE in header have been replace with SAMPLES

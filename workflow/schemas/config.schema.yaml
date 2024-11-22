@@ -433,17 +433,6 @@ properties:
         - germline
         - cnv_hardfilter
 
-  fix_svdb_header:
-    type: object
-    description: parameters for fix_svdb_header
-    properties:
-      benchmark_repeats:
-        type: integer
-        description: set number of times benchmark should be repeated
-      container:
-        type: string
-        description: name or path to docker/singularity container
-
   fusioncatcher:
     type: object
     properties:

@@ -7,7 +7,7 @@ aligner: "bwa_gpu" # bwa_gpu or bwa_sentieon
 
 modules:
   alignment: "906d25d0d4791eb5a54cba9954fddf29e27b85dd"
-  annotation: "v1.1.0"
+  annotation: "cd97f30"
   cnv_sv: "v0.4.1"
   compression: "v1.1.0"
   filtering: "v0.3.0"
