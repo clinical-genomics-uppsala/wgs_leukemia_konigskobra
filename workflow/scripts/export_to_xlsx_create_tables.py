@@ -425,7 +425,7 @@ def create_manta_tables(vcf_input, avoid_filterflags=["MinQUAL", "MinGQ", "MinSo
                 if sample_normal:
                     outline = outline + [record_values["pr_freq_n"], record_values["sr_freq_n"]]
                 manta_tables["dup"]["data"].append(outline)
-        elif "MantaINS" in record_values["id"]:
+            elif "MantaINS" in record_values["id"]:
                 outline = [
                     str(record.contig),
                     int(record.pos),
