@@ -275,7 +275,7 @@ files:
     # Fusions
   - name: RNA fusion xlsx
     input: "export_to_xlsx/rna/{sample}.rna_fusions.xlsx"
-    output: "Results/RNA_fusions/{sample}_R.rna_fusions.xlsx"
+    output: "{sample}/RNA_fusions/{sample}_R.rna_fusions.xlsx"
     types: ["R"]
   
   - name: Arriba pdf
