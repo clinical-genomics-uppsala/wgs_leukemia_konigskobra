@@ -2,6 +2,7 @@
 
 import xlsxwriter
 import datetime
+import sys
 import logging
 
 logging.basicConfig(
@@ -13,6 +14,7 @@ logging.basicConfig(
 
 
 def convert_columns_to_letter(nr_columns):
+    # Function to convert number of columns to alphabetical coordinates for xlsx-sheets
     if nr_columns < 27:
         letter = chr(nr_columns + 64)
     elif nr_columns < 703:
@@ -86,6 +88,7 @@ format_heading = workbook.add_format({"bold": True, "font_size": 18})
 format_bold = workbook.add_format({"bold": True, "text_wrap": True})
 
 # Overview sheet
+logging.debug(f"Creating Overview sheet")
 worksheet_overview.write(0, 0, sample_name, format_heading)
 worksheet_overview.write(1, 0, "Processing date: " + datetime.datetime.now().strftime("%d %B, %Y"))
 
@@ -113,6 +116,7 @@ worksheet_overview.add_table(
 )
 
 # Arriba sheet
+logging.debug(f"Creating Arriba sheet")
 worksheet_arriba.set_column("E:F", 12)
 
 worksheet_arriba.write("A1", "Fusions detected by Arriba", format_heading)
@@ -130,6 +134,7 @@ worksheet_arriba.add_table(
 )
 
 # Fusioncatcher sheet
+logging.debug(f"Creating Fusioncatcher sheet")
 worksheet_fusioncatcher.set_column("C:C", 12)
 worksheet_fusioncatcher.set_column("I:J", 12)
 
@@ -148,6 +153,7 @@ worksheet_fusioncatcher.add_table(
 )
 
 # StarFusion sheet
+logging.debug(f"Creating Starfusion sheet")
 worksheet_starfusion.set_column("A:A", 18)
 worksheet_starfusion.set_column("F:J", 15)
 
@@ -166,3 +172,4 @@ worksheet_starfusion.add_table(
 )
 
 workbook.close()
+logging.info(f"All done!")

@@ -5,6 +5,28 @@ import xlsxwriter
 import datetime
 from pysam import VariantFile
 import yaml
+import sys
+import logging
+
+logging.basicConfig(
+    format="{asctime} - {levelname} - {message}",
+    style="{",
+    datefmt="%Y-%m-%d %H:%M",
+    level=logging.INFO,
+)
+
+
+def convert_columns_to_letter(nr_columns):
+    # Function to convert number of columns to alphabetical coordinates for xlsx-sheets
+    if nr_columns < 27:
+        letter = chr(nr_columns + 64)
+    elif nr_columns < 703:
+        i = int((nr_columns - 1) / 26)
+        letter = chr(i + 64) + chr(nr_columns - (i * 26) + 64)
+    else:
+        logging.error(f"Nr columns has to be less than 703, does not support three letter column-index for tables {nr_columns=}")
+        sys.exit()
+    return letter
 
 
 def index_vep(variantfile):
@@ -16,6 +38,7 @@ def index_vep(variantfile):
 
 
 """ Prepping input data """
+logging.info(f"Prepping data and creating datatables")
 bedfiles = {}
 bedfiles["all"] = snakemake.input.all_bed
 bedfiles["aml"] = snakemake.input.aml_bed
@@ -33,7 +56,9 @@ sample_name = snakemake.output.xlsx.split("/")[-1].split(".snvs.xlsx")[0]
 
 snv_tables = {}
 for subsection in subsections:
+    logging.debug(f"Loading {subsection}= using create_snv_table()")
     snv_tables[subsection] = create_snv_table(vcfs[subsection])
+logging.debug(f"Loading pindel using create_pindel_table()")
 pindel_table = create_pindel_table(vcfs["pindel"])
 
 
@@ -57,6 +82,7 @@ for key, items in filters_dict["filters"].items():
 
 
 """ Creating xlsx file """
+logging.info(f"Creating xlsx workbbok {snakemake.output.xlsx}=")
 workbook = xlsxwriter.Workbook(snakemake.output.xlsx)
 worksheet_overview = workbook.add_worksheet("Overview")
 
@@ -65,6 +91,7 @@ format_bold = workbook.add_format({"bold": True, "text_wrap": True})
 format_orange = workbook.add_format({"bg_color": "#ffd280"})
 
 # Overview sheet
+logging.debug(f"Creating Overview sheet")
 worksheet_overview.write(0, 0, sample_name, format_heading)
 worksheet_overview.write(1, 0, "Processing date: " + datetime.datetime.now().strftime("%d %B, %Y"))
 
@@ -73,23 +100,24 @@ worksheet_overview.write(4, 4, "Valid from: ")
 worksheet_overview.write(5, 0, "Signed by: ")
 worksheet_overview.write(5, 4, "Document nr: ")
 
-
 worksheet_overview.write(7, 0, "Sheets:", format_bold)
 worksheet_overview.write_url(8, 0, "internal:'ALL'!A1", string="Variants in ALL genes")
 worksheet_overview.write_url(9, 0, "internal:'AML'!A1", string="Variants in AML genes")
 worksheet_overview.write_url(10, 0, "internal:'TM'!A1", string="Variants in TM exons")
-worksheet_overview.write_url(11,0, "internal: 'Pindel'!A1", string="Variants found by pindel in FLT3 or UBTF")
+worksheet_overview.write_url(11, 0, "internal: 'Pindel'!A1", string="Variants found by pindel in FLT3 or UBTF")
 worksheet_overview.write_url(12, 0, "internal:'ALL bedfile'!A1", string="Gene regions included in ALL bedfile")
 worksheet_overview.write_url(13, 0, "internal:'AML bedfile'!A1", string="Gene regions included in AML bedfile")
 worksheet_overview.write_url(14, 0, "internal:'TM bedfile'!A1", string="Gene regions included in TM bedfile")
+worksheet_overview.write_url(15, 0, "internal:'PINDEL bedfile'!A1", string="Gene regions included in pindel bedfile")
 
-worksheet_overview.write(17, 0, "Pindel bedfile: " + bedfiles["pindel"])
-worksheet_overview.write(18, 0, "ALL bedfile: " + bedfiles["all"])
-worksheet_overview.write(19, 0, "AML bedfile: " + bedfiles["aml"])
-worksheet_overview.write(20, 0, "TM exons bedfile: " + bedfiles["tm"])
+worksheet_overview.write(18, 0, "Pindel bedfile: " + bedfiles["pindel"])
+worksheet_overview.write(19, 0, "ALL bedfile: " + bedfiles["all"])
+worksheet_overview.write(20, 0, "AML bedfile: " + bedfiles["aml"])
+worksheet_overview.write(21, 0, "TM exons bedfile: " + bedfiles["tm"])
 
 # Add snv variants sheets
 for sheet in subsections:
+    logging.debug(f"Creating {sheet} sheet")
     data_table = snv_tables[sheet]
     worksheet = workbook.add_worksheet(sheet.upper())
     worksheet.set_column("B:B", 12)
@@ -114,12 +142,13 @@ for sheet in subsections:
     )
 
     i += 2
+    column_end = ":" + convert_columns_to_letter(len(data_table["headers"]))
     if len(data_table["data"]) > 0:
-        table_area = "A" + str(i) + ":T" + str(len(data_table["data"]) + i)
-        table_area_data = "A" + str(i + 1) + ":T" + str(len(data_table["data"]) + i)
+        table_area = "A" + str(i) + column_end + str(len(data_table["data"]) + i)
+        table_area_data = "A" + str(i + 1) + column_end + str(len(data_table["data"]) + i)
     else:
-        table_area = "A" + str(i) + ":T" + str(i + 1)
-        table_area_data = "A" + str(i + 1) + ":T" + str(i + 1)
+        table_area = "A" + str(i) + column_end + str(i + 1)
+        table_area_data = "A" + str(i + 1) + column_end + str(i + 1)
 
     worksheet.add_table(table_area, {"columns": data_table["headers"], "style": "Table Style Light 1"})
 
@@ -136,17 +165,18 @@ for sheet in subsections:
             worksheet.set_row(i, options={"hidden": True})
         worksheet.write_row(i, 0, row_data)
         i += 1
-
+# Pindel sheet
+logging.debug(f"Creating Pindel sheet")
 worksheet = workbook.add_worksheet("Pindel")
 worksheet.set_column("B:B", 12)
-#worksheet_pindel.set_column(5, 5, 10)
-#worksheet_pindel.set_column(11, 13, 10)
+# worksheet_pindel.set_column(5, 5, 10)
+# worksheet_pindel.set_column(11, 13, 10)
 worksheet.write("A1", "Variants found", format_heading)
 worksheet.write("A3", "Sample: " + str(sample_name))
 worksheet.write("A5", "To limit runtime pindel were used with a specific designfile: " + bedfiles["pindel"])
 worksheet.write("A6", "Which includes the following regions: ")
 i = 7
-#for gene in pindel_genes:
+# for gene in pindel_genes:
 #    worksheet.write("C" + str(i), gene)
 #    i += 1
 
@@ -162,14 +192,15 @@ worksheet.write(
     "To see all variants; put marker on header row, then click on 'Standard Filter' and remove any values. "
     + "You can then use the drop-downs in the header row to filter to your liking.",
 )
-i += 3
 
+i += 3
+column_end = ":" + convert_columns_to_letter(len(pindel_table["headers"]))
 if len(pindel_table["data"]) > 0:
-    table_area = "A" + str(i) + ":T" + str(len(pindel_table["data"]) + i)
-    table_area_data = "A" + str(i + 1) + ":T" + str(len(pindel_table["data"]) + i)
+    table_area = "A" + str(i) + column_end + str(len(pindel_table["data"]) + i)
+    table_area_data = "A" + str(i + 1) + column_end + str(len(pindel_table["data"]) + i)
 else:
-    table_area = "A" + str(i) + ":T" + str(i + 1)
-    table_area_data = "A" + str(i + 1) + ":T" + str(i + 1)
+    table_area = "A" + str(i) + column_end + str(i + 1)
+    table_area_data = "A" + str(i + 1) + column_end + str(i + 1)
 
 worksheet.add_table(table_area, {"columns": pindel_table["headers"], "style": "Table Style Light 1"})
 
@@ -187,9 +218,10 @@ for row_data in pindel_table["data"]:
     i += 1
 
 
-
 # Add bedfile sheets
+logging.debug(f"Creating bedfile sheets:")
 for sheet in subsections + ["pindel"]:
+    logging.debug(f"Creating {sheet} bedfile sheet")
     bed_data = bed_tables[sheet]
     worksheet = workbook.add_worksheet(sheet.upper() + " bedfile")
     worksheet.set_column("B:C", 10)
@@ -201,3 +233,4 @@ for sheet in subsections + ["pindel"]:
     )
 
 workbook.close()
+logging.info(f"All done")
