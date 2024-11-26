@@ -6,15 +6,15 @@ __license__ = "GPL-3"
 
 rule annotate_normal_ratio:
     input:
-        vcf="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.vcf",
+        vcf="parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.normalized.vep.vcf",
     output:
-        vcf="parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.vcf",
+        vcf="parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.normalized.vep.ratio.vcf",
     log:
-        "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.vcf.gz.log",
+        "parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.normalized.vep.ratio.vcf.log",
     benchmark:
         repeat(
-            "parabricks/pbrun_mutectcaller_tn/{sample}.normalized.vep.ratio.vcf.gz.benchmark.tsv",
-            config.get("annotate_normal_ratio", {}).get("benchmark_repeats", 1)
+            "parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.normalized.vep.ratio.vcf.benchmark.tsv",
+            config.get("annotate_normal_ratio", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("annotate_normal_ratio", {}).get("threads", config["default_resources"]["threads"])
     resources:

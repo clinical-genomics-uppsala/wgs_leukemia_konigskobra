@@ -1,5 +1,3 @@
-output: "../../config/output_files.json"
-
 reference:
   design_bed: "reference/homo_sapiens.wgs.bed"
   design_intervals: "reference/wgs.interval_list" #HSMetrics
@@ -45,15 +43,9 @@ cnvkit_table:
 
 cnv_html_report:
   show_table: true
-  template_dir: "../../config/cnv_report_template"
   cnv_vcf:
     - annotation: cna_exons
       filter: cnv_hardfilter
-
-
-filter_vcf:
-  germline: "../../config/config_germline_filter.yaml"
-  cnv_hardfilter: "/../../config_cnv_hardfilter.yaml"
 
 fusioncatcher:
   genome_path: "reference"
@@ -67,16 +59,6 @@ gatk_cnv_denoise_read_counts_by_sex:
 
 mosdepth_bed:
   design_bed: "reference/exome.bed"
-
-multiqc:
-  reports:
-    DNA:
-      config: "../../config/multiqc_dna_config.yaml"
-    RNA:
-      config: "../../config/multiqc_rna_config.yaml"
-
-peddy:
-  config: "peddy_mqc.tsv" 
 
 pindel_call:
   include_bed: "reference/pindel.bed"
@@ -104,13 +86,6 @@ star:
 
 star_fusion:
   genome_path: "reference/"
-
-svdb_merge:
-  tc_method:
-    - name: pathology
-      cnv_caller:
-        - cnvkit
-        - gatk
 
 vep:
   vep_cache: "reference/vep"
