@@ -14,7 +14,7 @@ rule annotate_normal_ratio:
     benchmark:
         repeat(
             "parabricks/pbrun_mutectcaller_{analysis}/{sample_type}.normalized.vep.ratio.vcf.benchmark.tsv",
-            config.get("annotate_normal_ratio", {}).get("benchmark_repeats", 1)
+            config.get("annotate_normal_ratio", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("annotate_normal_ratio", {}).get("threads", config["default_resources"]["threads"])
     resources:

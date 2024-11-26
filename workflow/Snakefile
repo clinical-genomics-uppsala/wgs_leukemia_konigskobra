@@ -740,11 +740,14 @@ use rule bgzip from misc as decompress_manta with:
     output:
         "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf",
     params:
-         extra="-d"
+        extra="-d",
     log:
         "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.log",
     benchmark:
-        repeat("cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.benchmark.tsv", config.get("bgzip", {}).get("benchmark_repeats", 1))
+        repeat(
+            "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.benchmark.tsv",
+            config.get("bgzip", {}).get("benchmark_repeats", 1),
+        )
     message:
         "{rule}: decompress {input}"
 
