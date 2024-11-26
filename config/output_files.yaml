@@ -261,7 +261,7 @@ files:
     output: multiqc_R.html
     types: ["R"]
   
-    # alignment
+    # Alignment
   - name: RNA bam
     input: "alignment/star/{sample}_R.bam"
     output: "{sample}/Cram/{sample}_R.bam"
@@ -273,32 +273,12 @@ files:
     types: ["R"]
 
     # Fusions
-  - name: Arriba tsv
-    input: "fusions/arriba/{sample}_R.fusions.tsv"
-    output: "{sample}/RNA_fusions/{sample}_R.arriba.tsv"
+  - name: RNA fusion xlsx
+    input: "export_to_xlsx/rna/{sample}.rna_fusions.xlsx"
+    output: "{sample}/RNA_fusions/{sample}_R.rna_fusions.xlsx"
     types: ["R"]
   
   - name: Arriba pdf
     input: fusions/arriba_draw_fusion/{sample}_R.pdf
     output: "{sample}/RNA_fusions/{sample}_R.arriba.plot.pdf"
-    types: ["R"]
-
-  - name: Star-fusion tsv
-    input: fusions/star_fusion/{sample}_R/star-fusion.fusion_predictions.tsv
-    output: "{sample}/RNA_fusions/{sample}_R.star_fusion.tsv"
-    types: ["R"]
-  
-  - name: Fusioncather tsv
-    input: fusions/fusioncatcher/{sample}_R/final-list_candidate-fusion-genes.txt
-    output: "{sample}/RNA_fusions/{sample}_R.fusioncatcher.tsv"
-    types: ["R"]
-  
-  - name: Fusioncatcher dux4-igh counts
-    input: fusions/fusioncatcher/{sample}_R/dux4-igh_counts.txt
-    output: "{sample}/RNA_fusions/{sample}_R.fusioncatcher_dux4-igh_counts.txt"
-    types: ["R"]
-
-  - name: Fusioncatcher dux4-igh calls
-    input: fusions/fusioncatcher/{sample}_R/dux4-igh_hits.txt
-    output: "{sample}/RNA_fusions/{sample}_R.fusioncatcher_dux4-igh_filtered-results.txt"
     types: ["R"]

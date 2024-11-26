@@ -20,8 +20,8 @@ Introduction to export_to_xlsx
 
 #RESOURCESSCHEMA__export_to_xlsx#
 
-## [annotate_normal_ratio](url_to_tool)
-Introduction to annotate_normal_ratio
+## [annotate_normal_ratio]
+Add normal ratio to variants for TN samples 
 
 ### :snake: Rule
 
@@ -40,3 +40,4 @@ Introduction to annotate_normal_ratio
 #### Resources settings (`resources.yaml`)
 
 #RESOURCESSCHEMA__annotate_normal_ratio#
+

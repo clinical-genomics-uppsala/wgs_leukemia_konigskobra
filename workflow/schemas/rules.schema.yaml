@@ -56,3 +56,4 @@ properties:
           xlsx:
             type: string
             description: name of xlsx file for summarizing snv results based on different genelists
+

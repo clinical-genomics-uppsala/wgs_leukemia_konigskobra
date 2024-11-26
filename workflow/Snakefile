@@ -32,7 +32,6 @@ if aligner is None or (aligner != "bwa_gpu" and aligner != "bwa_sentieon"):
 
 elif aligner == "bwa_gpu":
 
-    include: "rules/mutectcaller_to_tsv.smk"
     include: "rules/sample_order_multiqc.smk"
 
     ruleorder: parabricks_pbrun_fq2bam > alignment_samtools_index
@@ -61,7 +60,7 @@ module annotation:
         config
 
 
-use rule * from annotation as annotation_*
+use rule * from annotation exclude bgzip_vcf, tabix_vcf as annotation_*
 
 
 use rule vep from annotation as annotation_vep_snvs with:
@@ -85,7 +84,7 @@ use rule vep from annotation as annotation_vep_snvs with:
 
 use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation_tn with:
     input:
-        vcf="cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.snpeff.vcf.gz",
+        vcf="cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.snpeff_annotated.vcf.gz",
         panel=config["simple_sv_annotation"]["panel"],
         fusion_pairs=config["simple_sv_annotation"]["fusion_pairs"],
     output:
@@ -103,7 +102,7 @@ use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation
 
 use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation_t with:
     input:
-        vcf="cnv_sv/manta_run_workflow_t/{sample}/results/variants/tumorSV.snpeff.vcf.gz",
+        vcf="cnv_sv/manta_run_workflow_t/{sample}/results/variants/tumorSV.snpeff_annotated.vcf.gz",
         panel=config["simple_sv_annotation"]["panel"],
         fusion_pairs=config["simple_sv_annotation"]["fusion_pairs"],
     output:
@@ -113,7 +112,7 @@ use rule simple_sv_annotation from annotation as annotation_simple_sv_annotation
     benchmark:
         repeat(
             "cnv_sv/manta_run_workflow_t/{sample}.ssa.vcf.benchmark.tsv",
-            config.get("snpeff", {}).get("benchmark_repeats", 1),
+            config.get("ssa", {}).get("benchmark_repeats", 1),
         )
     message:
         "{rule}: Annotate {input.vcf}"
@@ -219,9 +218,6 @@ use rule manta_run_workflow_tn from cnv_sv as cnv_sv_manta_run_workflow_tn with:
         bai_n=lambda wildcards: get_bam_input(wildcards, t_n="N")[1],
         ref=config["reference"]["fasta"],
         scrpt="cnv_sv/manta_run_workflow_tn/{sample}/runWorkflow.py",
-    output:
-        som_sv_vcf=temp("cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.vcf.gz"),
-        som_sv_tbi=temp("cnv_sv/manta_run_workflow_tn/{sample}/results/variants/somaticSV.vcf.gz.tbi"),
     priority: 4
 
 
@@ -744,11 +740,14 @@ use rule bgzip from misc as decompress_manta with:
     output:
         "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf",
     params:
-         extra="-d"
+        extra="-d",
     log:
         "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.log",
     benchmark:
-        repeat("cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.benchmark.tsv", config.get("bgzip", {}).get("benchmark_repeats", 1))
+        repeat(
+            "cnv_sv/manta_run_workflow_{analysis}/{sample}.ssa.include.{bed}.vcf.benchmark.tsv",
+            config.get("bgzip", {}).get("benchmark_repeats", 1),
+        )
     message:
         "{rule}: decompress {input}"
 
