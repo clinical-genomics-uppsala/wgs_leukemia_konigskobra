@@ -16,7 +16,7 @@ properties:
 
   output:
     type: string
-    description: path to output_files.json file
+    description: path to output_files.yaml file
 
   modules:
     type: object
@@ -55,6 +55,9 @@ properties:
       sentieon:
         type: string
         description: version/branch/tag
+      snv_indels:
+        type: string
+        description: version/branch/tag
       misc:
         type: string
         description: version/branch/tag
@@ -68,6 +71,7 @@ properties:
       - fusions
       - qc
       - reports
+      - snv_indels
       - misc
 
   default_container:
@@ -133,6 +137,17 @@ properties:
         type: string
         description: path to CNA gene bed file
 
+  annotate_normal_ratio:
+    type: object
+    description: parameters for annotate_normal_ratio to annotate snvs tn vcfs
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated
+      container:
+        type: string
+        description: name or path to docker/singularity container
+
   arriba:
     type: object
     properties:
@@ -187,7 +202,10 @@ properties:
         description: path to all snv bed file 
       aml:
         type: string
-        description: path to aml snv bed file 
+        description: path to aml snv bed file
+      tm:
+        type: string
+        description: path to tm snv bed file contain Twist Myeloid focused panel genes
     required:
       - aml
       - all
@@ -205,28 +223,6 @@ properties:
     required:
       - aml
       - all 
-
-  cnv_html_report:
-    type: object
-    description: parameters for cnv_html_report
-    properties: 
-      cnv_vcf:
-        type: array
-        properties: 
-          annotation: 
-            type: string
-          filter:
-            type: string 
-        description: path to annotation and filter files
-      show_table: 
-        type: boolean
-      template_dir: 
-        type: string
-        description: path to cnv report template
-    required:
-      - cnv_vcf
-      - show_table
-      - template_dir
 
   cnvkit_batch:
     type: object
@@ -268,6 +264,28 @@ properties:
         description: name or path to docker/singularity container
     required:
       - container
+
+  cnv_html_report:
+    type: object
+    description: parameters for cnv_html_report
+    properties: 
+      cnv_vcf:
+        type: array
+        properties: 
+          annotation: 
+            type: string
+          filter:
+            type: string 
+        description: path to annotation and filter files
+      show_table: 
+        type: boolean
+      template_dir: 
+        type: string
+        description: path to cnv report template
+    required:
+      - cnv_vcf
+      - show_table
+      - template_dir
 
   cnvkit_scatter:
     type: object
@@ -313,7 +331,6 @@ properties:
         description: path to a cyto coordinate txt file
     required:
       - bedfile
-      - container
       - cyto_coordinates
 
   cnvkit_vcf:
@@ -365,9 +382,9 @@ properties:
     required:
       - region
 
-  export_to_xlsx:
+  export_to_xlsx_snvs:
     type: object
-    description: parameters for export_to_xlsx
+    description: parameters for export_to_xlsx_snvs
     properties:
       benchmark_repeats:
         type: integer
@@ -403,6 +420,9 @@ properties:
       container:
         type: string
         description: name or path of container
+      sample_name_regex:
+        type: string
+        description: regexp for tumor (or wanted sample to be used in filters)
       cnv_hardfilter:
         type: string
         description: path to cnv hard filter yaml file
@@ -535,6 +555,9 @@ properties:
       by:
         type: string
         description: window size
+      thresholds:
+        type: string
+        description: specific thresholds limits to use
       container:
         type: string
         description: name or path to docker/singularity container
@@ -547,7 +570,7 @@ properties:
 
   mosdepth_bed:
     type: object
-    description: parameters for mosdepth_bed
+    description: parameters for mosdepth_bed used on RNA samples
     properties:
       container:
         type: string
@@ -611,24 +634,6 @@ properties:
       - container
       - reports
 
-  peddy:
-    type: object
-    description: parameters for peddy
-    properties:
-      containter:
-        type: string
-        description: name or path to docker/singularity container
-      config: 
-        type: string
-        description: path to peddy multiqc config file
-      extra:
-        type: string
-        description: additional parameters for peddy
-    required:
-      - container
-      - config
-      - extra
-
   pbrun_fq2bam: 
     type: object
     description: parameters for pbrun_fq2bam
@@ -658,6 +663,24 @@ properties:
         description: name or path to docker/singularity container
     required:
       - container
+
+  peddy:
+    type: object
+    description: parameters for peddy
+    properties:
+      containter:
+        type: string
+        description: name or path to docker/singularity container
+      config: 
+        type: string
+        description: path to peddy multiqc config file
+      extra:
+        type: string
+        description: additional parameters for peddy e.g. --sites hg38
+    required:
+      - container
+      - config
+      - extra
 
   picard_collect_alignment_summary_metrics:
     type: object
@@ -940,6 +963,22 @@ properties:
       - container
       - vep_cache
 
+  vt_decompose:
+    type: object
+    description: parameters for vt vt_decompose
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+
+  vt_normalize:
+    type: object
+    description: parameters for vt vt_decompose
+    properties:
+      container:
+        type: string
+        description: name or path to docker/singularity container
+
 
 required:
   - resources
@@ -961,7 +1000,6 @@ required:
   - cnvkit_scatter
   - cnvkit_scatter_whole
   - cnvkit_table
-  - cnvkit_vcf
   - gatk_call_copy_ratio_segments
   - gatk_cnv_collect_allelic_counts
   - gatk_collect_read_counts
@@ -997,3 +1035,5 @@ required:
   - svdb_merge
   - svdb_query
   - vep
+  - vt_decompose
+  - vt_normalize

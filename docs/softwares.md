@@ -19,3 +19,25 @@ Introduction to export_to_xlsx
 #### Resources settings (`resources.yaml`)
 
 #RESOURCESSCHEMA__export_to_xlsx#
+
+## [annotate_normal_ratio]
+Add normal ratio to variants for TN samples 
+
+### :snake: Rule
+
+#SNAKEMAKE_RULE_SOURCE__annotate__annotate_normal_ratio#
+
+#### :left_right_arrow: input / output files
+
+#SNAKEMAKE_RULE_TABLE__annotate__annotate_normal_ratio#
+
+### :wrench: Configuration
+
+#### Software settings (`config.yaml`)
+
+#CONFIGSCHEMA__annotate_normal_ratio#
+
+#### Resources settings (`resources.yaml`)
+
+#RESOURCESSCHEMA__annotate_normal_ratio#
+

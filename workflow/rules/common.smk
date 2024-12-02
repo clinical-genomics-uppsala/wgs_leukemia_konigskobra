@@ -31,12 +31,12 @@ from hydra_genetics.utils.software_versions import touch_software_version_file
 from hydra_genetics.utils.software_versions import touch_pipeline_version_file_name
 
 
-min_version("7.8.0")
+hydra_min_version("3.0.0")
+min_version("7.32.0")
 
 
 ### Set and validate config file
-configfile: "config.yaml"
-
+config = replace_dict_variables(config)
 
 try:
     validate(config, schema="../schemas/config.schema.yaml")
@@ -148,7 +148,9 @@ def get_vcf_input(wildcards):
     if aligner is None:
         sys.exit("aligner missing from config, valid options: bwa_gpu or bwa_sentieon")
     elif aligner == "bwa_gpu":
-        vcf_input = "parabricks/pbrun_mutectcaller_t/{}_{}.vep.filter.germline.vcf".format(wildcards.sample, wildcards.type)
+        vcf_input = "parabricks/pbrun_mutectcaller_t/{}_{}.normalized.vep.filter.germline.vcf".format(
+            wildcards.sample, wildcards.type
+        )
     elif aligner == "bwa_sentieon":
         vcf_input = "sentieon/tnscope/{}_TNscope_tn_ML.vcf".format(wildcards.sample)
     else:

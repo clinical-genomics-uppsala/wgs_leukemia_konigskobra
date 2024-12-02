@@ -16,9 +16,9 @@ jobs:
     name: Run snakemake dry run
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.0.2
+      - uses: actions/checkout@v4
       - name: Set up Python 3.9
-        uses: actions/setup-python@v3.1.2
+        uses: actions/setup-python@v5
         with:
           python-version: 3.9
       - name: Install requirements.txt
@@ -30,4 +30,4 @@ jobs:
       - name: snakemake dry run
         working-directory: .tests/integration
         run: |
-          snakemake --configfiles ../../config/config.yaml config.yaml -n -s ../../workflow/Snakefile
+          snakemake -n -s ../../workflow/Snakefile --configfiles ../../config/config.yaml config.yaml --config FLUFFY_HOME=../..

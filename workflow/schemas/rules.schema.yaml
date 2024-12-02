@@ -3,9 +3,29 @@ description: snakemake rule input and output files description file
 type: object
 properties:
 
-  export_to_xlsx:
+
+  annotate_normal_ratio:
     type: object
-    description: input and output parameters for export_to_xlsx
+    description: input and output parameters for tumour normal vcf with annotate_normal_ratio
+    properties:
+      input:
+        type: object
+        description: list of inputs
+        properties:
+          vcf:
+            type: string
+            description: vcf file with both normal and tumor sample af used to annotate INFO column with n_frq/t_frq
+      output:
+        type: object
+        description: list of outputs
+        properties:
+          vcf:
+            type: string
+            description: vcf file with N_ratio annotation in INFO field
+
+  export_to_xlsx_snvs:
+    type: object
+    description: input and output parameters for export_to_xlsx_snvs
     properties:
       input:
         type: object
@@ -35,4 +55,5 @@ properties:
         properties:
           xlsx:
             type: string
-            description: name of xlsx file for summerizing snv results based on different genelists
+            description: name of xlsx file for summarizing snv results based on different genelists
+

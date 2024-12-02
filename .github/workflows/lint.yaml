@@ -16,11 +16,11 @@ jobs:
     name: Lint workflow
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v3
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.8
+          python-version: 3.9
       - name: Add conda to system path
         run: |
           echo $CONDA/bin >> $GITHUB_PATH
@@ -30,4 +30,4 @@ jobs:
       - name: Linting
         working-directory: .tests/integration
         run: |
-          snakemake --lint -n -s ../../workflow/Snakefile --configfiles ../../config/config.yaml config.yaml
+          snakemake --lint -n -s ../../workflow/Snakefile --configfiles ../../config/config.yaml config.yaml --config FLUFFY_HOME=../..
