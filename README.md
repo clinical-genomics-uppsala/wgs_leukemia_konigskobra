@@ -145,7 +145,7 @@ All results (as described in table below) are located in: `Results/{project}/{sa
 
 
 #### General Statistics - DNA
-The general statistics table are ordered based on the sample order in `SampleSheet.csv`, this is done by renaming the samples in two steps using the script `sample_order_multiqc.py`. To toggle between "Sample Order" and "Sample Name" use the buttons just above General Stats header.
+The general statistics table are ordered based on the "s-index" in fastq-filename. This is done by renaming the samples in two steps using the script `sample_order_multiqc.py`. To toggle between "Sample Order" and "Sample Name" use the buttons just above General Stats header.
 
 <br />
 
@@ -159,7 +159,7 @@ The general statistics table are ordered based on the sample order in `SampleShe
 | >= 10X | [Mosdepth](https://github.com/brentp/mosdepth) | Fraction of reference with coverage over 10x |
 | >= 30X | [Mosdepth](https://github.com/brentp/mosdepth) | Fraction of reference with coverage over 30x |
 | >=50X |[Mosdepth](https://github.com/brentp/mosdepth) | Fraction of reference with coverage over 50x |
-| Error sex check |[Peddy](https://github.com/brentp/peddy)| Result of sex check based on sex in samplesheet |
+| Error sex check |[Peddy](https://github.com/brentp/peddy)| Result of sex check based on sex in `units.tsv` |
 | Predicted sex sex check |[Peddy](https://github.com/brentp/peddy)| |
 | Bases on Target | [Picard](https://broadinstitute.github.io/picard/) HSMetrics | Bases inside the capture design (`config[reference][design_intervals]`) |
 | Fold80 |[Picard](https://broadinstitute.github.io/picard/) HSMetrics | The fold over-coverage necessary to raise 80% of bases in "non-zero-cvg" targets to the mean coverage level in those targets (`config[reference][design_intervals]`) |
